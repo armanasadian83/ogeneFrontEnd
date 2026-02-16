@@ -1,0 +1,571 @@
+/*search modal*/
+@media screen and (max-width : 500px){
+.modalInput{width: 250px;}
+}
+
+
+@media screen and (max-width : 500px){
+    .calenderBar{background: #d7f2ec; height: 40px;}
+    .calenderBar p{font-size: 14px; font-weight: 600; margin-bottom: 0px !important;}
+    .calenderBar button{background: #f5b875; color: #000; font-size: 14px; font-weight: 500;
+        margin-right: 10px; border-radius: 15px; padding: 1px 10px; border: 2px solid #f5b875;}
+    .calenderBar button:hover{background: #d7f2ec;}
+}
+
+@media screen and (max-width : 500px){
+    .myNavbar{width: 100%; color: #212529 !important; font-weight: 600; font-size: 16px; z-index: 1000 !important;}
+    .myNavbar .logoSection{width: 120px; height: 120px;}
+    .myNavbar .logoSection img{width: 100%; height: auto;}
+    .myNavbar button{min-width: 40px !important; width: 40px !important; height: 40px !important;}
+    /*.myNavbar button:hover{color: #000 !important;}
+    .myNavbar button svg{color: #212529 !important; font-size: 20px;}*/
+    .logoSection img{width: 200px; height: 210px;}
+    a{text-decoration: none !important; color: #212529;}
+
+    .sidenavOpen {height: 100%; width: 300px !important; position: fixed; z-index: 1000; top: 0; right: 0; background-color: #d1f2ea;
+        opacity: 1; overflow-x: hidden; transition: 0.5s; padding-top: 60px; border-bottom-left-radius: 140px;
+        border-left: 17px solid #f6f6f6;}
+
+    .sidenavOpen a {padding: 10px 30px; text-decoration: none; font-size: 20px; color: #000000; display: block; transition: 0.3s;}
+    .sidenavOpen .closeBtn{position: absolute; left: 0px; top: 20px; font-size: 25px; border-radius: 50%; color: #000; display: block;}
+    .sidenavOpen .sideBarbtnGroup svg{font-size: 26px; color: #000;}
+    .sidenavOpen .sideBarbtnGroup .cartIcon div{position: relative;}
+    .sidenavOpen .sideBarbtnGroup .cartIcon span{position: absolute; right: -8px; top: -8px; background: #849490; 
+        border-radius: 50%; width: 20px; height: 20px;}
+
+    .sidenavClosed{height: 100%; width: 0px; position: fixed; z-index: 1000; top: 0; right: 0; background-color: #d1f2ea;
+        opacity: 1; overflow-x: hidden; transition: 0.5s; padding-top: 60px; border-bottom-left-radius: 140px;
+        border-left: 0;}
+    .sidenavClosed a, .sidenavClosed button{display: none;}
+}
+
+@media screen and (max-width : 1300px){
+    .special.container{max-width: 1000px;}
+    .menuItems li{padding: 0px 28px; text-wrap: nowrap !important;}
+    .myNavbar .picture{width: 150px; height: auto;}
+}
+
+@media screen and (max-width : 1100px){
+    .myNavbar .picture{width: 150px; height: auto;}
+    .hideInMobile{display: none !important;}
+    .myNavbar .menuButton{display: block;}
+    .myNavbar .menuItems{display: none;}
+    .myNavbar .btnGroup{margin-right: auto;}
+
+    .sidenavOpen {height: 100%; width: 400px; position: fixed; z-index: 1000; top: 0; right: 0; background-color: #d1f2ea;
+        opacity: 1; overflow-x: hidden; transition: 0.5s; padding-top: 60px; border-bottom-left-radius: 140px;
+        border-left: 17px solid #f6f6f6;}
+
+    .sidenavOpen a {padding: 10px 30px; text-decoration: none; font-size: 20px; color: #000000; display: block; transition: 0.3s;}
+    .sidenavOpen .closeBtn{position: absolute; left: 0px; top: 20px; font-size: 25px; border-radius: 50%; color: #000; display: block;}
+    .sidenavOpen .sideBarbtnGroup svg{font-size: 26px; color: #000;}
+    .sidenavOpen .sideBarbtnGroup .cartIcon div{position: relative;}
+    .sidenavOpen .sideBarbtnGroup .cartIcon span{position: absolute; right: -8px; top: -8px; background: #849490; 
+        border-radius: 50%; width: 20px; height: 20px;}
+
+    .sidenavClosed{height: 100%; width: 0px; position: fixed; z-index: 1000; top: 0; right: 0; background-color: #d1f2ea;
+        opacity: 1; overflow-x: hidden; transition: 0.5s; padding-top: 60px; border-bottom-left-radius: 140px;
+        border-left: 0;}
+    .sidenavClosed a, .sidenavClosed button{display: none;}
+}
+
+@media screen and (max-width : 640px){
+    .bannerSectionPc{display: none;}
+    .bannerSectionMobile{display: block; padding-top: 25px; padding-bottom: 20px;}
+    .bannerSectionMobile h2{font-size: 24px; font-weight: 600;}
+    .bannerSectionMobile .pWrapper{margin-top: 15px;}
+    .bannerSectionMobile .pWrapper p{margin-bottom: 0px !important; margin-top: 0px !important;}
+    .bannerSectionMobile .bannerImgWrapper img{width: 350px;}
+    .bannerSectionMobile .MobileBannerImg2 img{width: 150px; border-radius: 15px;}
+
+    .bannerSectionMobile .swiper{overflow: inherit !important;}
+    .bannerSectionMobile .swiper-pagination{z-index: 1000;}
+    .bannerSectionMobile .swiper-pagination-bullets{top: 370px !important;}
+    .bannerSectionMobile .swiper-pagination-bullet{background: #00503cd4 !important; width: 11px !important; height: 11px !important;}
+    .bannerSectionMobile .swiper-pagination-bullet-active{background: #9eefdbd4 !important; width: 12px !important; height: 12px !important;}
+}
+
+@media screen and (max-width : 1300px){
+    .bannerSectionPc .bannerImg{position: absolute; top: 0px; left: 30px; object-fit: cover; z-index: 10; width: 750px;}
+    .bannerSectionPc .bannerImg2{width: 26%; left: 300px; border-radius: 20px;}
+    .bannerSectionPc .bannerInfo2 h2{margin-right: 100px;}
+    .bannerSectionPc .bannerInfo2 div{margin-right: 100px;}
+    .bannerSectionPc .bannerInfo{margin-top: 100px !important;}
+    .bannerSectionPc .bannerInfo h2{font-size: 36px;}
+    .bannerSectionPc .swiper-pagination-bullets{top: 440px !important;}
+}
+
+@media screen and (max-width : 1250px){
+    .bannerSectionPc .bannerImg{position: absolute; top: 0px; left: 30px; object-fit: cover; z-index: 10; width: 550px;}
+    .bannerSectionPc .bannerImg2{width: 26%; left: 300px; border-radius: 20px;}
+    .bannerSectionPc .bannerInfo2 h2{margin-right: 50px;}
+    .bannerSectionPc .bannerInfo2 div{margin-right: 50px;}
+    .bannerSectionPc .bannerInfo{margin-top: 100px !important;}
+    .bannerSectionPc .bannerInfo h2{font-size: 25px;}
+    .bannerSectionPc .swiper-pagination-bullets{top: 330px !important;}
+}
+
+@media screen and (max-width : 1050px){
+    .bannerSectionPc .bannerImg{position: absolute; top: 0px; left: 30px; object-fit: cover; z-index: 10; width: 450px;}
+    .bannerSectionPc .bannerImg2{width: 22%; left: 200px; border-radius: 20px;}
+    .bannerSectionPc .bannerInfo2 h2{margin-right: 30px;}
+    .bannerSectionPc .bannerInfo2 div{margin-right: 30px;}
+    .bannerSectionPc .bannerInfo{margin-top: 60px !important;}
+    .bannerSectionPc .bannerInfo h2{margin-right: 30px; width: 400px;font-weight: 700; font-size: 43px; text-align: left;}
+    .bannerSectionPc .bannerInfo div{margin-top: 30px; margin-right: 30px;}
+    .bannerSectionPc .bannerInfo h2{font-size: 18px;}
+    .bannerSectionPc .bannerInfo p{font-size: 14px;}
+    .bannerSectionPc .swiper-pagination-bullets{top: 270px !important;}
+}
+
+@media screen and (max-width : 900px){
+    .bannerSectionPc .bannerImg{position: absolute; top: 0px; left: 30px; object-fit: cover; z-index: 10; width: 300px;}
+    .bannerSectionPc .bannerImg2{width: 20%; left: 150px; border-radius: 20px;}
+    .bannerSectionPc .bannerInfo2 h2{margin-right: 0px;}
+    .bannerSectionPc .bannerInfo2 div{margin-right: 0px;}
+    .bannerSectionPc .bannerInfo{margin-top: 30px !important;}
+    .bannerSectionPc .bannerInfo h2{margin-right: 10px; width: 400px;font-weight: 700; font-size: 43px; text-align: left;}
+    .bannerSectionPc .bannerInfo div{margin-top: 30px; margin-right: 10px;}
+    .bannerSectionPc .bannerInfo h2{font-size: 16px;}
+    .bannerSectionPc .bannerInfo p{font-size: 13px;}
+    .bannerSectionPc .swiper-pagination-bullets{top: 200px !important;}
+}
+
+@media screen and (max-width : 737px){
+    .bannerSectionPc .bannerImg{position: absolute; top: 0px; left: 30px; object-fit: cover; z-index: 10; width: 300px;}
+    .bannerSectionPc .bannerInfo{margin-top: 25px !important;}
+    .bannerSectionPc .bannerImg2{width: 27%; left: 100px; border-radius: 20px;}
+    .bannerSectionPc .bannerInfo2 h2{margin-right: 0px;}
+    .bannerSectionPc .bannerInfo2 div{margin-right: 0px;}
+    .bannerSectionPc .bannerInfo h2{margin-right: -90px; width: 400px;font-weight: 700; font-size: 43px; text-align: left;}
+    .bannerSectionPc .bannerInfo div{margin-top: 30px; margin-right: -90px;}
+    .bannerSectionPc .bannerInfo h2{font-size: 16px;}
+    .bannerSectionPc .bannerInfo p{font-size: 13px;}
+    .bannerSectionPc .swiper-pagination-bullets{top: 200px !important;}
+}
+
+@media screen and (max-width : 1000px){
+    .serviceSection .specialMargin{margin-top: 20px;}
+    .serviceSection .row{margin-right: 0px !important;}
+}
+
+@media screen and (max-width : 1200px){
+    .serviceSection{margin-top: 40px;}
+    .serviceSection .title h2{font-size: 24px; font-weight: 600;}
+    .serviceSection .row{margin-top: 0px; margin-right: 70px;}
+    .serviceSection .top-div .imgLine1{width: 150px; margin-bottom: 10px; margin-top: 20px;}
+    .serviceSection .top-div .imgLine2{width: 150px; margin-bottom: 10px; margin-top: 20px;}
+    .serviceSection .top-div .imgLine3{width: 150px; margin-bottom: 10px; margin-top: 20px;}
+    .serviceSection .bottom-div{height: 270px;}
+    .serviceSection .top-div{height: 270px;}
+    .serviceSection .overlap-container{margin-top: 0px; margin-bottom: 0px;}
+}
+
+@media screen and (max-width : 768px){
+    .serviceSection .row{margin-top: 0px; margin-right: 60px !important;}
+}
+
+
+
+@media screen and (max-width : 500px){
+    .serviceSection .title{padding-right: 20px; padding-left: 20px;}
+    .serviceSection .title h2{font-size: 24px; font-weight: 600;}
+    .serviceSection .title p{font-size: 16px; font-weight: 500;}
+
+    .serviceSection .overlap-container{position: relative; width: 100%; margin: 20px; height: 270px;}
+    .serviceSection .row{margin-right: 0px !important; margin-top: 0px;}
+    .serviceSection .bottom-div{position: absolute; width: 90%; height: 270px; background-color: #f6f6f6; z-index: 1; display: flex;
+      align-items: center; justify-content: center; font-size: 24px; color: white; border-radius: 70px; opacity: 1 !important;
+      background-image: none !important;}
+    .serviceSection .top-div{position: absolute; width: 90%;  height: 270px; background-color: #d1f2ead4; top: 15px; right: -15px;
+      z-index: 2; font-size: 26px; color: rgb(9, 63, 11); border-radius: 70px; opacity: 1 !important; border: none;
+      outline: none; font-weight: 700;}
+    .serviceSection .top-div .imgLine1{width: 180px; margin-bottom: 10px; margin-top: 20px;}
+    .serviceSection .top-div .imgLine2{width: 200px; margin-bottom: 10px; margin-top: 20px;}
+    .serviceSection .top-div .imgLine3{width: 220px; margin-bottom: 0px; margin-top: 20px;}
+    .serviceSection .top-div div{font-size: 20px;}
+    .serviceSection .imgWrapper{padding-bottom: 0px;}
+    .serviceSection .imgWrapper img{width: 700px;}
+    .serviceSection .mobileNoDisplay{display: none;}
+}
+
+/* shopBanner section for Home page */
+
+@media screen and (max-width : 1350px) {
+    .shopBanner .infoContent{padding: 10px 90px;}
+}
+
+@media screen and (max-width : 1200px){
+    .shopBanner{margin-top: 65px; height: 500px;}
+    .shopBanner .imgWrapper img{width: 350px;}
+    .shopBanner .imgWrapper{padding-left: 200px;}
+    .shopBanner .infoContent{padding: 10px 60px;}
+}
+
+@media screen and (max-width : 768px){
+    .shopBanner{margin-top: 65px; height: 500px;}
+    .shopBanner .infoContent{padding: 10px 30px; margin-right: 0px; text-align: center; margin-top: 50px;}
+    .shopBanner .imgWrapper{padding-left: 0px; margin-bottom: 50px;}
+    .shopBanner .imgWrapper img{width: 350px;}
+}
+
+@media screen and (max-width : 1200px){
+    .CoursesHomeSection .title h2{font-size: 24px;}
+    .CoursesHomeSection .title p{font-size: 16px;}
+
+    .CoursesHomeSection .infoWrapper .data p{font-size: 18px;text-wrap: nowrap;}
+    .CoursesHomeSection .infoWrapper p{font-size: 22px; font-weight: 700;}
+}
+
+@media screen and (max-width : 500px){
+    .CoursesHomeSection{margin-top: 50px;}
+    .CoursesHomeSection .title{padding-right: 20px; padding-left: 20px;}
+    .CoursesHomeSection .title h2{font-size: 23px; font-weight: 600;}
+    .CoursesHomeSection .title p{font-size: 16px; font-weight: 500;}
+
+    .CoursesHomeSection .overlap-container{position: relative; width: 100%; height: 400px;}
+    .CoursesHomeSection .bottom-div{position: absolute; width: 90%; height: 400px; background-color: #f6f6f6; z-index: 1; display: flex;
+      align-items: center; justify-content: center; font-size: 24px; color: white; border-radius: 70px; opacity: 1 !important;
+      background-image: none !important;}
+    .CoursesHomeSection .top-div{position: absolute; width: 90%;  height: 400px; background-color: #d1f2ead4; top: 15px; right: -15px;
+      z-index: 2; font-size: 26px; color: rgb(9, 63, 11); border-radius: 70px; opacity: 1 !important; border: none;
+      outline: none; font-weight: 700;}
+    .CoursesHomeSection .top-div p{padding: 0px 35px;}
+    .CoursesHomeSection .infoWrapper{padding: 30px 10px; color: #000; width: 100%;}
+    .CoursesHomeSection .infoWrapper p{font-size: 22px; font-weight: 700;}
+    .CoursesHomeSection .infoWrapper .data p{font-size: 18px; cursor: pointer; line-height: 19px;}
+    .hideInMobile{display: none;}
+}
+
+@media screen and (max-width : 500px) {
+    .calenderSectionHome .imgWrapperMobile{display: block;}
+    .calenderSectionHome{margin-top: 50px;}
+    .calenderSectionHome .title{margin-bottom: 15px;}
+    .calenderSectionHome .title h2{font-size: 24px; font-weight: 600;}
+    .calenderSectionHome .title p{font-size: 16px; font-weight: 500;}
+
+    .calenderSectionHome .overlap-container{position: relative; width: 100%; height: auto; margin: 20px;}
+    .calenderSectionHome .bottom-div{position: absolute; width: 95%; height: 590px;}
+    .calenderSectionHome .top-div{position: absolute; width: 95%;  height: auto;}
+    .calenderSectionHome .calenderPWrapper{padding-top: 40px; padding-bottom: 0px; padding-right: 10px; padding-left: 3px;}
+    .calenderSectionHome .calenderPWrapper span{font-size: 17px;}
+    .calenderSectionHome .calenderPWrapper p{font-size: 16px; line-height: 35px; color: #000; margin-bottom: 0px;}
+    .calenderSectionHome .imgWrapper{display: none;}
+    .calenderSectionHome .imgWrapperMobile{padding-top: 30px;}
+    .calenderSectionHome .imgWrapperMobile img{width: 80%; border-radius: 20px;}
+    .mobileDisplayNone{display: none;}
+    .calenderSectionHome .seeFullCalender{display: block; margin-top: 0px; margin-bottom: 20px;}
+    .calenderSectionHome .seeFullCalender button{padding: 2px 30px; color: #000000d4; background: #d1f2ead4; z-index: 2;
+        font-size: 17px; font-family: fugen-font !important; font-weight: 600; border: 1px solid #000; border-radius: 10px;}
+    .blurInMobileOne{opacity: 0.7; z-index: 1; pointer-events: none;}
+    .blurInMobileTwo{opacity: 0.4; z-index: 1; pointer-events: none;}
+}
+
+@media screen and (max-width : 500px){
+    .CoursesSection{margin-top: 60px;}
+    .CoursesSection .title h2{font-weight: 600; font-size: 24px;}
+    .CoursesSection .title p{font-size: 16px; font-weight: 500;}
+    .CoursesSection .CoursesWrapper{margin-right: 0px; margin-top: 25px; padding-right: 10px; padding-left: 10px;}
+    .CoursesSection .item{margin-right: 55px;}
+    .CoursesSection .item img{width: 200px; height: 200px; margin-top: 10px; border-radius: 20px;}
+    .CoursesSection .item p{font-weight: 700; color: #000000; font-size: 18px; line-height: 25px; padding-bottom: 20px;}
+    .CoursesSection .item .cardInfo{width: 100%; height: auto; border-radius: 77px;}
+    .CoursesSection .item .cardBtn{width: 100%; height: 43px;}
+    .CoursesSection .cardBtn button{font-size: 19px;}
+    .paddingForMobile{padding-right: 40px; padding-left: 40px;}
+    .displayNoneInMobile{display: none;}
+}
+
+@media screen and (max-width : 500px) {
+    .productsSection{margin-top: 30px;}
+    .productsSection .title h2{font-weight: 600; font-size: 24px;}
+    .productsSection .title p{font-size: 16px; font-weight: 500;}
+    .productsSection .productsWrapper{margin-right: 0px; margin-top: 25px;}
+    .productsSection .item .cardInfo{width: 100%; height: auto; border-radius: 77px;}
+    .productsSection .item img{width: 200px; height: 260px; margin-top: 10px;}
+    .productsSection .item p{font-weight: 700; color: #000000; font-size: 18px; line-height: 25px; padding-bottom: 20px;}
+    .productsSection .item .cardBtn{width: 100%; height: 43px;}
+    .productsSection .cardBtn button{font-size: 19px;}
+}
+
+@media screen and (max-width : 1500px) {
+    .footerSection .overlap-container{height: 700px;}
+    .footerSection .bottom-div{height: 685px;}
+    .footerSection .top-div{height: 685px;}
+    .footerSection .container{padding-top: 100px;}
+    .footerSection .container h2{font-size: 24px !important;}
+    .footerSection .container .col-12 p{line-height: 25px; font-size: 18px;}
+    .textCenterMobile{text-align: center !important;}
+    .textCenterMobile p{text-align: justify !important;}
+    .footerSection .container .col-12 a{font-weight: 600; font-size: 17px;}
+    .footerSection .footerBody .col-md-6.left-part p{margin-top: 50px;}
+    .footerSection .container .right-content{padding-right: 20px;}
+    .footerSection .container .right-content p{margin-top: 15px !important;}
+
+    .footerSection .footerBody .col-md-6.left-part{margin-top: 0px !important; padding-right: 0px;}
+}
+
+
+@media screen and (max-width : 768px) {
+    .footerSection .overlap-container{height: 970px;}
+    .footerSection .bottom-div{height: 955px;}
+    .footerSection .top-div{height: 955px;}
+    .footerSection .container{padding-top: 0px;}
+    .footerSection .container h1{font-size: 30px; line-height: 40px; text-align: center; padding-top: 50px;}
+    .footerSection .container h2{font-size: 24px !important; text-align: center;}
+    .footerSection .container .col-12 p{line-height: 25px; font-size: 18px; text-align: center;}
+    .textCenterMobile{text-align: center !important;}
+    .textCenterMobile p{text-align: justify !important;}
+    .footerSection .container .col-12 a{font-weight: 600; font-size: 17px;}
+    .footerSection .footerBody .col-md-6.left-part p{margin-top: 50px;}
+    .footerSection .container .right-content{padding-right: 20px;}
+    .footerSection .container .right-content p{margin-top: 15px !important;}
+
+    .footerSection .footerBody .col-md-6.left-part{margin-top: 0px !important; padding-right: 0px;}
+}
+
+@media screen and (max-width : 1200px){
+    .CourseItem .columnReverse{flex-direction: column-reverse !important;}
+    .CourseItem .col-12.pointer{padding-right: 150px; padding-left: 150px; width: 100%;}
+    .CourseItem .card .details .oldPrice{font-size: 17px;}
+    .CourseItem .card .details .price .newPrice{font-size: 18.5px; margin-right: 110px;}
+    .CourseItem .card .details .specialEventAlert{padding: 10px; height: 35px !important;}
+    .CourseItem .card .AddToCartBtn button{font-size: 17px !important; padding: 8px 4px !important;}
+
+    .CourseItem h1{font-size: 32px; margin-top: 20px; text-align: center;}
+    .CourseItem h3{font-size: 28px; text-align: center;}
+    .CourseItem .description p.title{font-size: 24px; text-align: center;}
+    .CourseItem .description p{font-size: 21px; text-align: justify;}
+
+    .CourseItem .CourseInfo .CourseInfoBtns{gap: 6px; overflow-x: scroll; white-space: nowrap; width: 100%;}
+    .CourseItem .CourseInfo .CourseInfoBtns button{height: 50px; font-size: 22px; margin: 3px; padding-right: 10px; padding-left: 10px;}
+
+    .CourseItem .CourseInfo .CourseInfoBtns::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+}
+
+
+
+@media screen and (max-width : 768px) {
+    .CourseItem .col-12.pointer{padding-right: 35px; padding-left: 35px; width: 100%;}
+    .CourseItem .card .details .oldPrice{font-size: 17px;}
+    .CourseItem .card .details .price .newPrice{font-size: 18.5px; margin-right: 110px;}
+    .CourseItem .card .details .specialEventAlert{padding: 10px; height: 35px !important;}
+    .CourseItem .card .AddToCartBtn button{font-size: 17px !important; padding: 8px 4px !important;}
+
+    .CourseItem h1{font-size: 28px; margin-top: 20px; text-align: center;}
+    .CourseItem h3{font-size: 26px; text-align: center;}
+    .CourseItem .description p.title{font-size: 22px; text-align: center;}
+    .CourseItem .description p{font-size: 20px; text-align: justify;}
+
+    .CourseItem .CourseInfo .CourseInfoBtns{gap: 6px; overflow-x: scroll; white-space: nowrap; width: 100%;}
+    .CourseItem .CourseInfo .CourseInfoBtns button{height: 50px; font-size: 22px; margin: 3px; padding-right: 10px; padding-left: 10px;}
+    .CourseItem .CourseInfo .tabInfo ul li{font-size: 20px;}
+    .CourseItem .CourseInfo .tabInfo .calenderInfo{font-size: 18px;}
+
+    .CourseItem .tabInfo .reviewSection{width: 90%; padding-right: 10px;}
+    .CourseItem .tabInfo .reviewSection .replyCard{margin-bottom: 45px; margin-right: 20px;}
+
+    .CourseItem .tabInfo form{width: 330px !important;}
+
+    .breadCrumb{font-size: 15px;}
+}
+
+
+@media screen and (max-width : 500px){
+    .serviceAnformaticSection .overlap-container{display: flex; justify-content: center; margin-top: 0px; margin-bottom: 0px;}
+    .serviceAnformaticSection .bottom-div{width: 85%; text-align: center; height: 100px;}
+    .serviceAnformaticSection .top-div{width: 85%; display: flex; justify-content: center; right: 10px; height: 100px; top: 10px;}
+    .serviceAnformaticSection .top-div p{padding: 0px 20px; font-size: 20px;}
+    .serviceAnformaticSection .imgWrapper{padding-bottom: 0px;}
+    .serviceAnformaticSection .imgWrapper img{width: 100%;}
+    .serviceAnformaticSection .info h1{font-size: 32px; margin-top: 10px;}
+    .serviceAnformaticSection .info p{margin-top: 30px; font-size: 20px;margin-bottom: 10px;}
+}
+
+@media screen and (max-width : 1400px){
+    .aboutUsSection h1{color: #174A4E; font-weight: 800; font-size: 42px; text-align: center;}
+    .aboutUsSection .secOne h3{color: #174A4E; font-weight: 800; font-size: 30px;}
+    .aboutUsSection img{width: 100%; margin-top: 10px;}
+    .aboutUsSection .secOne p{text-align: center; padding: 0px 10px; font-size: 19px; margin-top: 10px;}
+    .aboutUsSection .secTwo{margin-top: 60px;}
+    .aboutUsSection .secTwo h1{font-size: 32px;}
+    .aboutUsSection .secTwo p{font-size: 19px; margin-top: 20px; text-align: center; padding: 0px 10px;}
+    .aboutUsSection .secThree{margin-top: 65px;}
+    .aboutUsSection .secThree h1{font-size: 32px;}
+    .aboutUsSection .secThree p{font-weight: 600; font-size: 18px; text-align: center;}
+    .aboutUsSection .address{padding: 40px 50px;}
+
+
+    /* backend : banners: 12/1/2025 */
+    .bannerImg.three{width: 600px; transform: translateX(30px); height: 400px;}
+    .bannerImg.four{width: 600px; transform: translateX(30px); height: 400px;}
+}
+
+@media screen and (max-width : 1250px) {
+    /* backend : banners: 12/1/2025 */
+    .bannerImg.three{width: 500px; transform: translateX(90px); height: 300px;}
+    .bannerImg.four{width: 500px; transform: translateX(90px); height: 300px;}
+}
+
+@media screen and (max-width : 1150px) {
+    /* backend : banners: 12/1/2025 */
+    .bannerImg.three{width: 350px; transform: translateX(90px); height: 250px;}
+    .bannerImg.four{width: 350px; transform: translateX(90px); height: 250px;}
+}
+
+@media screen and (max-width : 900px) {
+    /* backend : banners: 12/1/2025 */
+    .bannerImg.three{width: 200px; transform: translateX(90px); height: 170px;}
+    .bannerImg.four{width: 200px; transform: translateX(90px); height: 170px;}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width : 500px){
+    .signInPage .box h2{font-size: 21px;}
+    .signInPage.signUp{width: 100%; height: 800px;position: relative; overflow: hidden;}
+}
+
+
+
+@media screen and (max-width : 1500px){
+    .tabSectionHome{margin-top: 120px;}
+}
+
+@media screen and (max-width : 1000px){
+    .tabSectionHome .col{height: 200px;}
+    .tabSectionHome span{font-size: 52px; margin-top: 0px !important;}
+    .tabSectionHome h1{font-weight: 600; font-size: 17px; margin-top: 5px;}
+    .tabSectionHome svg{display: none;}
+    .tabSectionHome .col div{margin-top: 40px;}
+}
+
+@media screen and (max-width : 900px){
+    .tabSectionHome{margin-top: 70px !important;}
+}
+
+@media screen and (max-width : 500px){
+    .tabSectionHome{margin-top: 50px !important;}
+    .tabSectionHome .col{border-radius: 40%; background: #d1f2eb; width: 100px; height: 100px; position: relative;
+        overflow: hidden; box-shadow: 8px 8px #f6f6f6; border-top-right-radius: 7%; margin: 10px !important;}
+    .tabSectionHome .col div{margin-top: 5px;}
+    .tabSectionHome span{color: #129a78; font-size: 24px !important; font-weight: 800; margin-top: 0px !important;}
+    .tabSectionHome h1{font-weight: 600; font-size: 15px; margin-top: 5px;}
+    .tabSectionHome svg{display: none;}
+}
+
+@media screen and (max-width : 500px){
+    .feildCellularAndMolecular .banner{padding-top: 60px; padding-bottom: 60px; margin-top: 25px;}
+    .feildCellularAndMolecular .banner h1{font-size: 33px;}
+    .feildCellularAndMolecular .banner p{font-size: 17px;font-weight: 600; margin-top: 10px;}
+    .feildCellularAndMolecular .banner button{padding: 4px 30px; margin-top: 30px; color: #000; background: #f4a33f;
+    border-radius: 15px; font-size: 20px; font-weight: 600;}
+    .courseCard{margin-top: 0px; padding-right: 30px; padding-left: 30px;}
+    .courseCard .item{width: 100%; background: #d9f4ee; border-radius: 50px;}
+    .courseCard .item img{width: 220px; height: 220px; margin-top: 15px;}
+    .courseCard .item p{font-size: 20px; font-weight: 600; padding-bottom: 18px;}
+    .courseCard .cardBtn{margin-bottom: 30px; transform: translateY(-20px);}
+    .courseCard .cardBtn button{background: #fce6cf; width: 100%; border-radius: 70px; height: 50px;
+        font-size: 20px; font-weight: 600;}
+    .feildCellularAndMolecular .section .viewAllCourses{margin-top: 0px; padding-top: 0px !important;}
+    .feildCellularAndMolecular .section .viewAllCourses button{font-size: 16px; width: 220px; height: 40px;}
+    .serviceForm{padding: 10px 15px;}
+    .serviceForm form{margin-right: 12px;}
+    .serviceForm h1{margin-top: 50px; font-weight: 600; font-size: 24px;}
+    .serviceForm p{margin-top: 10px;font-size: 18px; margin-bottom: 25px;}
+    .css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root{white-space: pre-line !important;}
+    .serviceForm .css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select{
+    text-wrap: nowrap !important;}
+    .serviceForm form{padding: 5px 0px;}
+    .serviceForm form label{margin-top: 10px;}
+    .serviceForm .serviceNotifier p{font-size: 15px; margin-right: 5px; margin-bottom: 10px;}
+    .serviceForm .serviceNotifier .badge{font-size: 14px; border-radius: 50%;}
+
+    .articleItem svg{padding-left: 7px; font-size: 62px !important;}
+    .articleItem div{width: 100%; height: auto; padding-right: 10px;}
+    .articleItem p{color: #000; font-weight: 600; font-size: 16px;}
+    .articleItem a{position: relative !important; text-wrap: nowrap; font-size: 15px; margin-bottom: 15px;}
+    .articleItem a:hover{transform: scale(1.07); color: #337ab7;}
+    .articleItem .mobileHide{display: none;}
+    .articleItem .desktopHide{display: block;}
+}
+
+@media screen and (max-width : 500px) {
+    .degreePage .banner{border-radius: 60px; margin-top: 15px; padding: 10px 20px;}
+    .degreePage .banner h1{font-size: 22px;}
+    .degreePage .banner h5{font-size: 17px; margin-bottom: 30px;}
+    .degreePage .banner img{border-radius: 25px; padding-bottom: 0px; margin-bottom: 20px; width: 300px;}
+    .degreePage .content p{padding: 0px 15px; font-size: 16px;}
+    .degreePage .content h3{padding: 0px 10px; font-size: 20px;}
+    .degreePage .content h1{font-size: 22px; padding: 10px 0px;}
+    .degreePage .content h2{font-size: 18px; padding: 20px 0px;}
+    .degreePage .orgLink img{width: 150px;}
+    .degreePage .tablePic{overflow-x: auto;}
+    .degreePage .tablePic::-webkit-scrollbar{height: 7px !important; padding: 2px 10px !important;}
+    .degreePage .tablePic img{width: 1200px;} 
+}
+
+@media screen and (max-width : 1200px) {
+    .listingPage .mobileTabSection{display: block;}
+    .listingPage .mobileTabSection .btnWrapper{padding: 10px;}
+    .listingPage .mobileTabSection button{padding: 1px 30px; color: #000; font-size: 17px;}
+    .listingPage .skeletonWrapper{padding-right: 40px; padding-left: 40px;}
+    .listingPage .searchBtn button{display: none;}
+    .listingPage .breadCrumb{margin-top: 40px !important; margin-bottom: 10px !important;}
+    .listingPage .banner img{width: 95%; height: 150px;}
+    .listingPage .banner h1{font-size: 28px;}
+    .listingPage.shop .productCard{padding-right: 20px; padding-left: 20px; margin-top: 10px;}
+    .listingPage .tabSection{display: none;}
+}
+
+@media screen and (max-width : 1200px){
+    .listingPage .filterBox{display: none;}
+    .productSection .col-lg-4 .productCard .item img{width: 200px;}
+    .productCard .cardBtn button{background: #fce6cf; width: 100%; border-radius: 70px; height: 50px;
+        font-size: 17px; font-weight: 600;}
+    .productSection .col-lg-4 .productCard .item{height: 400px;}
+    .listingPage .viewButton{display: none;}
+
+    .productItem .productCard{padding-right: 30px; padding-left: 30px;}
+}
+
+@media screen and (max-width : 992px) {
+    .listingPage .courseCard{padding-right: 150px; padding-left: 150px;}
+    .listingPage.shop .productCard{padding-right: 150px; padding-left: 150px;}
+}
+
+@media screen and (max-width : 800px) {
+    .listingPage .courseCard{padding-right: 50px; padding-left: 50px;}
+    .listingPage.shop .productCard{padding-right: 50px; padding-left: 50px;}
+}
+
+@media screen and (min-width : 500px) and (max-width : 767.20px) {
+    .courseCard{margin-top: 0px; padding-right: 90px; padding-left: 90px;}
+}
+
+@media screen and (min-width : 767.20px) and (max-width : 992px){
+    .courseCard{margin-top: 0px; padding-right: 0px; padding-left: 0px;}
+    .courseCard .item{height: 240px;}
+    .courseCard .item img{width: 140px; height: 140px; margin-top: 15px;}
+    .courseCard .cardBtn button{background: #fce6cf; width: 100%; border-radius: 70px; height: 50px;
+        font-size: 16px; font-weight: 600;}
+}
+
+/* backend : banners: */
+
+.mobileBannerImage.three{height: 200px; object-fit: cover; border-radius: 15%; padding-right: 20px; padding-left: 20px; object-position: top;}
+.mobileBannerImage.four{height: 200px; object-fit: cover; border-radius: 15%; padding-right: 20px; padding-left: 20px; object-position: top;}
