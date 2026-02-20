@@ -137,12 +137,13 @@ const App = () => {
     }
 
 
-    // fix: 20 Feb
-    const FixedUser = JSON.parse(localStorage.getItem("user"));
-    const FixedUserId = FixedUser?.userId;
 
     useEffect(() => {
         //const user = JSON.parse(localStorage.getItem("user"));
+
+        // fix: 20 Feb
+        const FixedUser = JSON.parse(localStorage.getItem("user"));
+        const FixedUserId = FixedUser?.userId;
 
 
         if (!FixedUserId) return;
@@ -150,7 +151,7 @@ const App = () => {
         fetchDataFromApi(`/api/cart?userId=${FixedUserId}`).then((res) => {
             setCartData(res);
         })
-    }, [FixedUserId]);
+    }, []);
 
 
 
