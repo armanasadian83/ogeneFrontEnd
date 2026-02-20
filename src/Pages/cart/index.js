@@ -38,6 +38,7 @@ const Cart = () => {
         if(user?.userId === id){
             fetchDataFromApi(`/api/cart?userId=${id}`).then((res) => {
                 setCartData(res);
+                console.log(res);
         });
         }
     }, []);
@@ -142,7 +143,7 @@ const Cart = () => {
                                                         <Link to={`/product/${item?.productId}`} className="d-flex align-items-center productBox">
                                                             <div className="imgWrapper">
                                                                 <div className="img">
-                                                                    <img className="w-100" src={item?.images[0]} />
+                                                                    <img className="w-100" src={item?.image} />
                                                                 </div>
                                                             </div>
                                                             <div className="info pl-3">

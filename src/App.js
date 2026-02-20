@@ -136,12 +136,21 @@ const App = () => {
         })
     }
 
+
+    // fix: 20 Feb
+    const FixedUser = JSON.parse(localStorage.getItem("user"));
+    const FixedUserId = FixedUser?.userId;
+
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        fetchDataFromApi(`/api/cart?userId=${user?.userId}`).then((res) => {
+        //const user = JSON.parse(localStorage.getItem("user"));
+
+
+        if (!FixedUserId) return;
+
+        fetchDataFromApi(`/api/cart?userId=${FixedUserId}`).then((res) => {
             setCartData(res);
         })
-    }, [cartData]);
+    }, [FixedUserId]);
 
 
 

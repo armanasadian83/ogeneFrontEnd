@@ -279,7 +279,7 @@ const Navbar = () => {
                         <Link  onClick={SideNavClose} to={`/cart/${context.user?.userId}`} className="cartIcon">
                             <div>
                                 <BsBasket3Fill />
-                                <span className="d-flex align-items-center justify-content-center">{context.cartData?.length}</span>
+                                {/*<span className="d-flex align-items-center justify-content-center">{context.cartData?.length}</span>*/}
                                 &nbsp;
                                 سبد خرید
                             </div>
