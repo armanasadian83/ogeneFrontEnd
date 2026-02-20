@@ -146,7 +146,8 @@ const App = () => {
         const FixedUserId = FixedUser?.userId;
 
 
-        if (!FixedUserId) return;
+        if (FixedUserId === null || FixedUserId === undefined || !FixedUserId) return;
+        if (!FixedUser === null || FixedUser === undefined || !FixedUser) return;
 
         fetchDataFromApi(`/api/cart?userId=${FixedUserId}`).then((res) => {
             setCartData(res);
