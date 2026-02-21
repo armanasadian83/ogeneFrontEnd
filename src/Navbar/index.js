@@ -205,10 +205,10 @@ const Navbar = () => {
                         }
                         {
                             context.isLoggedIn === true && 
-                            <Link  to={`/cart/${context.user?.userId}`}>
+                            <Link to={`/cart/${context.user?.userId}`}>
                                 <Button className="hideInMobile">
                                     <BsBasket3Fill />
-                                    <span className="d-flex align-items-center justify-content-center basketCounter">{context.cartData?.length}</span>
+                                    {/*<span className="d-flex align-items-center justify-content-center basketCounter">{context.cartData?.length}</span>*/}
                                 </Button>
                             </Link>
                         }
