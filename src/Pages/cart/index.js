@@ -140,7 +140,7 @@ const Cart = () => {
                                                 </td>
                                                 <td>
                                                     <div>
-                                                        <Link to={`/product/${item?.productId}`} className="d-flex align-items-center productBox">
+                                                        <div className="d-flex align-items-center productBox">
                                                             <div className="imgWrapper">
                                                                 <div className="img">
                                                                     <img className="w-100" src={item?.image} />
@@ -151,7 +151,7 @@ const Cart = () => {
                                                                     {item?.productTitle?.substr(0, 30) + '...'}
                                                                 </h6>
                                                             </div>
-                                                        </Link>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td>

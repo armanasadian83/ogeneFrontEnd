@@ -13,7 +13,7 @@ const CalenderBar = () => {
     return (
         <>
         <div className="w-100 calenderBar d-flex align-items-center justify-content-center">
-                <p>تقویم زمستان منتشر شد!</p>
+                <p>تقویم تابستان منتشر شد!</p>
                 <Button onClick={handleDownload}>مشاهده تقویم</Button>
         </div>
         </>

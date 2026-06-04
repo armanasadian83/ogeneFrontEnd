@@ -26,7 +26,7 @@ const CoursesSection = () => {
         <div className='CoursesSection'>
                 <div className='text-center title'>
                     <h2>دوره های آموزشی</h2>
-                    <p>تقویم آموزشی آذر ماه 1404</p>
+                    <p>تقویم آموزشی تیرماه 1405</p>
                 </div>
 
                 <div className='CoursesWrapper'>
@@ -63,7 +63,7 @@ const CoursesSection = () => {
                                         <div className='item'>
                                             <div className='text-center paddingForMobile'>
                                                 <div className='cardInfo'>
-                                                    <img src={item?.images[0]} />
+                                                    <img src={item?.images[0]} style={{borderRadius: '20px'}} />
                                                     <p className='mt-3'>{item?.name?.substring(0, 62)}</p>
                                                 </div>
                                                 <div className='cardBtn'>

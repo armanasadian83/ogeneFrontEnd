@@ -158,9 +158,18 @@ const ProductItem = () => {
         }));
     }
 
-    const changeRating = (e) => {
+    /*const changeRating = (e) => {
         reviews.customerRating = e.target.value;
-    }
+    }*/
+
+
+    const changeRating = (e, newValue) => {
+        // If using Material-UI Rating, newValue is the number directly
+        setReviews(prev => ({
+            ...prev,
+            customerRating: newValue
+        }));
+    };
     
     const addReview = (e) => {
         e.preventDefault();
