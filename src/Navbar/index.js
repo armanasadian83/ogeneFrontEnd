@@ -24,6 +24,8 @@ import { FaUserCog } from "react-icons/fa";
 import { MdPublishedWithChanges } from "react-icons/md";
 import { GiShoppingBag } from "react-icons/gi";
 
+import { IoChevronDownOutline } from "react-icons/io5";
+
 const Navbar = () => {
 
     const [dialogWidth, setDialogWidth] = useState('lg');
@@ -97,6 +99,40 @@ const Navbar = () => {
         } 
     }
 
+    const [navbarDropDown, setNavbarDropDown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setNavbarDropDown(false);
+            }
+        }; 
+
+        const handleScroll = () => {
+            if (navbarDropDown) {
+                setNavbarDropDown(false);
+            }
+        };
+
+        // Use 'click' instead of 'mousedown' and add it to the document
+        document.addEventListener('click', handleClickOutside);
+        document.addEventListener('scroll', handleScroll, true);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('scroll', handleScroll, true);
+        };
+    }, [navbarDropDown]);
+
+    const navigate = useNavigate();
+
+    const handleClick = (value) => {
+        context.setCourseFilterValue(value);
+        navigate('/courseShop'); // Navigate without filter in URL
+    };
+
+
     //backend
     const [btnDisabled, setBtnDisabled] = useState(false);
 
@@ -149,12 +185,48 @@ const Navbar = () => {
                     </div>
                     <div className="menuItems">
                         <ul className="list-unstyled d-flex">
-                            <Link to='/courseShop'><li>دوره های آموزشی</li></Link>
+                            <div ref={dropdownRef} style={{position: 'relative'}}>
+                                
+                                <li className={`flex align-items-center ${navbarDropDown && 'fixedBold'}`} 
+                                onClick={() => setNavbarDropDown(!navbarDropDown)}>
+                                    دوره های آموزشی &nbsp;
+                                    <span><IoChevronDownOutline 
+                                    className={`icon ${navbarDropDown ? 'rotatefull' : ''}`} /></span>
+                                </li>
+                                {
+                                    navbarDropDown &&
+                                    <div className="dropdownMenu shadow shadow-md">
+                                        <div onClick={() => handleClick('سلولی، مولکولی و ژنتیک')}>
+                                            سلولی، مولکولی و ژنتیک
+                                        </div>
+                                        <div onClick={() => handleClick('میکروبیولوژی')}>
+                                            میکروبیولوژی
+                                        </div>
+                                        <div onClick={() => handleClick('خدمات عمومی')}>
+                                            خدمات عمومی
+                                        </div>
+                                        <div onClick={() => handleClick('نانوفناوری')}>
+                                            نانوفناوری
+                                        </div>
+                                        <div onClick={() => handleClick('بالینی و مدل حیوانی')} className="text-nowrap">
+                                            بالینی و مدل حیوانی/هیستولوژی
+                                        </div>
+                                        <div onClick={() => handleClick('زیست پزشکی')}>
+                                            زیست پزشکی
+                                        </div>
+                                        <div onClick={() => handleClick(0)}>
+                                            تمامی دوره ها
+                                        </div>
+                                    </div>
+                                }
+                            
+                            </div>
                             <Link to='/degree'><li>مدرک فنی و حرفه ای</li></Link>
                             {/*<Link to=''><li>مدرک کارآموزی</li></Link>*/}
                             <Link to='/service'><li>خدمات</li></Link>
                             <Link to='/shop'><li>فروشگاه</li></Link>
-                            <Link to='/aboutUs'><li>درباره اوژن</li></Link>
+                            <Link to='/'><li>بلاگ</li></Link>
+                            <Link to='/aboutUs'><li>درباره و تماس</li></Link>
                         </ul>
                     </div>
 
@@ -200,7 +272,7 @@ const Navbar = () => {
                                 </Link>
                             :
                             <Link to='/logIn'>
-                                <Button className="hideInMobile logInBtn ms-1">ورود</Button>
+                                <div className="hideInMobile logInBtn ms-1">ورود</div>
                             </Link>
                         }
                         {
@@ -213,9 +285,9 @@ const Navbar = () => {
                             </Link>
                         }
                         <Tooltip title="جستجو" arrow>
-                            <Button onClick={context.handleClickOpenSearchModal}>
+                            <div onClick={context.handleClickOpenSearchModal} className="searchBtn">
                                 <IoSearch />
-                            </Button>
+                            </div>
                         </Tooltip>
                         <Button className="menuButton" onClick={SideNavOpen}>
                             <MdOutlineMenu />

@@ -41,7 +41,7 @@
 
 @media screen and (max-width : 1300px){
     .special.container{max-width: 1000px;}
-    .menuItems li{padding: 0px 28px; text-wrap: nowrap !important;}
+    .menuItems li{padding: 0px 18px; text-wrap: nowrap !important;}
     .myNavbar .picture{width: 150px; height: auto;}
 }
 
@@ -261,7 +261,7 @@
     .blurInMobileTwo{opacity: 0.4; z-index: 1; pointer-events: none;}
 }
 
-@media screen and (max-width : 500px){
+@media screen and (max-width : 580px){
     .CoursesSection{margin-top: 60px;}
     .CoursesSection .title h2{font-weight: 600; font-size: 24px;}
     .CoursesSection .title p{font-size: 16px; font-weight: 500;}
@@ -269,11 +269,13 @@
     .CoursesSection .item{margin-right: 55px;}
     .CoursesSection .item img{width: 200px; height: 200px; margin-top: 10px; border-radius: 20px;}
     .CoursesSection .item p{font-weight: 700; color: #000000; font-size: 18px; line-height: 25px; padding-bottom: 20px;}
-    .CoursesSection .item .cardInfo{width: 100%; height: auto; border-radius: 77px;}
+    .CoursesSection .item .cardInfo{width: 100%; height: auto; border-radius: 77px; padding: 0px 20px;}
     .CoursesSection .item .cardBtn{width: 100%; height: 43px;}
     .CoursesSection .cardBtn button{font-size: 19px;}
     .paddingForMobile{padding-right: 40px; padding-left: 40px;}
     .displayNoneInMobile{display: none;}
+
+    .CoursesSection .item .cardInfo p{font-size: 15px;}
 }
 
 @media screen and (max-width : 500px) {
@@ -289,9 +291,9 @@
 }
 
 @media screen and (max-width : 1500px) {
-    .footerSection .overlap-container{height: 700px;}
-    .footerSection .bottom-div{height: 685px;}
-    .footerSection .top-div{height: 685px;}
+    .footerSection .overlap-container{height: 750px;}
+    .footerSection .bottom-div{height: 735px;}
+    .footerSection .top-div{height: 735px;}
     .footerSection .container{padding-top: 100px;}
     .footerSection .container h2{font-size: 24px !important;}
     .footerSection .container .col-12 p{line-height: 25px; font-size: 18px;}

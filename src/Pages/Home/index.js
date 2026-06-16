@@ -243,7 +243,7 @@ const Home = () => {
             </div>
 
             {/* Courses (Informative Section) -> Components -> CourseInformativeHome */}
-            <CoursesInformative />
+            {/*<CoursesInformative />*/}
 
             {/* Calender Section -> Components -> CalenderHome 
             <CalenderSection />*/}

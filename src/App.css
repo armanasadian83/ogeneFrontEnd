@@ -24,6 +24,7 @@ body{overflow-x: hidden !important;}
 
 /* Navbar */
 .myNavbar{width: 100%; color: #212529 !important; font-weight: 600; font-size: 15px; z-index: 1000 !important;}
+.myNavbar .logoSection:hover{transform: scale(1.03); transition: 200ms;}
 .myNavbar button{border-radius: 50% !important; width: 50px !important; height: 50px !important;
   color: #000 !important; max-width: 50px !important;}
 .myNavbar button:hover{color: #000 !important;}
@@ -31,16 +32,27 @@ body{overflow-x: hidden !important;}
 .myNavbar .btnGroup{margin: 0px 80px 10px 0px;}
 .logoSection img{width: 200px; height: 210px; cursor: pointer;}
 .menuItems{text-align: center !important; width: 70%;}
-.menuItems li{padding: 0px 43px; text-wrap: nowrap !important;}
+.menuItems li{padding: 0px 36px; text-wrap: nowrap !important;}
+.menuItems li:hover{transform: scale(1.1); transition: 100ms;}
 a{text-decoration: none !important; color: #212529;}
 .myNavbar .menuButton{display: none;}
 .sidenavOpen, .sidenavClosed{width: 0;}
 .sidenavOpen a, .sidenavClosed a{display: none;}
 .sidenavOpen button, .sidenavClosed button{display: none;}
-.logInBtn{border-radius: 70% !important; font-size: 17px !important;}
-.logInBtn:hover{background: #f3efef !important;}
+
+.myNavbar .searchBtn{font-size: 22px; cursor: pointer;}
+.myNavbar .searchBtn:hover{transform: scale(1.1); transition: 200ms;}
+.logInBtn{font-size: 17px !important; padding: 0px 20px;}
+.logInBtn:hover{transform: scale(1.1);}
 .myNavbar button span.basketCounter{position: absolute; right: 5px; top: 5px; background: #849490;
     border-radius: 50%; width: 20px; height: 20px;}
+
+.myNavbar .dropdownMenu{background: #f3f3f3; position: absolute; top: 30px; text-align: right;
+  padding: 0px; z-index: 1500 !important; border-radius: 20px;}
+.myNavbar .dropdownMenu div{padding: 10px 15px; font-weight: 400; cursor: pointer;}
+.myNavbar .fixedBold{transform: scale(1.1);}
+.myNavbar .icon{transition: 500ms;}
+.myNavbar .rotatefull{transform: rotate(180deg);}
 
 /*search modal*/
 .modalInput{width: 600px; height: 50px; outline: none; border: 0px; padding: 2px 20px;
@@ -251,7 +263,7 @@ a{text-decoration: none !important; color: #212529;}
 
 
 /* Courses Section */
-.CoursesSection{margin-top: 100px; overflow-x: hidden !important;}
+.CoursesSection{margin-top: 70px; overflow-x: hidden !important;}
 .CoursesSection .title h2{font-weight: 500; font-size: 38px;}
 .CoursesSection .title p{font-size: 18px; font-weight: 500;}
 .CoursesSection .CoursesWrapper{padding-right: 100px; padding-left: 100px; margin-top: 50px; margin-left: 0px !important;}

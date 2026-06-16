@@ -154,6 +154,9 @@ const App = () => {
         })
     }, []);
 
+    // 16 June update:
+    const [courseFilterValue, setCourseFilterValue] = useState(0);
+
 
 
 
@@ -178,7 +181,9 @@ const App = () => {
         addtoCart,
         setAddingInCart,
         addingInCart,
-        cartData
+        cartData,
+        courseFilterValue,
+        setCourseFilterValue
     }
 
     return (

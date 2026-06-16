@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import CourseCard from "../../Components/Cards/courseCard";
 import { MyContext } from "../../App";
 
@@ -33,13 +33,13 @@ const CourseShop = () => {
     }, []);
 
     const context = useContext(MyContext);
-    const [value, setValue] = useState(0);
+    //const [value, setValue] = useState(0);
     const [viewActive, setViewActive] = useState(context.itemView);
     const [loading, setLoading] = useState(true);
     const [btnDisabled, setBtnDisabled] = useState(false);
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        context.setCourseFilterValue(newValue);
     };
 
     const changeItemView = (index) => {
@@ -68,7 +68,7 @@ const CourseShop = () => {
       setAnchorEl(event.currentTarget);
     };
     const handleClose = (value) => {
-      setValue(value);
+      context.setCourseFilterValue(value);
       setAnchorEl(null);
     };
 
@@ -76,7 +76,7 @@ const CourseShop = () => {
     useEffect(() => {
         const handleScrollTwo = () => {
             if (anchorEl) {
-                handleClose(value); 
+                handleClose(context.courseFilterValue); 
             }
         };
         window.addEventListener('scroll', handleScrollTwo);
@@ -98,8 +98,8 @@ const CourseShop = () => {
 
     useEffect(() => {
         setBtnDisabled(true);
-        if(value !== 0){
-            fetchDataFromApi(`/api/course?filterKey=${value}`).then((res) => {
+        if(context.courseFilterValue !== 0){
+            fetchDataFromApi(`/api/course?filterKey=${context.courseFilterValue}`).then((res) => {
                 setCourseDate(res);
                 setTimeout(() => {
                     setBtnDisabled(false);
@@ -115,7 +115,7 @@ const CourseShop = () => {
             })
         }
         
-    }, [value]);
+    }, [context.courseFilterValue]);
 
 
     return (
@@ -137,7 +137,7 @@ const CourseShop = () => {
                             <RadioGroup
                                 aria-labelledby="demo-controlled-radio-buttons-group"
                                 name="controlled-radio-buttons-group"
-                                value={value}
+                                value={context.courseFilterValue}
                                 onChange={handleChange}
                                 className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
                             >
@@ -181,7 +181,7 @@ const CourseShop = () => {
                                 <div className="tabSection">
                                     <Box sx={{ maxWidth: { xs: 2820, sm: 2080 }}} >
                                         <Tabs
-                                            value={value}
+                                            value={context.courseFilterValue}
                                             onChange={handleChange}
                                             variant="scrollable"
                                             scrollButtons={false}
@@ -201,13 +201,13 @@ const CourseShop = () => {
 
                                 <div className="mobileTabSection">
                                     <div className="btnWrapper">
-                                        <Button onClick={handleClick}>{value === 0 ? 'همه دوره ها' : value}&nbsp; <IoIosArrowDown /></Button>
+                                        <Button onClick={handleClick}>{context.courseFilterValue === 0 ? 'همه دوره ها' : context.courseFilterValue}&nbsp; <IoIosArrowDown /></Button>
                                     </div>
                                     <Menu
                                         id="basic-menu"
                                         anchorEl={anchorEl}
                                         open={open}
-                                        onClose={() => handleClose(value)}
+                                        onClose={() => handleClose(context.courseFilterValue)}
                                         slotProps={{
                                           list: {
                                             'aria-labelledby': 'basic-button',

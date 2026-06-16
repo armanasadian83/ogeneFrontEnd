@@ -13,13 +13,31 @@ const CoursesSection = () => {
 
     // backend
 
-    const [courseData, setCourseDate] = useState([]);
+    const [courseData, setCourseData] = useState([]);
 
     useEffect(() => {
         fetchDataFromApi('/api/course').then((res) => {
-            setCourseDate(res);
+            setCourseData(res);
         })
     }, []);
+
+
+    // to show random numbers:
+    const [startIndex, setStartIndex] = useState(0);
+    const ITEMS_TO_SHOW = 10;
+    
+    // Generate random start index when component mounts
+    useEffect(() => {
+        if (courseData?.length > ITEMS_TO_SHOW) {
+            const maxStart = courseData.length - ITEMS_TO_SHOW;
+            const randomStart = Math.floor(Math.random() * (maxStart + 1));
+            setStartIndex(randomStart);
+        }
+    }, [courseData]);
+    
+    // Calculate end index
+    const endIndex = Math.min(startIndex + ITEMS_TO_SHOW, courseData?.length || 0);
+    const displayData = Array.isArray(courseData) ? courseData.slice(startIndex, endIndex) : [];
 
     return (
         <>
@@ -34,8 +52,13 @@ const CoursesSection = () => {
                     slidesPerView={4}
                     spaceBetween={200}
                     navigation={false}
-                    loop={false}
-                    modules={[Navigation]}
+                    loop={true}
+                    modules={[Navigation, Autoplay]}
+                    autoplay={{
+                        delay: 3000, // 3000ms = 3 seconds (change this value as needed)
+                        disableOnInteraction: false, // Set to true if you want to stop autoplay when user interacts
+                        pauseOnMouseEnter: true, // Pause autoplay when mouse hovers over the slider
+                    }}
                     
                     breakpoints={{
                         200 : {
@@ -57,7 +80,7 @@ const CoursesSection = () => {
                     }}
                     >
                         {
-                            courseData?.length !== undefined && courseData?.length !== 0 && courseData?.map((item, index) => {
+                            displayData?.length !== undefined && displayData?.length !== 0 && displayData?.map((item, index) => {
                                 return(
                                     <SwiperSlide key={index}>
                                         <div className='item'>
@@ -80,9 +103,9 @@ const CoursesSection = () => {
                             })
                         }
 
-                        <SwiperSlide className='displayNoneInMobile'>
+                        {/*<SwiperSlide className='displayNoneInMobile'>
 
-                        </SwiperSlide>
+                        </SwiperSlide>*/}
                     </Swiper>
 
                 </div>
