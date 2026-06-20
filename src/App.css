@@ -2,6 +2,7 @@
 *{font-family: fugen-font !important;}
 .inputFont{font-family:'Times New Roman', Times, serif !important;}
 input, textarea{font-family:'Times New Roman', Times, serif !important;}
+.cursor-pointer{cursor: pointer;}
 
 html{overflow-x: hidden !important; padding-left: 0px; padding-right: 0px;}
 body{overflow-x: hidden !important;}
@@ -47,9 +48,10 @@ a{text-decoration: none !important; color: #212529;}
 .myNavbar button span.basketCounter{position: absolute; right: 5px; top: 5px; background: #849490;
     border-radius: 50%; width: 20px; height: 20px;}
 
-.myNavbar .dropdownMenu{background: #f3f3f3; position: absolute; top: 30px; text-align: right;
-  padding: 0px; z-index: 1500 !important; border-radius: 20px;}
+.myNavbar .dropdownMenu{background: #f8f8f8; position: absolute; top: 35px; text-align: right;
+  padding: 0px; z-index: 1500 !important; border-radius: 20px; overflow: hidden;}
 .myNavbar .dropdownMenu div{padding: 10px 15px; font-weight: 400; cursor: pointer;}
+.myNavbar .dropdownMenu div:hover{background: #e7e7e7; transition: all 300ms;}
 .myNavbar .fixedBold{transform: scale(1.1);}
 .myNavbar .icon{transition: 500ms;}
 .myNavbar .rotatefull{transform: rotate(180deg);}
@@ -145,11 +147,13 @@ a{text-decoration: none !important; color: #212529;}
 
 /* shopBanner section for Home page */
 .shopBanner{width: 100%; margin-top: 240px; background: #e6ae72; height: 500px;}
+.shopBanner:hover .imgWrapper img{transform: scale(1.03); transition: 400ms;}
 .shopBanner .row{height: 100%;}
 .shopBanner .infoContent{padding: 10px 190px; margin-right: 100px;}
 .shopBanner .infoContent h1{font-weight: 600;}
 .shopBanner .infoContent p{font-weight: 600; font-size: 18px;}
 .shopBanner .infoContent button{color: #000; background: #D1F2EB; padding: 5px 30px; border-radius: 15px; font-size: 18px;}
+.shopBanner .infoContent button:hover{transform: scale(1.06); transition: all 100ms; background: rgb(203, 254, 242);}
 .shopBanner .imgWrapper{padding-left: 400px;}
 .shopBanner .imgWrapper img{width: 650px;}
 
@@ -649,11 +653,27 @@ table.v-align td .scrollBox{text-wrap: nowrap; width: 270px; overflow: scroll; p
   align-items: center; justify-content: center; color: #808083;}
 .accountProfile p{margin-bottom: 0px; font-size: 26px;}
 
-
-
 /* 12/1/2025 : banners  */
 .bannerImg.three{width: 700px; transform: translateX(100px); height: 550px; border-radius: 30px; object-fit: cover; object-position: top;}
 .bannerImg.four{width: 700px; transform: translateX(100px); height: 550px; border-radius: 30px; object-fit: cover; object-position: top;}
+
+/* Blog page */
+.blogPage .icon{font-size: 30px; color: #27AA98;}
+.blogPage .content{gap: 10px;}
+/* Blog page */
+
+/* Bale Alert */
+.baleAlert{position: fixed; z-index: 2000 !important; bottom: 20px; right: 20px;}
+.baleAlert .logoWrapper{width: 50px; height: 50px; border-radius: 15px; object-fit: cover; overflow: hidden;
+    cursor: pointer; background: #f5f5f5; transition: all 1000ms; animation: ease-in-out;}
+.baleAlert .logoWrapper:hover{width: 250px; transition: all 1000ms; animation: ease-in-out;}
+.baleAlert .logoWrapper img{width: 50px; height: 50px; border-radius: 5px;}
+.baleAlert .logoWrapper img:hover{transform: scale(1.05); transition: 200ms;}
+.baleAlert .logoWrapper p{transform: translateY(-3px);}
+.baleAlert .logoWrapper .svg{transform: translateY(-3px); margin-right: 25px; padding-left: 10px; font-size: 22px;}
+.baleAlert .logoWrapper .svg:hover{font-size: 24px;}
+
+/* Bale Alert */
 
 
 

@@ -31,6 +31,8 @@ import Cart from "./Pages/cart";
 import { fetchDataFromApi, postData } from "./utils/api";
 import VerifyOTP from "./Pages/verifyOTP";
 import AccountPage from "./Pages/account/accountPage";
+import Blog from "./Pages/Blog";
+import BaleAlert from "./Components/baleAlert";
 
 export const MyContext = createContext();
 
@@ -157,6 +159,9 @@ const App = () => {
     // 16 June update:
     const [courseFilterValue, setCourseFilterValue] = useState(0);
 
+    // 20 June update:
+    const [isBaleIconShown, setIsBaleIconShown] = useState(true);
+
 
 
 
@@ -183,7 +188,9 @@ const App = () => {
         addingInCart,
         cartData,
         courseFilterValue,
-        setCourseFilterValue
+        setCourseFilterValue,
+        isBaleIconShown,
+        setIsBaleIconShown
     }
 
     return (
@@ -202,6 +209,10 @@ const App = () => {
                 </Snackbar>
             {isShowCalenderBar === true && <CalenderBar />}
             {isShowNavbar === true && <Navbar />}
+
+
+            {isBaleIconShown && <BaleAlert />}
+
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/service" element={<Service />} />
@@ -213,6 +224,7 @@ const App = () => {
                     <Route path="/degree" element={<FaniHerfeiDegree />} />
                     <Route path="/courseShop" element={<CourseShop />} />
                     <Route path="/shop" element={<Shop />} />
+                    <Route path="/blog" element={<Blog />} />
                     <Route path="/cart/:id" element={<Cart />} />
                     <Route path="/verifyOTP" element={<VerifyOTP />} />
                     <Route path="/accountPage/:id" element={<AccountPage />} />

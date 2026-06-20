@@ -187,7 +187,7 @@ const Navbar = () => {
                         <ul className="list-unstyled d-flex">
                             <div ref={dropdownRef} style={{position: 'relative'}}>
                                 
-                                <li className={`flex align-items-center ${navbarDropDown && 'fixedBold'}`} 
+                                <li className={`flex align-items-center cursor-pointer ${navbarDropDown && 'fixedBold'}`} 
                                 onClick={() => setNavbarDropDown(!navbarDropDown)}>
                                     دوره های آموزشی &nbsp;
                                     <span><IoChevronDownOutline 
@@ -212,7 +212,7 @@ const Navbar = () => {
                                             بالینی و مدل حیوانی/هیستولوژی
                                         </div>
                                         <div onClick={() => handleClick('زیست پزشکی')}>
-                                            زیست پزشکی
+                                            زیست پزشکی و گیاهی
                                         </div>
                                         <div onClick={() => handleClick(0)}>
                                             تمامی دوره ها
@@ -225,7 +225,7 @@ const Navbar = () => {
                             {/*<Link to=''><li>مدرک کارآموزی</li></Link>*/}
                             <Link to='/service'><li>خدمات</li></Link>
                             <Link to='/shop'><li>فروشگاه</li></Link>
-                            <Link to='/'><li>بلاگ</li></Link>
+                            <Link to='/blog'><li>بلاگ</li></Link>
                             <Link to='/aboutUs'><li>درباره و تماس</li></Link>
                         </ul>
                     </div>
@@ -368,6 +368,7 @@ const Navbar = () => {
                     {/*<Link to='' onClick={SideNavClose}><li>مدرک کارآموزی</li></Link>*/}
                     <Link to='/service' onClick={SideNavClose}><li>خدمات</li></Link>
                     <Link to='/shop' onClick={SideNavClose}><li>فروشگاه</li></Link>
+                    <Link to='/blog' onClick={SideNavClose}><li>بلاگ</li></Link>
                     <Link to='/aboutUs' onClick={SideNavClose}><li>درباره اوژن</li></Link>
                 </div>
             </div>

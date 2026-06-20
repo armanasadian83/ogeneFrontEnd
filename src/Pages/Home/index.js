@@ -25,6 +25,7 @@ import { MyContext } from "../../App";
 import { useContext, useEffect } from 'react';
 import TabsHome from '../../Components/tabSectionHome';
 import { Link } from 'react-router-dom';
+import BaleAlert from '../../Components/baleAlert';
 
 const Home = () => {
 

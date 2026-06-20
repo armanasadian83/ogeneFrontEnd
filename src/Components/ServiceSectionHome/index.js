@@ -72,7 +72,7 @@ const ServiceSection = () => {
                             <div class="bottom-div"></div>
                             <div class="top-div text-center">
                                 <img src={imgOne} className="imgLine1" />
-                                <div className="text-center">زیست پزشکی</div>
+                                <div className="text-center">زیست پزشکی و گیاهی</div>
                             </div>
                         </div>
                     </Link>

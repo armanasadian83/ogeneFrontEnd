@@ -128,7 +128,7 @@ const FieldFive = () => {
         <>
         <div className="feildCellularAndMolecular">
             
-            <FieldsBanner name={'زیست پزشکی'} ref={ref} />
+            <FieldsBanner name={'زیست پزشکی و گیاهی'} ref={ref} />
 
             <div className="container">
                 <div className="section" ref={ref}>

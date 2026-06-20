@@ -479,7 +479,7 @@
     .courseCard{margin-top: 0px; padding-right: 30px; padding-left: 30px;}
     .courseCard .item{width: 100%; background: #d9f4ee; border-radius: 50px;}
     .courseCard .item img{width: 220px; height: 220px; margin-top: 15px;}
-    .courseCard .item p{font-size: 20px; font-weight: 600; padding-bottom: 18px;}
+    .courseCard .item p{font-size: 16px; font-weight: 600; padding-bottom: 18px;}
     .courseCard .cardBtn{margin-bottom: 30px; transform: translateY(-20px);}
     .courseCard .cardBtn button{background: #fce6cf; width: 100%; border-radius: 70px; height: 50px;
         font-size: 20px; font-weight: 600;}
@@ -565,6 +565,12 @@
     .courseCard .item img{width: 140px; height: 140px; margin-top: 15px;}
     .courseCard .cardBtn button{background: #fce6cf; width: 100%; border-radius: 70px; height: 50px;
         font-size: 16px; font-weight: 600;}
+}
+
+@media screen and (max-width : 500px){
+    .blogPage{padding: 20px 0px !important;}
+    .blogPage .icon{font-size: 30px; color: #27AA98;}
+
 }
 
 /* backend : banners: */
