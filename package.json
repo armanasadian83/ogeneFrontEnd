@@ -25,6 +25,7 @@
     "react-slick": "^0.30.3",
     "react-top-loading-bar": "^3.0.2",
     "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
     "styled-components": "^6.1.19",
     "swiper": "^11.2.10",
     "web-vitals": "^2.1.0"

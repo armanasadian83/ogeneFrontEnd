@@ -20,6 +20,10 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { CircularProgress, Rating } from "@mui/material";
 
+// adding markdown
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 
 const ProductItem = () => {
 
@@ -37,7 +41,7 @@ const ProductItem = () => {
     } ,[id]);
 
 
-    const [infoTab, setInfoTab] = useState(1);
+    const [infoTab, setInfoTab] = useState(2);
     const openTab = (id) => {
         //console.log(id);
         setInfoTab(id);
@@ -271,7 +275,27 @@ const ProductItem = () => {
 
                     <div className="description mt-4">
                         <p className="title">درباره این محصول</p>
-                        <p style={{ whiteSpace: 'pre-line' }}>{productData?.description}</p>
+                        <p style={{ whiteSpace: 'pre-line' }}>
+                            <ReactMarkdown 
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                    img: ({node, ...props}) => (
+                                        <img 
+                                            {...props} 
+                                            style={{ 
+                                                width: '100%', 
+                                                height: 'auto',
+                                                paddingLeft: '10px',
+                                                paddingRight: '10px'
+                                            }} 
+                                        />
+                                    ),
+                                    p: ({node, ...props}) => <span {...props} /> // Removes extra paragraph tags
+                                }}
+                            >
+                                {productData?.description || ''}
+                            </ReactMarkdown>
+                        </p>
                     </div>
 
                      <div className="d-flex align-items-center p-1">
@@ -353,7 +377,7 @@ const ProductItem = () => {
 
             <div className=" CourseInfo mt-5">
                 <div className="CourseInfoBtns d-flex">
-                    <button onClick={() => openTab(1)}>معرفی محصول</button>
+                    {/*<button onClick={() => openTab(1)}>معرفی محصول</button>*/}
                     {
                         productData?.authorName !== '' && <button onClick={() => openTab(2)}>نویسنده</button>
                     }
@@ -362,7 +386,7 @@ const ProductItem = () => {
                 </div>
 
                 <div className="CourseInfoTabs">
-                    {
+                    {/*
                         infoTab === 1 && (
                             <div className="tabInfo w-100">
                                 <h4 style={{ whiteSpace: 'pre-line' }} className="pe-4">
@@ -370,20 +394,40 @@ const ProductItem = () => {
                                 </h4>
                             </div>
                         )
-                    }
+                    */}
 
                     {
                         infoTab === 2 && (
-                            <div className="text-center">
+                            <div className="text-center authorData">
                                 <h3 className="mt-4">معرفی نویسنده :</h3><br />
-                                 <h4 style={{ whiteSpace: 'pre-line' }} className="pe-4">
+
+                                <h4 style={{ whiteSpace: 'pre-line', textAlign: 'right' }} className="pe-4">
                                     <div className="d-flex align-items-center">
                                         <h3>نام نویسنده :</h3>
-                                        <h3>{productData?.authorName}</h3><br />
+                                        <h3 className="me-2">{productData?.authorName}</h3>
                                     </div>
-                                    <p style={{textAlign: 'right'}}>
-                                        {productData?.authorDescription}
-                                    </p>
+                                    <br />
+                                        <div className="text">
+                                            <ReactMarkdown 
+                                                remarkPlugins={[remarkGfm]}
+                                                components={{
+                                                    img: ({node, ...props}) => (
+                                                        <img 
+                                                            {...props} 
+                                                            style={{ 
+                                                                width: '100%', 
+                                                                height: 'auto',
+                                                                paddingLeft: '10px',
+                                                                paddingRight: '10px'
+                                                            }} 
+                                                        />
+                                                    ),
+                                                    p: ({node, ...props}) => <span {...props} />
+                                                }}
+                                            >
+                                                {productData?.authorDescription || ''}
+                                            </ReactMarkdown>
+                                        </div>
                                 </h4>
                             </div>
                         )

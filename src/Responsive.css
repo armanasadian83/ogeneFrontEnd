@@ -335,7 +335,7 @@
     .CourseItem .card .AddToCartBtn button{font-size: 17px !important; padding: 8px 4px !important;}
 
     .CourseItem h1{font-size: 32px; margin-top: 20px; text-align: center;}
-    .CourseItem h3{font-size: 28px; text-align: center;}
+    .CourseItem h3{font-size: 20px; text-align: center;}
     .CourseItem .description p.title{font-size: 24px; text-align: center;}
     .CourseItem .description p{font-size: 21px; text-align: justify;}
 
@@ -357,12 +357,12 @@
     .CourseItem .card .AddToCartBtn button{font-size: 17px !important; padding: 8px 4px !important;}
 
     .CourseItem h1{font-size: 28px; margin-top: 20px; text-align: center;}
-    .CourseItem h3{font-size: 26px; text-align: center;}
-    .CourseItem .description p.title{font-size: 22px; text-align: center;}
-    .CourseItem .description p{font-size: 20px; text-align: justify;}
+    .CourseItem h3{font-size: 20px; text-align: center;}
+    .CourseItem .description p.title{font-size: 20px; text-align: center;}
+    .CourseItem .description p{font-size: 17px; text-align: justify;}
 
     .CourseItem .CourseInfo .CourseInfoBtns{gap: 6px; overflow-x: scroll; white-space: nowrap; width: 100%;}
-    .CourseItem .CourseInfo .CourseInfoBtns button{height: 50px; font-size: 22px; margin: 3px; padding-right: 10px; padding-left: 10px;}
+    .CourseItem .CourseInfo .CourseInfoBtns button{height: 50px; font-size: 18px; margin: 3px; padding-right: 10px; padding-left: 10px;}
     .CourseItem .CourseInfo .tabInfo ul li{font-size: 20px;}
     .CourseItem .CourseInfo .tabInfo .calenderInfo{font-size: 18px;}
 
@@ -372,6 +372,11 @@
     .CourseItem .tabInfo form{width: 330px !important;}
 
     .breadCrumb{font-size: 15px;}
+
+    .CourseItem h3{font-size: 18px;}
+    .CourseItem .teacherText h5{font-size: 16px;} 
+
+    .prerequisiteTab .text h4{font-size: 16px;}
 }
 
 
@@ -384,6 +389,8 @@
     .serviceAnformaticSection .imgWrapper img{width: 100%;}
     .serviceAnformaticSection .info h1{font-size: 32px; margin-top: 10px;}
     .serviceAnformaticSection .info p{margin-top: 30px; font-size: 20px;margin-bottom: 10px;}
+
+    .authorData .text{font-size: 17px; text-align: justify; padding-left: 30px;}
 }
 
 @media screen and (max-width : 1400px){

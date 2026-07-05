@@ -26,8 +26,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import remarkBreaks from "remark-breaks";
 import { CircularProgress, Rating } from "@mui/material";
 
@@ -270,19 +270,49 @@ const CourseItem = () => {
 
                     <div className="description mt-4">
                         <p className="title">درباره این دوره</p>
-                        <p style={{ whiteSpace: 'pre-line' }}>{courseData?.description}</p>
+                        <div style={{ whiteSpace: 'pre-line' }}>
+                            <ReactMarkdown 
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                    img: ({node, ...props}) => (
+                                        <img 
+                                            {...props} 
+                                            style={{ 
+                                                width: '100%', 
+                                                height: 'auto',
+                                                paddingLeft: '10px',
+                                                paddingRight: '10px',
+                                                display: 'block'
+                                            }} 
+                                        />
+                                    ),
+                                    p: ({node, ...props}) => (
+                                        <p style={{ margin: '0 0 10px 0' }} {...props} />
+                                    )
+                                }}
+                            >
+                                {courseData?.description || ''}
+                            </ReactMarkdown>
+                        </div>
                     </div>
+                    
+                    {
+                        courseData?.startingDate &&
+                        <div className="d-flex align-items-center p-1 fontSmall">
+                            <h5 className="mb-0">تاریخ شروع دوره :</h5>&nbsp;
+                            <strong>{courseData?.startingDate}</strong>
+                        </div>
+                    }
 
-                    <div className="d-flex align-items-center p-1">
-                        <h5 className="mb-0">تاریخ شروع دوره :</h5>&nbsp;
-                        <strong>{courseData?.startingDate}</strong>
-                    </div>
-                    <div className="d-flex align-items-center p-1">
-                        <h5 className="mb-0">تاریخ پایان دوره :</h5>&nbsp;
-                        <strong>{courseData?.EndingDate}</strong>
-                    </div>
+                    {
+                        courseData?.EndingDate &&
+                        <div className="d-flex align-items-center p-1 fontSmall">
+                            <h5 className="mb-0">تاریخ پایان دوره :</h5>&nbsp;
+                            <strong>{courseData?.EndingDate}</strong>
+                        </div>
+                    }
 
-                    <div className="d-flex align-items-center p-1">
+                    <div className="d-flex align-items-center p-1 fontSmall">
                         <h5 className="mb-0">وضعیت ثبت نام :</h5>
                         <div className="statusBox">
                             <span>{courseData?.status}</span>
@@ -376,9 +406,26 @@ const CourseItem = () => {
                     {
                         infoTab === 1 && (
                             <div className="tabInfo w-100">
-                                <h4 style={{ whiteSpace: 'pre-line' }} className="pe-4">
-                                    {courseData?.headline}
-                                </h4>
+                                <div style={{ whiteSpace: 'pre-line' }} className="pe-4 headlineText">
+                                    <ReactMarkdown 
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                            img: ({node, ...props}) => (
+                                                <img 
+                                                    {...props} 
+                                                    style={{ 
+                                                        width: '100%', 
+                                                        height: 'auto',
+                                                        paddingLeft: '10px',
+                                                        paddingRight: '10px'
+                                                    }} 
+                                                />
+                                            )
+                                        }}
+                                    >
+                                        {courseData?.headline || ''}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         )
                     }
@@ -388,7 +435,7 @@ const CourseItem = () => {
                             <div className="text-center prerequisiteTab">
                                 <h3 className="mt-4">پیش نیاز های این دوره :</h3>
                                 <div className="py-1">
-                                    <div className="row py-5">
+                                    <div className="row py-5 text">
                                     {
                                         courseData?.prerequisite?.length !== undefined && courseData?.prerequisite?.length !== 0  ? courseData?.prerequisite?.map((item, index) => {
                                             return(
@@ -459,7 +506,29 @@ const CourseItem = () => {
                         infoTab === 4 && (
                             <div className="text-center">
                                 <h3 className="mt-4">معرفی مدرس این دوره :</h3>
-                                <h5 style={{ whiteSpace: 'pre-line', textAlign: 'right' }} className="pe-4">{courseData?.aboutTeacher}</h5>
+                                <div style={{ textAlign: 'right' }} className="pe-4 teacherText">
+                                    <ReactMarkdown 
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                            img: ({node, ...props}) => (
+                                                <img 
+                                                    {...props} 
+                                                    style={{ 
+                                                        width: '100%', 
+                                                        height: 'auto',
+                                                        paddingLeft: '10px',
+                                                        paddingRight: '10px'
+                                                    }} 
+                                                />
+                                            ),
+                                            p: ({node, ...props}) => (
+                                                <h5 style={{ margin: '0 0 10px 0', textAlign: 'right' }} {...props} />
+                                            )
+                                        }}
+                                    >
+                                        {courseData?.aboutTeacher || 'مدرس این دوره هنوز مشخص نشده است.'}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         )
                     }
