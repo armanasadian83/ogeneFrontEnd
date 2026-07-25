@@ -14,7 +14,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useContext, useEffect, useRef, useState } from "react";
 
 import { BsSearch, BsShieldFillExclamation } from "react-icons/bs";
-
+ 
 import { BsBasket3Fill } from "react-icons/bs";
 import { MyContext } from "../App";
 import { ListItemIcon, Menu, MenuItem } from "@mui/material";
@@ -184,7 +184,7 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div className="menuItems">
-                        <ul className="list-unstyled d-flex">
+                        <ul className="list-unstyled d-flex justify-content-center">
                             <div ref={dropdownRef} style={{position: 'relative'}}>
                                 
                                 <li className={`flex align-items-center cursor-pointer ${navbarDropDown && 'fixedBold'}`} 
@@ -230,10 +230,10 @@ const Navbar = () => {
                         </ul>
                     </div>
 
-                    <div className="btnGroup d-flex align-items-center">
+                    <div className="btnGroup d-flex align-items-center justify-content-center">
                         {
                             context.isLoggedIn === true ? 
-                                <Link>
+                                <Link className="iconBtn">
                                     <Button onClick={handleOpenMyAccDrop} className="hideInMobile">
                                         <FaUserCircle />
                                     </Button>
@@ -250,12 +250,14 @@ const Navbar = () => {
                                                 حساب من
                                             </MenuItem>
                                         </Link>
-                                        <MenuItem className="menuItemInMobile" onClick={handleCloseMyAccDrop}>
-                                            <ListItemIcon>
-                                                <GiShoppingBag/>
-                                            </ListItemIcon>
-                                            سفارشات من
-                                        </MenuItem>
+                                        <Link to={`/orders/${userId}`}>
+                                            <MenuItem className="menuItemInMobile" onClick={handleCloseMyAccDrop}>
+                                                <ListItemIcon>
+                                                    <GiShoppingBag/>
+                                                </ListItemIcon>
+                                                سفارشات من
+                                            </MenuItem>
+                                        </Link>
                                         <MenuItem className="menuItemInMobile" onClick={handleCloseMyAccDrop}>
                                           <ListItemIcon>
                                                 <MdPublishedWithChanges />
@@ -272,23 +274,25 @@ const Navbar = () => {
                                 </Link>
                             :
                             <Link to='/logIn'>
-                                <div className="hideInMobile logInBtn ms-1">ورود</div>
+                                <div className="hideInMobile ms-1">ورود</div>
                             </Link>
                         }
                         {
                             context.isLoggedIn === true && 
-                            <Link to={`/cart/${context.user?.userId}`}>
+                            <Link to={`/cart/${context.user?.userId}`} className="iconBtn">
                                 <Button className="hideInMobile">
                                     <BsBasket3Fill />
                                     {/*<span className="d-flex align-items-center justify-content-center basketCounter">{context.cartData?.length}</span>*/}
                                 </Button>
                             </Link>
                         }
-                        <Tooltip title="جستجو" arrow>
-                            <div onClick={context.handleClickOpenSearchModal} className="searchBtn">
-                                <IoSearch />
-                            </div>
-                        </Tooltip>
+                        <div className="d-flex align-items-center justify-content-center searchBtn">
+                            <Tooltip title="جستجو" arrow>
+                                <div onClick={context.handleClickOpenSearchModal} >
+                                    <IoSearch />
+                                </div>
+                            </Tooltip>
+                        </div>
                         <Button className="menuButton" onClick={SideNavOpen}>
                             <MdOutlineMenu />
                         </Button>
@@ -325,12 +329,14 @@ const Navbar = () => {
                                         </ListItemIcon>
                                     </MenuItem>
                                 </Link>
-                                <MenuItem className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
-                                    <ListItemIcon>
-                                        <GiShoppingBag/>
-                                    </ListItemIcon>
-                                    سفارشات من
-                                </MenuItem>
+                                <Link>
+                                    <MenuItem to={`/orders/${userId}`} className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
+                                        <ListItemIcon>
+                                            <GiShoppingBag/>
+                                        </ListItemIcon>
+                                        سفارشات من
+                                    </MenuItem>
+                                </Link>
                                 <MenuItem className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
                                   <ListItemIcon>
                                         <MdPublishedWithChanges />

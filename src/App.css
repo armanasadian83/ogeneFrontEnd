@@ -30,9 +30,9 @@ body{overflow-x: hidden !important;}
   color: #000 !important; max-width: 50px !important;}
 .myNavbar button:hover{color: #000 !important;}
 .myNavbar button svg{color: #212529 !important; font-size: 25px;}
-.myNavbar .btnGroup{margin: 0px 80px 10px 0px;}
+.myNavbar .btnGroup{margin: 0px 0px 15px 0px;}
 .logoSection img{width: 200px; height: 210px; cursor: pointer;}
-.menuItems{text-align: center !important; width: 70%;}
+.menuItems{text-align: center !important; width: 100%; padding-left: 45px;}
 .menuItems li{padding: 0px 36px; text-wrap: nowrap !important;}
 .menuItems li:hover{transform: scale(1.1); transition: 100ms;}
 a{text-decoration: none !important; color: #212529;}
@@ -40,8 +40,10 @@ a{text-decoration: none !important; color: #212529;}
 .sidenavOpen, .sidenavClosed{width: 0;}
 .sidenavOpen a, .sidenavClosed a{display: none;}
 .sidenavOpen button, .sidenavClosed button{display: none;}
+.myNavbar .iconBtn button{width: 40px !important; height: 40px !important; min-width: 40px !important;}
+.myNavbar .iconBtn button svg{font-size: 22px !important;}
 
-.myNavbar .searchBtn{font-size: 22px; cursor: pointer;}
+.myNavbar .searchBtn{font-size: 22px; cursor: pointer; width: 40px;}
 .myNavbar .searchBtn:hover{transform: scale(1.1); transition: 200ms;}
 .logInBtn{font-size: 17px !important; padding: 0px 20px;}
 .logInBtn:hover{transform: scale(1.1);}
@@ -306,6 +308,11 @@ a{text-decoration: none !important; color: #212529;}
   outline: none; font-weight: 700; border-top-right-radius: 60px;}
 .footerSection .footerCopyRight span{font-size: 15px;}
 
+.footerSection .contactSection .contact-info{text-align: left; color: black; font-size: 17px;}
+.footerSection .contactSection .contact-info div{margin: 10px 0px; cursor: pointer;}
+.footerSection .contactSection .contact-info .icons span{font-size: 36px; margin: 0px 5px;}
+.footerSection .contactSection{justify-content: flex-end;}
+
 
 /*.footerSection .overlap{position: absolute; width: 1540px; height: 547px; top: 7630px; left: -85px; z-index: 1; pointer-events: none;}
 .footerSection .rectangle-9 {width: 1500px; height: 529px; position: absolute; top: 0; left: 0;
@@ -316,29 +323,40 @@ a{text-decoration: none !important; color: #212529;}
 
 .footerSection .footerBody .container{padding-right: 25px !important; padding-left: 25px !important; z-index: 1000 !important;}
 .footerSection .footerBody .col-md-6{margin-top: 50px !important;}
-.footerSection .footerBody .col-md-6.left-part{margin-top: 150px !important; padding-right: 250px;}
+.footerSection .footerBody .col-md-6.left-part{ padding-right: 250px;}
+.footerSection .footerBody .col-md-6.left-part p{padding: 0px;}
 .footerSection .container h1{font-weight: 600;color: #000; font-size: 40px; line-height: 45px; }
 .footerSection .container h2{font-size: 28px !important;font-weight: 600; color: #000; margin-top: 40px;}
 .footerSection .container .col-md-6 p{line-height: 30px; color: #000; font-weight: 600; margin-top: 15px; font-size: 19px;}
 .footerSection .footerMenu p{margin-top: 5px !important; margin-bottom: 0px;}
 .footerSection .container .col-md-6 a{color: #000; font-weight: 600; font-size: 19px;}
-.footerSection .container .footerLogo{background: #fff; width: 150px; height: 160px; border: 1px solid #c0bfbf;}
-.footerSection .container .footerLogo img{width: 148px; height: 158px;}
+.footerSection .container .footerLogo{background: #fff; height: 100%; width: 150px; border: 1px solid #c0bfbf;}
+.footerSection .container .footerLogo img{object-fit: cover; width: 100%; height: 100%;}
 .footerSection .container .icon{width: 50px; height: 50px; border: 1px solid #000; margin-left: 0px; cursor: pointer; color: #000;}
 .footerSection .container .icon:hover svg{transform: scale(1.05);}
 .footerSection .container .icon svg{font-size: 40px; margin-top: 4px;}
 .footerSection .container .right-content{float: left;}
-.footerSection .svgTelegram{color: #27a2e1;}
-.footerSection .svgInstagram{background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515BD4); color: #fff; border-radius: 10px;}
-.footerSection .svgWhatsapp{background: #2cd46b; color: #fff; border-radius: 16px;}
-.footerSection .svgPhone{color: red;}
 
 
 /* CourseItem Page */
 .CourseItem h1{font-size: 52px; color: #174A4E; font-weight: bolder;}
 .CourseItem h3{font-size: 24px; color: #174A4E; font-weight: bolder;}
 .CourseItem .description p.title{font-size: 28px; font-weight: bolder;}
-.CourseItem .description p{font-size: 19px;}
+.CourseItem .description{padding: 15px 0px; white-space: normal !important;}
+.CourseItem .description,
+.CourseItem .description p,
+.CourseItem .description span,
+.CourseItem .description li,
+.CourseItem .description div,
+.CourseItem .description ul,
+.CourseItem .description ol {font-size: 18px; white-space: normal !important;}
+
+.CourseItem .description,
+.CourseItem .description span{text-align: justify;}
+
+
+.CourseItem .description li{padding: 10px 0px;}
+
 
 .CourseItem .col-md-4 .card, .CourseItem .col-12 .card{height: auto; width: 100%; border-radius: 18px !important; border: 1px solid #000;}
 .courseItemImagesSwiper { width: 100%; height: 100%; }
@@ -369,7 +387,7 @@ a{text-decoration: none !important; color: #212529;}
   outline: none; height: 50px; font-size: 24px; font-weight: bold; border-radius: 10px;}
 .CourseItem .CourseInfo .CourseInfoBtns button:hover{background: #cacaca;}
 
-.CourseItem .CourseInfo .tabInfo{margin-top: 40px;}
+.CourseItem .CourseInfo .tabInfo{margin-top: 40px;} 
 .CourseItem .CourseInfo .tabInfo ul li{font-size: 23px; margin: 5px 0px; font-weight: 500;}
 .CourseItem .CourseInfo .tabInfo .calenderInfo{font-size: 23px; font-weight: 500;}
 .CourseItem .CourseInfo .tabInfo .overlap-group-3 {position: relative; width: 350px; height: 484px; margin-right: auto;}
@@ -638,7 +656,7 @@ table.v-align td .scrollBox{text-wrap: nowrap; width: 270px; overflow: scroll; p
 .statusBox span{font-weight: 600;}
 .countInStockBox span{font-weight: 600;}  
 
-.snackBar{left: auto !important; right: 24px !important;}
+.snackBar{left: auto !important; right: 24px !important; z-index: 99999 !important;}
 .snackBar svg{margin-right: 20px !important;}
 
 .menuItemInMobile svg{font-size: 24px;}
@@ -682,6 +700,99 @@ table.v-align td .scrollBox{text-wrap: nowrap; width: 270px; overflow: scroll; p
 .authorData h3{font-size: 20px;}
 .authorData .text{font-size: 17px; text-align: justify;}
 
+
+/* orders page : starts from here */
+.order-col-index{width:70px}
+.order-col-id{width:200px}
+.order-col-actions{width:150px}
+.orderId small{color:#fff; font-size:13px; background: #27AA98; border-radius: 15px; padding: 2px 5px; cursor: pointer;}
+.orderItemsCount{text-align:center}
+.orderItemsCount b{font-size:18px}
+.orderItemsCount span{color:#838c93; font-size:12px; margin-right: 5px;}
+.order-total{font-weight:bold}
+.toman-icon{width:30px;margin-right:5px}
+.orderStatus span{font-size: 16px; font-family: fugen !important; font-weight: 600;}
+.status-badge{padding: 5px 10px; border-radius: 4px; display: inline-block}
+.status-pending{background-color:#ffc107; color:#212529;}
+.status-processing{background-color:#17a2b8; color:#fff;}
+.status-completed{background-color:#28a745; color:#fff;}
+.status-cancelled{background-color:#dc3545; color:#fff;}
+.orderDate small{color: #6c757d; font-size: 14px}
+.viewDetailsBtn{font-size: 16px !important; background: rgb(63, 175, 160) !important; 
+    color: #fff !important; font-family: fugen !important; font-weight: 600;}
+.viewDetailsBtn span{margin-right: 5px}
+.order-details-row{background-color:#f8f9fa}
+.order-details-wrapper{padding:16px;background-color:#f8f9fa;border-radius:8px}
+.order-details-wrapper h6{margin-bottom:12px}
+.order-items-table{margin-bottom:0}
+.order-items-table thead th{background-color: #e9ecef; font-size: 13px}
+.order-items-subTable thead th{background-color: #27AA98; font-size: 13px}
+.item-col-index{width:30px}
+.item-col-product{width:300px}
+.item-col-price{width:150px}
+.item-col-qty{width:80px}
+.item-col-subtotal{width:150px}
+.item-col-type{width:80px}
+.itemQty{text-align:center;font-weight:bold}
+.item-type-badge{padding: 4px 10px; border-radius: 4px; font-size: 14px; color: #fff; display: inline-block}
+.type-course{background-color:#007bff}
+.type-product{background-color:#28a745}
+.order-grand-total{font-weight:bold;background-color:#f8f9fa !important}
+.order-grand-total td{padding:10px !important}
+.emptyOrders{text-align:center;padding:40px 0}
+.emptyOrders h5{color:#6c757d}
+.emptyOrders .btn{display:inline-block;margin-top:16px}
+.indexCol{min-width: 30px; width: 30px;}
+.miniBox{width: 100% !important; height: 45px; min-width: 30px; display:flex; align-items:center; 
+    justify-content:center; background: #f7f5f5; border-radius:50%; font-weight:bold; font-size: 16px;} 
+.priceBox{display:flex;align-items:center;gap:5px;font-weight:bold}
+.productBox .imgWrapper{width: 50px; height: 50px; overflow: hidden; border-radius: 8px;}
+.productBox .imgWrapper .img{width: 100%; height: 100%;}
+.productBox .imgWrapper .img img{width:100%; height:100%; object-fit: contain;}
+.productBox .info h6{font-size:14px;margin:0}
+.v-align td{vertical-align: middle !important; padding: 10px 10px;}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.order-details-row {
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.order-details-wrapper {
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transform-origin: top;
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: scaleY(0);
+        max-height: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: scaleY(1);
+        max-height: 1000px;
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 1;
+        transform: scaleY(1);
+        max-height: 1000px;
+    }
+    100% {
+        opacity: 0;
+        transform: scaleY(0);
+        max-height: 0;
+    }
+}
+
+@media(max-width:768px){.order-col-id{min-width:120px}.item-col-product{min-width:200px}.order-details-wrapper{padding:10px}}
+.btn-ogeneGreen{background-color: #27AA98 !important; color: white !important;}
 
 
 

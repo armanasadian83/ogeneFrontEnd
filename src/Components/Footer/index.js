@@ -52,7 +52,7 @@ const Footer = () => {
                                 <p>تهران، صادقیه، بلوار فردوس شرق، انتهای خیابان ولیعصر,
                                     جنب متروی صادقیه، خیابان رز غربی، پلاک 7، طبقه همکف
                                 </p>
-                                <div className='d-flex'>
+                                {/*<div className='d-flex justify-content-end'>
                                     <div className='text-center right-content'>
                                         <p className='motto'>اوژن همه جا با شما</p>
                                         <div className='iconWrapper'>
@@ -74,8 +74,40 @@ const Footer = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='footerLogo text-center align-items-center me-auto'>
-                                        <img src={logo} />
+                                    <div className='flex align-items-center flex-nowrap'>
+                                        <div className=''>
+                                            <span>021-2244961487</span>
+                                        </div>
+                                        <div className='footerLogo text-center align-items-center'>
+                                            <img src={logo} />
+                                        </div>
+                                    </div>
+                                </div>*/}
+                                <div className='d-flex contactSection'>
+                                    <div className='d-flex align-items-center gap-3'>
+                                        <div className='contact-info'>
+                                            <div>
+                                                <a href="tel:+98212244961487">۰۲۱-۲۲۴۴۹۶۱۴۸۷</a>
+                                            </div>
+                                            <div>
+                                                <a href="tel:+989120169816">۰۹۱۲۰۱۶۹۸۱۶</a>
+                                            </div>
+                                            <div>
+                                                <a href="tel:+989050168316">۰۹۰۵۰۱۶۸۳۱۶</a>
+                                            </div>
+                                            <div className='flex align-items-center justify-content-end gap-3 icons'>
+                                                <span><FaInstagram /></span>
+                                                <span><FaTelegram /></span>
+                                            </div>
+                                        </div>
+                                        <div className='footerLogo text-center align-items-center ogeneLogo'>
+                                            <img src={logo} alt="Egon Logo" />
+                                        </div>
+                                        <div className='footerLogo text-center align-items-center'>
+                                            <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY'>
+                                                <img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY' alt='' style={{cursor: 'pointer'}} code='DCUvppqG13XGco7UU3cpoZFr82zDH5vY' />
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -11,8 +11,26 @@
         margin-right: 10px; border-radius: 15px; padding: 1px 10px; border: 2px solid #f5b875;}
     .calenderBar button:hover{background: #d7f2ec;}
 }
+@media screen and (max-width : 2000px){
+    .special.container{max-width: 100%; padding: 0px 80px;}
+    .myNavbar .btnGroup{width: 200px;}
+}
+
+@media screen and (max-width : 1300px){
+    .special.container{max-width: 100%}
+    .menuItems li{padding: 0px 18px; text-wrap: nowrap !important;}
+    .myNavbar .picture{width: 150px; height: auto;}
+}
+
+@media screen and (max-width : 1100px){
+    .special.container{max-width: 100%; padding: 0px 50px}
+    .myNavbar .btnGroup{width: auto;}
+}
 
 @media screen and (max-width : 500px){
+    .special.container{max-width: 100%; padding: 0px 10px !important;}
+    .myNavbar .btnGroup{width: auto !important;}
+
     .myNavbar{width: 100%; color: #212529 !important; font-weight: 600; font-size: 16px; z-index: 1000 !important;}
     .myNavbar .logoSection{width: 120px; height: 120px;}
     .myNavbar .logoSection img{width: 100%; height: auto;}
@@ -37,12 +55,6 @@
         opacity: 1; overflow-x: hidden; transition: 0.5s; padding-top: 60px; border-bottom-left-radius: 140px;
         border-left: 0;}
     .sidenavClosed a, .sidenavClosed button{display: none;}
-}
-
-@media screen and (max-width : 1300px){
-    .special.container{max-width: 1000px;}
-    .menuItems li{padding: 0px 18px; text-wrap: nowrap !important;}
-    .myNavbar .picture{width: 150px; height: auto;}
 }
 
 @media screen and (max-width : 1100px){
@@ -305,11 +317,13 @@
     .footerSection .container .right-content p{margin-top: 15px !important;}
 
     .footerSection .footerBody .col-md-6.left-part{margin-top: 0px !important; padding-right: 0px;}
+
+    .footerSection .ogeneLogo{display: block;}
 }
 
 
 @media screen and (max-width : 768px) {
-    .footerSection .overlap-container{height: 970px;}
+    .footerSection .overlap-container{height: 980px;}
     .footerSection .bottom-div{height: 955px;}
     .footerSection .top-div{height: 955px;}
     .footerSection .container{padding-top: 0px;}
@@ -324,6 +338,8 @@
     .footerSection .container .right-content p{margin-top: 15px !important;}
 
     .footerSection .footerBody .col-md-6.left-part{margin-top: 0px !important; padding-right: 0px;}
+    .footerSection .contactSection{justify-content: center;}
+
 }
 
 @media screen and (max-width : 1200px){
@@ -337,7 +353,18 @@
     .CourseItem h1{font-size: 32px; margin-top: 20px; text-align: center;}
     .CourseItem h3{font-size: 20px; text-align: center;}
     .CourseItem .description p.title{font-size: 24px; text-align: center;}
-    .CourseItem .description p{font-size: 21px; text-align: justify;}
+    .CourseItem .description{padding: 8px 0px; white-space: normal !important;}
+    .CourseItem .description,
+    .CourseItem .description p,
+    .CourseItem .description span,
+    .CourseItem .description div,
+    .CourseItem .description ul,
+    .CourseItem .description ol {font-size: 16px; white-space: normal !important;}
+
+    .CourseItem .description li{padding: 4px 0px; font-size: 16px;}
+    .CourseItem .description div.pe-4{padding: 0px 15px !important;}
+
+    .CourseItem .description ul, .CourseItem .description ol{padding-left: 15px !important;}
 
     .CourseItem .CourseInfo .CourseInfoBtns{gap: 6px; overflow-x: scroll; white-space: nowrap; width: 100%;}
     .CourseItem .CourseInfo .CourseInfoBtns button{height: 50px; font-size: 22px; margin: 3px; padding-right: 10px; padding-left: 10px;}
@@ -390,7 +417,7 @@
     .serviceAnformaticSection .info h1{font-size: 32px; margin-top: 10px;}
     .serviceAnformaticSection .info p{margin-top: 30px; font-size: 20px;margin-bottom: 10px;}
 
-    .authorData .text{font-size: 17px; text-align: justify; padding-left: 30px;}
+    .authorData .text{font-size: 17px; text-align: justify; padding-left: 30px;} 
 }
 
 @media screen and (max-width : 1400px){
@@ -428,6 +455,10 @@
     /* backend : banners: 12/1/2025 */
     .bannerImg.three{width: 200px; transform: translateX(90px); height: 170px;}
     .bannerImg.four{width: 200px; transform: translateX(90px); height: 170px;}
+}
+
+@media screen and (max-width: 1000px) {
+    .footerSection .ogeneLogo{display: none;}
 }
 
 

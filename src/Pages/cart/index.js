@@ -8,7 +8,7 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import Toman from "./../../assets/toman icon.png";
 
 import { BsFillCartCheckFill } from "react-icons/bs";
-import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import { deleteData, editData, fetchDataFromApi, postData } from "../../utils/api";
 import QuantityBox from "../../Components/quantityBox";
 
 const Cart = () => {
@@ -94,12 +94,108 @@ const Cart = () => {
         })
     }
 
-
-    //
-
-    const sendAlert = () => {
-        alert('به زودی امکان ثبت سفارش فراهم میشود!');
+    // Add this function
+    const calculateTotal = () => {
+        if (cartData?.length !== 0 && cartData?.length !== undefined) {
+            return cartData
+                .map(item => parseInt(item?.price) * item?.quantity)
+                .reduce((total, value) => total + value, 0);
+        }
+        return 0;
     }
+
+
+    /*const sendAlert = () => {
+        alert('به زودی امکان ثبت سفارش فراهم میشود!');
+    }*/
+
+    // adding order submit function:
+
+    const submitOrder = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    // Validate if user is logged in
+    if (!user || !user.userId) {
+        context.setAlertBox({
+            open: true,
+            error: true,
+            msg: 'لطفاً ابتدا وارد حساب کاربری خود شوید!'
+        });
+        return;
+    }
+
+    // Validate cart is not empty
+    if (!cartData || cartData.length === 0) {
+        context.setAlertBox({
+            open: true,
+            error: true,
+            msg: 'سبد خرید شما خالی است!'
+        });
+        return;
+    }
+
+    // Calculate total
+    const total = calculateTotal();
+
+    // Prepare order data
+    const orderData = {
+        clientName: `${user?.name || ''} ${user?.lastName || ''}`.trim(),
+        clientId: user.userId,
+        clientPhoneNumber: user?.phoneNumber || '09000000000',
+        totalPrice: total,
+        items: cartData.map(item => ({
+            productId: item.productId,
+            productTitle: item.productTitle,
+            quantity: item.quantity,
+            price: item.price,
+            subTotal: item.subTotal,
+            typeCourse: item.typeCourse,
+            image: item.image || ''
+        }))
+    };
+
+    try {
+        setIsLoading(true);
+        setBtnDisabled(true);
+
+        // Send order to backend using postData
+        const response = await postData('/api/orders', orderData);
+        
+        if (response.success) {
+            // Clear cart after successful order
+            const deletePromises = cartData.map(item => 
+                deleteData(`/api/cart/${item._id}`)
+            );
+            
+            await Promise.all(deletePromises);
+            
+            // Refresh cart data
+            setCartData([]);
+            
+            context.setAlertBox({
+                open: true,
+                error: false,
+                msg: 'سفارش شما با موفقیت ثبت شد!'
+            });
+        } else {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: response.message || 'خطا در ثبت سفارش!'
+            });
+        }
+    } catch (error) {
+        console.error('Order submission error:', error);
+        context.setAlertBox({
+            open: true,
+            error: true,
+            msg: 'خطا در ارتباط با سرور!'
+        });
+    } finally {
+        setIsLoading(false);
+        setBtnDisabled(false);
+    }
+}
 
     return (
         <>
@@ -211,15 +307,17 @@ const Cart = () => {
                         <div className="d-flex align-items-center px-3">
                             <h6 className="mb-0">مجموع : &nbsp;&nbsp;</h6>
                             <b>
-                                {
-                                cartData?.length !== 0 && cartData?.length !== undefined &&
-                                cartData?.map(item => parseInt(item?.price) * item?.quantity).reduce((total, value) => total + value, 0).toLocaleString()
-                                }
+                                {calculateTotal().toLocaleString()}
                             </b>
                             <img src={Toman} style={{width: '40px'}} />
                         </div>
-                        <Button className="orderSubmit" onClick={sendAlert}>
-                            ثبت سفارش <BsFillCartCheckFill /> 
+                        <Button 
+                            className="orderSubmit" 
+                            onClick={submitOrder}
+                            disabled={btnDisabled || isLoading || !cartData || cartData.length === 0}
+                        >
+                            {isLoading ? 'در حال ثبت...' : 'ثبت سفارش'} 
+                            <BsFillCartCheckFill /> 
                         </Button>
                     </div>
                 </div>

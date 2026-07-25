@@ -33,6 +33,7 @@ import VerifyOTP from "./Pages/verifyOTP";
 import AccountPage from "./Pages/account/accountPage";
 import Blog from "./Pages/Blog";
 import BaleAlert from "./Components/baleAlert";
+import OrderPage from "./Pages/orders";
 
 export const MyContext = createContext();
 
@@ -228,6 +229,7 @@ const App = () => {
                     <Route path="/cart/:id" element={<Cart />} />
                     <Route path="/verifyOTP" element={<VerifyOTP />} />
                     <Route path="/accountPage/:id" element={<AccountPage />} />
+                    <Route path="/orders/:id" element={<OrderPage />} />
 
                     <Route path="/field/I" element={<FieldOne />} />
                     <Route path="/field/II" element={<FieldTwo />} />

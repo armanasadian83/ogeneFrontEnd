@@ -1,3 +1,13 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Block private/user-specific pages
+Disallow: /logIn
+Disallow: /signUp
+Disallow: /verifyOTP
+Disallow: /cart/
+Disallow: /accountPage/
+
+# Tell Google where your sitemap is
+Sitemap: https://ogenetech.com/sitemap.xml

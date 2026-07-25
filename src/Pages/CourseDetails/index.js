@@ -270,7 +270,7 @@ const CourseItem = () => {
 
                     <div className="description mt-4">
                         <p className="title">درباره این دوره</p>
-                        <div style={{ whiteSpace: 'pre-line' }}>
+                        <div>
                             <ReactMarkdown 
                                 remarkPlugins={[remarkGfm]}
                                 components={{
@@ -405,8 +405,8 @@ const CourseItem = () => {
                 <div className="CourseInfoTabs">
                     {
                         infoTab === 1 && (
-                            <div className="tabInfo w-100">
-                                <div style={{ whiteSpace: 'pre-line' }} className="pe-4 headlineText">
+                            <div className="w-100 description mt-4">
+                                <div className="pe-4">
                                     <ReactMarkdown 
                                         remarkPlugins={[remarkGfm]}
                                         components={{
@@ -504,30 +504,29 @@ const CourseItem = () => {
 
                     {
                         infoTab === 4 && (
-                            <div className="text-center">
-                                <h3 className="mt-4">معرفی مدرس این دوره :</h3>
-                                <div style={{ textAlign: 'right' }} className="pe-4 teacherText">
-                                    <ReactMarkdown 
-                                        remarkPlugins={[remarkGfm]}
-                                        components={{
-                                            img: ({node, ...props}) => (
-                                                <img 
-                                                    {...props} 
-                                                    style={{ 
-                                                        width: '100%', 
-                                                        height: 'auto',
-                                                        paddingLeft: '10px',
-                                                        paddingRight: '10px'
-                                                    }} 
-                                                />
-                                            ),
-                                            p: ({node, ...props}) => (
-                                                <h5 style={{ margin: '0 0 10px 0', textAlign: 'right' }} {...props} />
-                                            )
-                                        }}
-                                    >
-                                        {courseData?.aboutTeacher || 'مدرس این دوره هنوز مشخص نشده است.'}
-                                    </ReactMarkdown>
+                            <div className="mt-4">
+                                <div className="w-100 description mt-1">
+                                    <div className="pe-4">
+                                        <ReactMarkdown 
+                                            remarkPlugins={[remarkGfm]}
+                                            components={{
+                                                img: ({node, ...props}) => (
+                                                    <img 
+                                                        {...props} 
+                                                        style={{ 
+                                                            width: '100%', 
+                                                            height: 'auto',
+                                                            paddingLeft: '10px',
+                                                            paddingRight: '10px'
+                                                        }} 
+                                                    />
+                                                ),
+                                                p: ({node, ...props}) => <span {...props} />
+                                            }}
+                                        >
+                                            {courseData?.aboutTeacher || 'مدرس این دوره هنوز مشخص نشده است.'}
+                                        </ReactMarkdown>
+                                    </div>
                                 </div>
                             </div>
                         )

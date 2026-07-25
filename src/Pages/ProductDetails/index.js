@@ -273,10 +273,10 @@ const ProductItem = () => {
                     <h1>{productData?.name}</h1>
                     <h3>{productData?.field}</h3>
 
-                    <div className="description mt-4">
+                    <div className="description mt-4" style={{ whiteSpace: 'normal !important' }}>
                         <p className="title">درباره این محصول</p>
-                        <p style={{ whiteSpace: 'pre-line' }}>
-                            <ReactMarkdown 
+                        <p>
+                            <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 components={{
                                     img: ({node, ...props}) => (
@@ -290,7 +290,7 @@ const ProductItem = () => {
                                             }} 
                                         />
                                     ),
-                                    p: ({node, ...props}) => <span {...props} /> // Removes extra paragraph tags
+                                    p: ({node, ...props}) => <span {...props} />
                                 }}
                             >
                                 {productData?.description || ''}
@@ -398,37 +398,41 @@ const ProductItem = () => {
 
                     {
                         infoTab === 2 && (
-                            <div className="text-center authorData">
-                                <h3 className="mt-4">معرفی نویسنده :</h3><br />
+                            <div className="w-100 description mt-1">
+                                <div className="pe-4">
+                                    <br />
 
-                                <h4 style={{ whiteSpace: 'pre-line', textAlign: 'right' }} className="pe-4">
-                                    <div className="d-flex align-items-center">
+                                    {/* اطلاعات نویسنده */}
+                                    <div className="d-flex align-items-center" style={{ textAlign: 'right' }}>
                                         <h3>نام نویسنده :</h3>
                                         <h3 className="me-2">{productData?.authorName}</h3>
                                     </div>
+
                                     <br />
-                                        <div className="text">
-                                            <ReactMarkdown 
-                                                remarkPlugins={[remarkGfm]}
-                                                components={{
-                                                    img: ({node, ...props}) => (
-                                                        <img 
-                                                            {...props} 
-                                                            style={{ 
-                                                                width: '100%', 
-                                                                height: 'auto',
-                                                                paddingLeft: '10px',
-                                                                paddingRight: '10px'
-                                                            }} 
-                                                        />
-                                                    ),
-                                                    p: ({node, ...props}) => <span {...props} />
-                                                }}
-                                            >
-                                                {productData?.authorDescription || ''}
-                                            </ReactMarkdown>
-                                        </div>
-                                </h4>
+
+                                    {/* توضیحات نویسنده */}
+                                    <div style={{ textAlign: 'right' }}>
+                                        <ReactMarkdown 
+                                            remarkPlugins={[remarkGfm]}
+                                            components={{
+                                                img: ({node, ...props}) => (
+                                                    <img 
+                                                        {...props} 
+                                                        style={{ 
+                                                            width: '100%', 
+                                                            height: 'auto',
+                                                            paddingLeft: '10px',
+                                                            paddingRight: '10px'
+                                                        }} 
+                                                    />
+                                                ),
+                                                p: ({node, ...props}) => <span {...props} />
+                                            }}
+                                        >
+                                            {productData?.authorDescription || ''}
+                                        </ReactMarkdown>
+                                    </div>
+                                </div>
                             </div>
                         )
                     }
