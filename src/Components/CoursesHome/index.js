@@ -44,7 +44,7 @@ const CoursesSection = () => {
         <div className='CoursesSection'>
                 <div className='text-center title'>
                     <h2>دوره های آموزشی</h2>
-                    <p>تقویم آموزشی تیرماه 1405</p>
+                    <p>تقویم آموزشی مردادماه 1405</p>
                 </div>
 
                 <div className='CoursesWrapper'>

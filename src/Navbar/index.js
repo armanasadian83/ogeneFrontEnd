@@ -258,12 +258,14 @@ const Navbar = () => {
                                                 سفارشات من
                                             </MenuItem>
                                         </Link>
-                                        <MenuItem className="menuItemInMobile" onClick={handleCloseMyAccDrop}>
-                                          <ListItemIcon>
-                                                <MdPublishedWithChanges />
-                                          </ListItemIcon>
-                                          تغییر رمز عبور
-                                        </MenuItem>
+                                        <Link to={'/change-password'}>
+                                            <MenuItem className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
+                                                <ListItemIcon>
+                                                      <MdPublishedWithChanges />
+                                                </ListItemIcon>
+                                                تغییر رمز عبور
+                                            </MenuItem>
+                                        </Link>
                                         <MenuItem className={`menuItemInMobile ${btnDisabled !== false && 'btnDisabled'}`} onClick={logout}>
                                             <ListItemIcon>
                                                 <BiLogOut fontSize="small" />
@@ -337,12 +339,14 @@ const Navbar = () => {
                                         سفارشات من
                                     </MenuItem>
                                 </Link>
-                                <MenuItem className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
-                                  <ListItemIcon>
-                                        <MdPublishedWithChanges />
-                                  </ListItemIcon>
-                                  تغییر رمز عبور
-                                </MenuItem>
+                                <Link to={'/change-password'}>
+                                    <MenuItem className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
+                                        <ListItemIcon>
+                                              <MdPublishedWithChanges />
+                                        </ListItemIcon>
+                                        تغییر رمز عبور
+                                    </MenuItem>
+                                </Link>
                                 <MenuItem className={`menuItemInMobile ${btnDisabled !== false && 'btnDisabled'}`} onClick={logout}>
                                     <ListItemIcon>
                                         <BiLogOut fontSize="small" />

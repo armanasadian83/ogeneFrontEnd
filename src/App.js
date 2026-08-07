@@ -34,6 +34,14 @@ import AccountPage from "./Pages/account/accountPage";
 import Blog from "./Pages/Blog";
 import BaleAlert from "./Components/baleAlert";
 import OrderPage from "./Pages/orders";
+import ForgotPassword from "./Pages/forgotPassword/ForgotPassword";
+import VerifyResetOTP from "./Pages/forgotPassword/VerifyResetOTP";
+import ResetPassword from "./Pages/forgotPassword/ResetPassword";
+import ChangePassword from "./Pages/changePassword/ChangePassword";
+import ChangePasswordVerifyOTP from "./Pages/changePassword/ChangePasswordVerifyOTP";
+import ChangePasswordNew from "./Pages/changePassword/ChangePasswordNew";
+import FailedPayment from "./Pages/payment/fail";
+import SuccessPayment from "./Pages/payment/success";
 
 export const MyContext = createContext();
 
@@ -230,6 +238,17 @@ const App = () => {
                     <Route path="/verifyOTP" element={<VerifyOTP />} />
                     <Route path="/accountPage/:id" element={<AccountPage />} />
                     <Route path="/orders/:id" element={<OrderPage />} />
+
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/verify-reset-otp" element={<VerifyResetOTP />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
+
+                    <Route path="/change-password" element={<ChangePassword />} />
+                    <Route path="/change-password-verify" element={<ChangePasswordVerifyOTP />} />
+                    <Route path="/change-password-new" element={<ChangePasswordNew />} />
+
+                    <Route path="/payment-success" element={<SuccessPayment />} />
+                    <Route path="/payment-failed" element={<FailedPayment />} />
 
                     <Route path="/field/I" element={<FieldOne />} />
                     <Route path="/field/II" element={<FieldTwo />} />

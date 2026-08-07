@@ -194,7 +194,11 @@ const SignIn = () => {
                             </div>
 
 
-                            <a className="border-effect cursor txt">رمز عبور خود را فراموش کرده اید؟</a>
+                            <a className="border-effect">
+                                <Link to="/forgot-password" className="border-effect cursor txt">
+                                    رمز عبور خود را فراموش کرده‌اید؟
+                                </Link>
+                            </a>
 
                             <div className="d-flex align-items-center mt-3 mb-3 actionBtnWrapper">
                                 <div className="w-50">

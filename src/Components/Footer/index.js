@@ -93,7 +93,7 @@ const Footer = () => {
                                                 <a href="tel:+989120169816">۰۹۱۲۰۱۶۹۸۱۶</a>
                                             </div>
                                             <div>
-                                                <a href="tel:+989050168316">۰۹۰۵۰۱۶۸۳۱۶</a>
+                                                <a href="tel:+989050168316">۰۹۰۵۰۱۶۷۲۱۶</a>
                                             </div>
                                             <div className='flex align-items-center justify-content-end gap-3 icons'>
                                                 <span><FaInstagram /></span>
@@ -103,11 +103,12 @@ const Footer = () => {
                                         <div className='footerLogo text-center align-items-center ogeneLogo'>
                                             <img src={logo} alt="Egon Logo" />
                                         </div>
-                                        <div className='footerLogo text-center align-items-center'>
-                                            <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY'>
-                                                <img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY' alt='' style={{cursor: 'pointer'}} code='DCUvppqG13XGco7UU3cpoZFr82zDH5vY' />
-                                            </a>
-                                        </div>
+                                        <div 
+                                            className='footerLogo text-center align-items-center'
+                                            dangerouslySetInnerHTML={{
+                                                __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY' alt='' style='cursor:pointer' code='DCUvppqG13XGco7UU3cpoZFr82zDH5vY' /></a>`
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </div>

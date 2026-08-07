@@ -462,19 +462,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 @media screen and (max-width : 500px){
     .signInPage .box h2{font-size: 21px;}
     .signInPage.signUp{width: 100%; height: 800px;position: relative; overflow: hidden;}
@@ -615,3 +602,112 @@
 
 .mobileBannerImage.three{height: 200px; object-fit: cover; border-radius: 15%; padding-right: 20px; padding-left: 20px; object-position: top;}
 .mobileBannerImage.four{height: 200px; object-fit: cover; border-radius: 15%; padding-right: 20px; padding-left: 20px; object-position: top;}
+
+
+/* order page new design: 5 Aug 2026 */
+
+@media (max-width: 991px) {
+    .orderStatsRow {grid-template-columns: repeat(2, 1fr);}
+}
+
+@media (max-width: 767px) {
+    .orderPageHead { align-items: flex-start; flex-direction: column;}
+    .orderCardHead { flex-direction: column; align-items: flex-start;}
+    .footInfo {gap: 16px;}
+    .stepperLabels span {font-size: 10.5px;}
+    .orderItemRow {flex-wrap: wrap;}
+    .itemSubtotal {width: 100%; text-align: left; padding-top: 6px; border-top: 1px dashed var(--border-strong);}
+}
+
+@media (max-width: 575px) {
+    .orderStatsRow {grid-template-columns: 1fr 1fr; gap: 10px;}
+    .orderCardFoot {flex-direction: column; align-items: stretch;}
+    .viewDetailsBtn {justify-content: center;}
+    .stepperWrap {padding: 20px 12px 4px;}
+    .statCard {padding: 14px 14px;}
+    .statValue {font-size: 20px;}
+}
+
+/* cart page new design: 5 Aug 2026 */
+
+@media (max-width: 860px) {
+    .cartLayout {grid-template-columns: 1fr;}
+    .summaryCard {position: static;}
+}
+
+@media (max-width: 640px) {
+    .cartItemRow {flex-wrap: wrap;}
+    .cartInfo {width: 100%;order: 1;}
+    .qtyBlock {width: auto;order: 3;justify-content: flex-start;}
+    .lineSubtotal {order: 4;text-align: right;width: auto;}
+    .removeBtn {order: 5;margin-right: auto !important;}
+    .miniBox {order: 0;}
+    .cartThumb {order: 0;}
+    .cartInfo h6 {overflow: visible;text-overflow: clip;}
+    .unitPrice{text-wrap: nowrap; margin-top: 15px;}
+    .cartPageText{padding-right: 20px; padding-left: 20px;}  
+    .getHelp{width: 50%;}
+    .paddingforMobile{margin-right: 20px !important;}
+}
+
+
+
+
+
+/* =========================================================
+   PAYMENT SUCCESS PAGE — RESPONSIVE
+   Append these rules to responsive.css
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .paymentCard {
+        padding: 30px 22px 26px;
+    }
+
+    .miniTracker {
+        gap: 4px;
+    }
+
+    .miniLine {
+        width: 22px;
+    }
+
+    .miniLabel {
+        font-size: 10px;
+    }
+
+    .helixDecor {
+        width: 220px;
+        height: 220px;
+    }
+
+    .helixDecor2 {
+        width: 240px;
+        height: 240px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   PAYMENT FAILED PAGE — RESPONSIVE
+   Append these rules to responsive.css — the base spacing
+   (.paymentCard, .miniTracker, .helixDecor) is already
+   handled by the payment-success responsive rules, since
+   both pages share the same structure.
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .reasonBox {
+        font-size: 12px;
+        padding: 12px 14px;
+    }
+}

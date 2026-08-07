@@ -5,6 +5,8 @@ import { Button } from "@mui/material";
 import Toman from "./../../assets/toman icon.png";
 import { fetchDataFromApi } from "../../utils/api";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { TbRefresh } from "react-icons/tb";
+import { MdSupportAgent } from "react-icons/md";
 
 const OrderPage = () => {
 
@@ -21,29 +23,63 @@ const OrderPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState(null);
     const [isClosing, setIsClosing] = useState(false);
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
-    useEffect(() => {
+    // isManualRefresh=true is used by the refresh button so it can show its
+    // own spinner instead of swapping the whole page back to the loading state.
+    const fetchOrders = (isManualRefresh = false) => {
         const user = JSON.parse(localStorage.getItem("user"));
-        
+
         if (user?.userId === id) {
+            if (isManualRefresh) {
+                setIsRefreshing(true);
+            } else {
+                setIsLoading(true);
+            }
+
             fetchDataFromApi(`/api/orders?userId=${id}`)
                 .then((res) => {
-                    setOrders(res);
+                    const list = Array.isArray(res)
+                        ? res
+                        : Array.isArray(res?.orders)
+                            ? res.orders
+                            : Array.isArray(res?.data)
+                                ? res.data
+                                : [];
+                    setOrders(list);
                     setIsLoading(false);
+                    setIsRefreshing(false);
                 })
                 .catch((err) => {
                     console.error(err);
                     setIsLoading(false);
+                    setIsRefreshing(false);
+                    context.setAlertBox({
+                        open: true,
+                        error: true,
+                        msg: 'خطا در به‌روزرسانی سفارش‌ها!'
+                    });
                 });
         } else {
             setIsLoading(false);
+            setIsRefreshing(false);
             context.setAlertBox({
                 open: true,
                 error: true,
                 msg: 'شما دسترسی به این صفحه ندارید!'
             });
         }
+    };
+
+    useEffect(() => {
+        fetchOrders(false);
     }, [id]);
+
+    const handleRefreshClick = () => {
+        if (isRefreshing) return;
+        fetchOrders(true);
+    };
 
     const toggleExpand = (orderId) => {
         if (expandedOrder === orderId) {
@@ -57,6 +93,7 @@ const OrderPage = () => {
         }
     };
 
+    // Kept exactly as before — drives both the badge class and the stepper mapping
     const getStatusClass = (status) => {
         switch (status) {
             case 'در انتظار':
@@ -88,6 +125,117 @@ const OrderPage = () => {
         });
     }
 
+    // Maps the real order.status values to the 3-stage stepper.
+    // 1 = ثبت سفارش (default / در انتظار)
+    // 2 = بررسی و تایید (در حال پردازش)
+    // 3 = پایان یافته (تایید شده)
+    const getStepIndex = (status) => {
+        switch (status) {
+            case 'تایید شده':
+                return 3;
+            case 'در حال پردازش':
+                return 2;
+            case 'در انتظار':
+            default:
+                return 1;
+        }
+    };
+
+    const stepLabels = ['ثبت سفارش', 'بررسی و تایید', 'پایان یافته'];
+
+    const renderStepper = (status) => {
+        if (status === 'لغو شده') {
+            return (
+                <div className="orderCancelledNote">
+                    <span className="orderCancelledDot"></span>
+                    این سفارش توسط پشتیبانی لغو شده است.
+                </div>
+            );
+        }
+
+        const step = getStepIndex(status);
+        // Reversed so index 0 (ثبت سفارش) sits on the right and index 2
+        // (پایان یافته) sits on the left — matching RTL reading order.
+        const nodeX = [700, 380, 60];
+
+        const seg1Done = step >= 2;
+        const seg2Done = step >= 3;
+
+        const nodeState = (i) => {
+            if (step > i + 1) return 'done';
+            if (step === i + 1) return 'current';
+            return 'upcoming';
+        };
+
+        // Direction-agnostic curve builder: works whether xB is to the
+        // left or right of xA, so the helix shape stays symmetric either way.
+        const lowArc = (xA, xB) => {
+            const off = (xB - xA) * 0.3125;
+            return `M ${xA} 15 C ${xA + off} 55, ${xB - off} 55, ${xB} 15`;
+        };
+        const highArc = (xA, xB) => {
+            const off = (xB - xA) * 0.3125;
+            return `M ${xA} 45 C ${xA + off} 5, ${xB - off} 5, ${xB} 45`;
+        };
+
+        return (
+            <div className="stepperWrap">
+                <svg viewBox="0 0 760 60" width="100%" height="60" preserveAspectRatio="xMidYMid meet">
+                    <path
+                        className={`stepperLine ${seg1Done ? 'done' : 'upcoming'}`}
+                        d={lowArc(nodeX[0], nodeX[1])}
+                    />
+                    <path
+                        className={`stepperLine ${seg1Done ? 'done' : 'upcoming'}`}
+                        d={highArc(nodeX[0], nodeX[1])}
+                    />
+                    <path
+                        className={`stepperLine ${seg2Done ? 'done' : 'upcoming'}`}
+                        d={lowArc(nodeX[1], nodeX[2])}
+                    />
+                    <path
+                        className={`stepperLine ${seg2Done ? 'done' : 'upcoming'}`}
+                        d={highArc(nodeX[1], nodeX[2])}
+                    />
+
+                    {nodeX.map((x, i) => (
+                        <circle
+                            key={i}
+                            className={`stepperNode ${nodeState(i)}`}
+                            cx={x}
+                            cy="30"
+                            r={nodeState(i) === 'current' ? 10 : 9}
+                        />
+                    ))}
+                </svg>
+                <div className="stepperLabels">
+                    {stepLabels.map((label, i) => (
+                        <span key={i} className={nodeState(i)}>{label}</span>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    const filteredOrders = orders.filter(order =>
+        statusFilter === 'all' ? true : order.status === statusFilter
+    );
+
+    const totalOrdersCount = orders.length;
+    const pendingCount = orders.filter(o => o.status === 'در انتظار').length;
+    const completedCount = orders.filter(o => o.status === 'تایید شده').length;
+    const totalSpent = orders
+        .filter(o => o.status !== 'لغو شده')
+        .reduce((sum, o) => sum + (o.totalPrice || 0), 0);
+
+    const statusChips = [
+        { key: 'all', label: 'همه' },
+        { key: 'در انتظار', label: 'در انتظار' },
+        { key: 'در حال پردازش', label: 'در حال پردازش' },
+        { key: 'تایید شده', label: 'تایید شده' },
+        { key: 'لغو شده', label: 'لغو شده' },
+    ];
+
     return (
         <>
             <div className="ordersPage container">
@@ -99,7 +247,6 @@ const OrderPage = () => {
 
                 <div className="row">
                     <div className="col-12 my-3">
-                        <h5>شما <b>{orders?.length || 0}</b> سفارش ثبت شده دارید.</h5>
 
                         {isLoading ? (
                             <div className="text-center my-5">
@@ -107,185 +254,193 @@ const OrderPage = () => {
                                     <span className="visually-hidden">در حال بارگذاری...</span>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="table-responsive mt-4">
-                                {orders?.length > 0 ? (
-                                    <table className="table table-bordered v-align">
-                                        <thead className="thead-dark">
-                                            <tr>
-                                                <th className="order-col-index">ردیف</th>
-                                                <th className="order-col-id">شناسه سفارش</th>
-                                                <th className="order-col-items">تعداد آیتم</th>
-                                                <th className="order-col-total">مبلغ کل</th>
-                                                <th className="order-col-status">وضعیت</th>
-                                                <th className="order-col-date">تاریخ ثبت</th>
-                                                <th className="order-col-actions">جزئیات</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {orders?.map((order, index) => (
-                                                <>
-                                                    <tr key={order._id} className="order-row">
-                                                        <td className="indexCol">
-                                                            <div className="miniBox">
-                                                                {index + 1}
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div className="orderId" onClick={() => copyOrderId(order._id)}>
-                                                                <small>{order._id?.substr(0, 8)}...</small>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div className="orderItemsCount">
-                                                                <b>{order.totalItems || order.items?.length || 0}</b>
-                                                                <span>آیتم</span>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div className="priceBox order-total">
-                                                                {order.totalPrice?.toLocaleString()}
-                                                                <img src={Toman} className="toman-icon" />
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div className="orderStatus">
-                                                                <span className={`status-badge ${getStatusClass(order.status)}`}>
-                                                                    {order.status}
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div className="orderDate">
-                                                                <small>{order.dateCreated}</small>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div className="orderActions">
-                                                                <Button 
-                                                                    className="viewDetailsBtn w-100"
-                                                                    onClick={() => toggleExpand(order._id)}
-                                                                >
-                                                                    {expandedOrder === order._id ? (
-                                                                        <>
-                                                                            <BsChevronUp />
-                                                                            <span>بستن</span>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <BsChevronDown />
-                                                                            <span>مشاهده</span>
-                                                                        </>
-                                                                    )}
-                                                                </Button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    {expandedOrder === order._id && (
-                                                        <tr className="order-details-row">
-                                                            <td colSpan="7">
-                                                                <div className="order-details-wrapper" style={{
-                                                                    animation: isClosing ? 'slideUp 0.3s ease-in-out' : 'slideDown 0.3s ease-in-out',
-                                                                    padding: '16px',
-                                                                    backgroundColor: '#f8f9fa',
-                                                                    borderRadius: '8px',
-                                                                    transformOrigin: 'top'
-                                                                }}>
-                                                                    <h6 style={{ marginBottom: '12px' }}>جزئیات سفارش</h6>
-                                                                    <div className="table-responsive">
-                                                                        <table className="table table-sm table-bordered order-items-subTable">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th className="item-col-index">#</th>
-                                                                                    <th className="item-col-product">محصول/دوره</th>
-                                                                                    <th className="item-col-price">قیمت</th>
-                                                                                    <th className="item-col-qty">تعداد</th>
-                                                                                    <th className="item-col-subtotal">قیمت کل</th>
-                                                                                    <th className="item-col-type">نوع</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                {order.items?.map((item, idx) => (
-                                                                                    <tr key={idx}>
-                                                                                        <td>
-                                                                                            <div className="miniBox">{idx + 1}</div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div className="d-flex align-items-center productBox">
-                                                                                                <div className="imgWrapper">
-                                                                                                    <div className="img">
-                                                                                                        <img className="w-100" src={item?.image} alt={item?.productTitle} />
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div className="info pl-3">
-                                                                                                    <Link 
-                                                                                                        to={item?.typeCourse ? `/course/${item?.productId}` : `/product/${item?.productId}`}
-                                                                                                        style={{ textDecoration: 'none', color: 'inherit' }}
-                                                                                                    >
-                                                                                                        <h6 style={{ margin: 0, fontSize: '14px', cursor: 'pointer' }}>
-                                                                                                            {item?.productTitle?.substr(0, 30) + '...'}
-                                                                                                        </h6>
-                                                                                                    </Link>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div className="priceBox">
-                                                                                                {item?.price?.toLocaleString()} تومان
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div className="itemQty">
-                                                                                                {item?.quantity}
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <div className="priceBox">
-                                                                                                {item?.subTotal?.toLocaleString()} تومان
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <span className={`item-type-badge ${item?.typeCourse ? 'type-course' : 'type-product'}`}>
-                                                                                                {item?.typeCourse ? 'دوره' : 'محصول'}
-                                                                                            </span>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                ))}
-                                                                            </tbody>
-                                                                            <tfoot>
-                                                                                <tr className="order-grand-total">
-                                                                                    <td colSpan="4">
-                                                                                        <strong>مجموع کل:</strong>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <strong>{order.totalPrice?.toLocaleString()} تومان</strong>
-                                                                                    </td>
-                                                                                    <td></td>
-                                                                                </tr>
-                                                                            </tfoot>
-                                                                        </table>
+                        ) : orders?.length > 0 ? (
+                            <>
+                                <div className="orderPageHead">
+                                    <div>
+                                        <h1>سفارش‌های من</h1>
+                                        <p>شما <b>{totalOrdersCount}</b> سفارش ثبت شده دارید.</p>
+                                    </div>
+                                </div>
+
+                                <div className="orderStatsRow">
+                                    <div className="statCard">
+                                        <div className="statCardHead">
+                                            <span className="statLabel">کل سفارش‌ها</span>
+                                            <span className="statIcon icTeal">▤</span>
+                                        </div>
+                                        <div className="statValue">{totalOrdersCount}<span className="statValueSmall">سفارش</span></div>
+                                    </div>
+                                    <div className="statCard">
+                                        <div className="statCardHead">
+                                            <span className="statLabel">در انتظار پیگیری</span>
+                                            <span className="statIcon icGold">◔</span>
+                                        </div>
+                                        <div className="statValue">{pendingCount}<span className="statValueSmall">سفارش</span></div>
+                                    </div>
+                                    <div className="statCard">
+                                        <div className="statCardHead">
+                                            <span className="statLabel">پایان یافته</span>
+                                            <span className="statIcon icTeal">✓</span>
+                                        </div>
+                                        <div className="statValue">{completedCount}<span className="statValueSmall">سفارش</span></div>
+                                    </div>
+                                    <div className="statCard">
+                                        <div className="statCardHead">
+                                            <span className="statLabel">مجموع خرید</span>
+                                            <span className="statIcon icAmber">T</span>
+                                        </div>
+                                        <div className="statValue">{totalSpent?.toLocaleString()}<span className="statValueSmall">تومان</span></div>
+                                    </div>
+                                </div>
+
+                                <div className="filtersRow">
+                                    {statusChips.map(chip => (
+                                        <>
+                                        <button
+                                            key={chip.key}
+                                            className={`chipBtn ${statusFilter === chip.key ? 'active' : ''}`}
+                                            onClick={() => setStatusFilter(chip.key)}
+                                        >
+                                            {chip.label}
+                                        </button>
+                                        </>
+                                    ))}
+                                    <button
+                                        className={`refreshBtn ${isRefreshing ? 'spinning' : ''}`}
+                                        onClick={handleRefreshClick}
+                                        disabled={isRefreshing}
+                                        title="رفرش"
+                                    >
+                                        <TbRefresh />
+                                    </button>
+                                </div>
+
+                                <div className="orderCardList">
+                                    {filteredOrders.map((order) => (
+                                        <div className="orderCardItem" key={order._id}>
+                                            <div className="orderCardHead">
+                                                <div className="orderIdBlock">
+                                                    <span className="orderIdChip" onClick={() => copyOrderId(order._id)}>
+                                                        #{order._id?.substr(0, 8)}...
+                                                    </span>
+                                                    <button className="copyBtn" onClick={() => copyOrderId(order._id)} title="کپی آیدی">
+                                                        <span>⧉</span>
+                                                    </button>
+                                                    <span className="orderDateText">{order.dateCreated}</span>
+                                                </div>
+                                                <span className={`statusPill ${getStatusClass(order.status)}`}>
+                                                    <span className="statusDot"></span>
+                                                    {order.status}
+                                                </span>
+                                            </div>
+
+                                            {renderStepper(order.status)}
+
+                                            <div className="orderCardFoot">
+                                                <div className="footInfo">
+                                                    <div className="footItem">
+                                                        <span className="footLabel">تعداد آیتم</span>
+                                                        <span className="footValue">{order.totalItems || order.items?.length || 0} آیتم</span>
+                                                    </div>
+                                                    <div className="footItem">
+                                                        <span className="footLabel">مبلغ کل</span>
+                                                        <span className="footValue footValueTotal">
+                                                            {order.totalPrice?.toLocaleString()}
+                                                            <span className="toman-icon">تومان</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <Button
+                                                    className={`viewDetailsBtn ${expandedOrder === order._id ? 'open' : ''}`}
+                                                    onClick={() => toggleExpand(order._id)}
+                                                >
+                                                    {expandedOrder === order._id ? (
+                                                        <>
+                                                            <BsChevronUp />
+                                                            <span>بستن</span>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <BsChevronDown />
+                                                            <span>مشاهده جزئیات</span>
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            </div>
+
+                                            {expandedOrder === order._id && (
+                                                <div className={`orderDetailsWrapper ${isClosing ? 'slideUp' : 'slideDown'}`}>
+                                                    <h6 className="orderDetailsTitle">جزئیات سفارش</h6>
+                                                    <div className="orderItemsList">
+                                                        {order.items?.map((item, idx) => (
+                                                            <div className="orderItemRow" key={idx}>
+                                                                <div className="miniBox">{idx + 1}</div>
+                                                                <div className="itemThumb">
+                                                                    <img className="w-100" src={item?.image} alt={item?.productTitle} />
+                                                                </div>
+                                                                <div className="itemInfo">
+                                                                    <Link
+                                                                        to={item?.typeCourse ? `/course/${item?.productId}` : `/product/${item?.productId}`}
+                                                                        className="itemInfoLink"
+                                                                    >
+                                                                        <h6 className="itemInfoName">
+                                                                            {item?.productTitle?.substr(0, 30) + '...'}
+                                                                        </h6>
+                                                                    </Link>
+                                                                    <div className="itemInfoMeta">
+                                                                        <span className={`item-type-badge ${item?.typeCourse ? 'type-course' : 'type-product'}`}>
+                                                                            {item?.typeCourse ? 'دوره' : 'محصول'}
+                                                                        </span>
+                                                                        <span>تعداد: {item?.quantity}</span>
+                                                                        <span>قیمت واحد: {item?.price?.toLocaleString()} تومان</span>
                                                                     </div>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                    )}
-                                                </>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : (
-                                    <div className="emptyOrders">
-                                        <div>
-                                            <h5>شما هیچ سفارشی ثبت نکرده‌اید!</h5>
-                                            <Link to="/courseShop" className="btn btn-ogeneGreen">
-                                                مشاهده دوره ها
-                                            </Link>
+                                                                <div className="itemSubtotal">
+                                                                    {item?.subTotal?.toLocaleString()} تومان
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div className="orderGrandTotal">
+                                                        <strong>مجموع کل:</strong>
+                                                        <strong>{order.totalPrice?.toLocaleString()} تومان</strong>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                )}
+                                    ))}
+
+                                    {filteredOrders.length === 0 && (
+                                        <div className="emptyOrders emptyOrdersFiltered">
+                                            <h6>سفارشی با این وضعیت یافت نشد.</h6>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="emptyOrders">
+                                <div>
+                                    <h5>شما هیچ سفارشی ثبت نکرده‌اید!</h5>
+                                    <Link to="/courseShop" className="btn btn-ogeneGreen">
+                                        مشاهده دوره ها
+                                    </Link>
+                                </div>
                             </div>
                         )}
                     </div>
+                </div>
+
+
+                <div className="cartPageText">
+                    <small className="mx-1">آیا نیاز به کمک دارید؟</small>
+                    <Button
+                        className="getHelp"
+                        onClick={() => window.location.href = "tel:0212244961487"}
+                    >
+                        ارتباط با پشتیبانی
+                        <MdSupportAgent />
+                    </Button>
                 </div>
             </div>
         </>
