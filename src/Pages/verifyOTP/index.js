@@ -11,7 +11,6 @@ import { Button, CircularProgress } from "@mui/material";
 const VerifyOTP = () => {
 
     const [isLoading, setIsLoading] = useState(false);
-
     const [otp, setOtp] = useState("");   
 
     const context = useContext(MyContext);
@@ -31,19 +30,23 @@ const VerifyOTP = () => {
         e.preventDefault();
         console.log('verify');
 
+        // CHANGED: Use phone instead of email
         const obj = {
             otp: otp,
-            email: localStorage.getItem("userEmail"),
+            phone: localStorage.getItem("userPhone"),  // Changed from email to phone
         };
 
-        postData(`/api/client/verifyemail`, obj).then((res) => {
+        // CHANGED: Use verify-phone endpoint instead of verifyemail
+        postData(`/api/client/verify-phone`, obj).then((res) => {
+            setIsLoading(false);
             if(res?.success === true){
                 context.setAlertBox({
                     open: true,
                     error: false,
                     msg: res?.message
                 });
-                setIsLoading(false);
+                localStorage.removeItem("userPhone");  // Changed from userEmail
+                // Also remove email if exists
                 localStorage.removeItem("userEmail");
                 history("/logIn");
             }else{
@@ -52,7 +55,6 @@ const VerifyOTP = () => {
                     error: true,
                     msg: res?.message
                 });
-                setIsLoading(false);
             }
         });
     }
@@ -85,12 +87,9 @@ const VerifyOTP = () => {
                             <MdOutlineVerifiedUser style={{fontSize: '60px', color: '#31c19fff'}} />
                         </div>
                         <form className="mt-0" onSubmit={verify}>
-                            {/*<div className="d-flex align-items-center mb-3 ms-4">
-                                <img src={Logo} className="signInLogo" />
-                                <h2 className="mx-1">ثبت نام</h2>
-                            </div>*/}
-                            <h2 className="mb-1 text-center">تایید ایمیل</h2>
-                            <p className="text-center text-muted">کد ورود به ایمیل <b>{localStorage.getItem('userEmail')}</b> ارسال شد.</p>
+                            {/* CHANGED: Title and message to use phone instead of email */}
+                            <h2 className="mb-1 text-center">تایید شماره تلفن</h2>
+                            <p className="text-center text-muted">کد تایید به شماره تلفن <b>{localStorage.getItem('userPhone')}</b> ارسال شد.</p>
 
                             <p className="text-center text-muted mt-4">کد ارسال شده را وارد کنید:</p>
                             
@@ -103,7 +102,6 @@ const VerifyOTP = () => {
                             </div>
 
                             <h6 className="mt-4 text-center font-weight-bold">آموزشگاه آزاد نانوزیست فناوری اوژن</h6>
-
 
                         </form>
                     </div>

@@ -15,28 +15,47 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import Skeleton from '@mui/material/Skeleton';
 import { GiArchiveResearch } from "react-icons/gi";
+import { IoIosArrowDown } from "react-icons/io";
+import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 
-//responsive
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { IoIosArrowDown } from "react-icons/io";
 import { fetchDataFromApi } from "../../utils/api";
+
+/* Skeleton card matching CourseCard's shape */
+const CourseSkeletonCard = () => (
+    <div className='shopCourseCard shopSkeletonCard'>
+        <div className='shopCourseImgWrapper shopShimmer'></div>
+        <div className='shopCourseCardBody'>
+            <div className='shopSkeletonLine shopSkeletonLineTitle shopShimmer'></div>
+            <div className='shopSkeletonLine shopSkeletonLineTitle2 shopShimmer'></div>
+            <div className='shopSkeletonLine shopSkeletonLineBtn shopShimmer'></div>
+        </div>
+    </div>
+);
+
+const filterOptions = [
+    { value: 'سلولی، مولکولی و ژنتیک', label: 'سلولی، مولکولی و ژنتیک' },
+    { value: 'میکروبیولوژی', label: 'میکروبیولوژی' },
+    { value: 'نانوفناوری', label: 'نانوفناوری' },
+    { value: 'خدمات عمومی', label: 'خدمات عمومی' },
+    { value: 'زیست پزشکی', label: 'زیست پزشکی' },
+    { value: 'بالینی و مدل حیوانی', label: 'بالینی و مدل حیوانی' },
+];
 
 const CourseShop = () => {
 
-    useEffect(() => {
-        context.setIsShowFooter(true); 
-        context.setIsShowNavbar(true);
-        context.setIsShowCalenderBar(true);
-    }, []);
-
     const context = useContext(MyContext);
-    //const [value, setValue] = useState(0);
     const [viewActive, setViewActive] = useState(context.itemView);
     const [loading, setLoading] = useState(true);
     const [btnDisabled, setBtnDisabled] = useState(false);
+
+    useEffect(() => {
+        context.setIsShowFooter(true);
+        context.setIsShowNavbar(true);
+        context.setIsShowCalenderBar(true);
+    }, []);
 
     const handleChange = (event, newValue) => {
         context.setCourseFilterValue(newValue);
@@ -61,22 +80,21 @@ const CourseShop = () => {
         }, 1000);
     }, [viewActive]);
 
-    //responsive
+    // responsive filter menu
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = (anchorEl);
+    const open = Boolean(anchorEl);
     const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget);
     };
     const handleClose = (value) => {
-      context.setCourseFilterValue(value);
-      setAnchorEl(null);
+        context.setCourseFilterValue(value);
+        setAnchorEl(null);
     };
 
-    // to close menu on scroll
     useEffect(() => {
         const handleScrollTwo = () => {
             if (anchorEl) {
-                handleClose(context.courseFilterValue); 
+                handleClose(context.courseFilterValue);
             }
         };
         window.addEventListener('scroll', handleScrollTwo);
@@ -84,10 +102,8 @@ const CourseShop = () => {
             window.removeEventListener('scroll', handleScrollTwo);
         };
     }, [anchorEl]);
-    //
 
     // backend
-    
     const [courseData, setCourseDate] = useState([]);
 
     useEffect(() => {
@@ -98,15 +114,14 @@ const CourseShop = () => {
 
     useEffect(() => {
         setBtnDisabled(true);
-        if(context.courseFilterValue !== 0){
+        if (context.courseFilterValue !== 0) {
             fetchDataFromApi(`/api/course?filterKey=${context.courseFilterValue}`).then((res) => {
                 setCourseDate(res);
                 setTimeout(() => {
                     setBtnDisabled(false);
                 }, 500);
             });
-        }
-        else{
+        } else {
             fetchDataFromApi('/api/course').then((res) => {
                 setCourseDate(res);
                 setTimeout(() => {
@@ -114,169 +129,143 @@ const CourseShop = () => {
                 }, 500);
             })
         }
-        
     }, [context.courseFilterValue]);
-
 
     return (
         <>
+            <div className="listingPage">
+                <div className="container">
+                    <div className="row">
 
-        <div className="listingPage">
-            <div className="container">
-                
-                <div className="row">
+                        {/* ===== Sidebar ===== */}
+                        <div className="col-12 col-lg-2 filterSection">
+                            <p className="mb-1 mt-2 me-4 me-lg-0 breadCrumb">
+                                <Link to="/"><b>خانه</b></Link> /
+                                <Link to="/courseShop"><b> دوره های آموزشی</b></Link>
+                            </p>
 
-                    <div className="col-12 col-lg-2 filterSection">
-                        <p className="mb-1 mt-2 me-4 me-lg-0 breadCrumb ">
-                            <Link to="/" ><b> خانه </b></Link> /
-                            <Link to="/courseShop" ><b> دوره های آموزشی</b></Link>
-                        </p>
-                        <div className="filterBox">
-                            <h6>فیلتر بر اساس حوزه</h6>
-                            
-                            <RadioGroup
-                                aria-labelledby="demo-controlled-radio-buttons-group"
-                                name="controlled-radio-buttons-group"
-                                value={context.courseFilterValue}
-                                onChange={handleChange}
-                                className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
-                            >
-                                {/*<FormControlLabel value={0} control={<Radio />} label="همه دوره ها" />*/}
-                                <FormControlLabel value={"سلولی، مولکولی و ژنتیک"} control={<Radio />} label="سلولی، مولکولی و ژنتیک" />
-                                <FormControlLabel value={'میکروبیولوژی'} control={<Radio />} label="میکروبیولوژی" />
-                                <FormControlLabel value={'نانوفناوری'} control={<Radio />} label="نانوفناوری" />
-                                <FormControlLabel value={'خدمات عمومی'} control={<Radio />} label="خدمات عمومی" />
-                                <FormControlLabel value={'زیست پزشکی'} control={<Radio />} label="زیست پزشکی" />
-                                <FormControlLabel value={'بالینی و مدل حیوانی'} control={<Radio />} label="بالینی و مدل حیوانی" />
-                            </RadioGroup>
-                        </div>
-                        <div className="searchBtn">
-                            <Button onClick={context.handleClickOpenSearchModal}>
-                                <span>جستجوی دوره &nbsp;</span>
-                                <GiArchiveResearch />
-                            </Button>
-                        </div>
-                    </div>
-
-                    <div className="col-12 col-lg-10">
-                        <div className="container banner">
-                            <img src={Banner} />
-                            <h1>دوره های آموزشی اوژن</h1>
-                        </div>
-                        <div className="toolBar">
-                            <div className="d-flex align-items-center">
-                                <div className="viewButton align-items-center">
-                                    <Button onClick={() => changeItemView(3)}>
-                                        <div className="">
-                                            <TfiLayoutGrid4Alt className={`${context.itemView === 3 ? 'active' : ''}`} />
-                                        </div>
-                                    </Button>
-                                    <Button onClick={() => changeItemView(4)}>
-                                        <div className="">
-                                            <BsGrid3X3GapFill className={`${context.itemView === 4 ? 'active' : ''}`} />
-                                        </div>
-                                    </Button>
+                            <div className="filterBox">
+                                <div className="filterBoxHeader">
+                                    <HiOutlineAdjustmentsHorizontal />
+                                    <h6>فیلتر بر اساس حوزه</h6>
                                 </div>
 
-                                <div className="tabSection">
-                                    <Box sx={{ maxWidth: { xs: 2820, sm: 2080 }}} >
-                                        <Tabs
-                                            value={context.courseFilterValue}
-                                            onChange={handleChange}
-                                            variant="scrollable"
-                                            scrollButtons={false}
-                                            aria-label="scrollable auto tabs example"
-                                            className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
-                                        >
-                                            <Tab className="tab" value={0} label="همه دوره ها" />
-                                            <Tab className="tab" value={'سلولی، مولکولی و ژنتیک'} label="سلولی، مولکولی و ژنتیک" />
-                                            <Tab className="tab" value={'میکروبیولوژی'} label="میکروبیولوژی" />
-                                            <Tab className="tab" value={'نانوفناوری'} label="نانوفناوری" />
-                                            <Tab className="tab" value={'خدمات عمومی'} label="خدمات عمومی" />
-                                            <Tab className="tab" value={'زیست پزشکی'} label="زیست پزشکی" />
-                                            <Tab className="tab" value={'بالینی و مدل حیوانی'} label="بالینی و مدل حیوانی" />
-                                        </Tabs>
-                                    </Box>
-                                </div>
+                                <RadioGroup
+                                    value={context.courseFilterValue}
+                                    onChange={handleChange}
+                                    className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
+                                >
+                                    {filterOptions.map((opt) => (
+                                        <FormControlLabel
+                                            key={opt.value}
+                                            value={opt.value}
+                                            control={<Radio />}
+                                            label={opt.label}
+                                        />
+                                    ))}
+                                </RadioGroup>
+                            </div>
 
-                                <div className="mobileTabSection">
-                                    <div className="btnWrapper">
-                                        <Button onClick={handleClick}>{context.courseFilterValue === 0 ? 'همه دوره ها' : context.courseFilterValue}&nbsp; <IoIosArrowDown /></Button>
-                                    </div>
-                                    <Menu
-                                        id="basic-menu"
-                                        anchorEl={anchorEl}
-                                        open={open}
-                                        onClose={() => handleClose(context.courseFilterValue)}
-                                        slotProps={{
-                                          list: {
-                                            'aria-labelledby': 'basic-button',
-                                          },
-                                        }}
-                                    >
-                                        <MenuItem onClick={() => handleClose(0)}>همه دوره ها</MenuItem>
-                                        <MenuItem onClick={() => handleClose('سلولی، مولکولی و ژنتیک')}>سلولی، مولکولی و ژنتیک</MenuItem>
-                                        <MenuItem onClick={() => handleClose('میکروبیولوژی')}>میکروبیولوژی</MenuItem>
-                                        <MenuItem onClick={() => handleClose('نانوفناوری')}>نانوفناوری</MenuItem>
-                                        <MenuItem onClick={() => handleClose('خدمات عمومی')}>خدمات عمومی</MenuItem>
-                                        <MenuItem onClick={() => handleClose('زیست پزشکی')}>زیست پزشکی</MenuItem>
-                                        <MenuItem onClick={() => handleClose('بالینی و مدل حیوانی')}>بالینی و مدل حیوانی</MenuItem>
-                                    </Menu>
-                                </div>
+                            <div className="searchBtn">
+                                <Button onClick={context.handleClickOpenSearchModal}>
+                                    <span>جستجوی دوره &nbsp;</span>
+                                    <GiArchiveResearch />
+                                </Button>
                             </div>
                         </div>
 
-                        <div className="productSection mt-5">
-                            <div className="row">
-                                {
-                                    loading === false ?
-                                        <>
-                                        {
-                                            courseData?.length !== undefined && courseData?.length !== 0 ? courseData?.map((item, index) => {
-                                                return(
+                        {/* ===== Main content ===== */}
+                        <div className="col-12 col-lg-10">
+
+                            <div className="container banner">
+                                <img src={Banner} />
+                                <div className="bannerOverlay"></div>
+                                <h1>دوره های آموزشی اوژن</h1>
+                            </div>
+
+                            <div className="toolBar">
+                                <div className="d-flex align-items-center">
+
+                                    <div className="viewButton align-items-center">
+                                        <Button onClick={() => changeItemView(3)}>
+                                            <TfiLayoutGrid4Alt className={`${context.itemView === 3 ? 'active' : ''}`} />
+                                        </Button>
+                                        <Button onClick={() => changeItemView(4)}>
+                                            <BsGrid3X3GapFill className={`${context.itemView === 4 ? 'active' : ''}`} />
+                                        </Button>
+                                    </div>
+
+                                    <div className="tabSection">
+                                        <Box sx={{ maxWidth: { xs: 2820, sm: 2080 } }}>
+                                            <Tabs
+                                                value={context.courseFilterValue}
+                                                onChange={handleChange}
+                                                variant="scrollable"
+                                                scrollButtons={false}
+                                                className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
+                                            >
+                                                <Tab className="tab" value={0} label="همه دوره ها" />
+                                                {filterOptions.map((opt) => (
+                                                    <Tab className="tab" key={opt.value} value={opt.value} label={opt.label} />
+                                                ))}
+                                            </Tabs>
+                                        </Box>
+                                    </div>
+
+                                    <div className="mobileTabSection">
+                                        <div className="btnWrapper">
+                                            <Button onClick={handleClick}>
+                                                {context.courseFilterValue === 0 ? 'همه دوره ها' : context.courseFilterValue}
+                                                &nbsp; <IoIosArrowDown />
+                                            </Button>
+                                        </div>
+                                        <Menu
+                                            id="basic-menu"
+                                            anchorEl={anchorEl}
+                                            open={open}
+                                            onClose={() => handleClose(context.courseFilterValue)}
+                                        >
+                                            <MenuItem onClick={() => handleClose(0)}>همه دوره ها</MenuItem>
+                                            {filterOptions.map((opt) => (
+                                                <MenuItem key={opt.value} onClick={() => handleClose(opt.value)}>{opt.label}</MenuItem>
+                                            ))}
+                                        </Menu>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="productSection mt-5">
+                                <div className="row">
+                                    {
+                                        loading === false ? (
+                                            courseData?.length !== undefined && courseData?.length !== 0 ? (
+                                                courseData.map((item, index) => (
                                                     <div className={`col-12 col-md-12 col-lg-${context.itemView}`} key={index}>
                                                         <CourseCard item={item} />
                                                     </div>
-                                                )
-                                            }) : <p className="mx-4">دوره ای در حوزه انتخاب شده وجود ندارد!</p>
-                                        }
-                                        </>
-                                    :
-                                        <>
-                                        <div className={`col-12 col-md-12 col-lg-${context.itemView} mb-5 skeletonWrapper`}>
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCard" />
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCardTwo" />
-                                        </div> 
-
-                                        <div className={`col-12 col-md-12 col-lg-${context.itemView} mb-5 skeletonWrapper`}>
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCard" />
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCardTwo" />
-                                        </div> 
-
-                                        <div className={`col-12 col-md-12 col-lg-${context.itemView} mb-5 skeletonWrapper`}>
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCard" />
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCardTwo" />
-                                        </div> 
-
-                                        <div className={`col-12 col-md-12 col-lg-${context.itemView} mb-5 skeletonWrapper`}>
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCard" />
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCardTwo" />
-                                        </div> 
-
-                                        <div className={`col-12 col-md-12 col-lg-${context.itemView} mb-5 skeletonWrapper`}>
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCard" />
-                                            <Skeleton animation="wave" variant="rectangular" width={'100%'} className="skeletonCardTwo" />
-                                        </div> 
-                                        </>              
-                                }
+                                                ))
+                                            ) : (
+                                                <div className="emptyState">
+                                                    <GiArchiveResearch />
+                                                    <p>دوره ای در حوزه انتخاب شده وجود ندارد!</p>
+                                                </div>
+                                            )
+                                        ) : (
+                                            Array.from({ length: 6 }).map((_, i) => (
+                                                <div className={`col-12 col-md-12 col-lg-${context.itemView} mb-4`} key={i}>
+                                                    <CourseSkeletonCard />
+                                                </div>
+                                            ))
+                                        )
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </>
     );
 }
- 
+
 export default CourseShop;

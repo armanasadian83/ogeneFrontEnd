@@ -142,7 +142,7 @@ const Cart = () => {
     const orderData = {
         clientName: `${user?.name || ''} ${user?.lastName || ''}`.trim(),
         clientId: user.userId,
-        clientPhoneNumber: user?.phoneNumber || '09000000000',
+        clientPhoneNumber: user?.phone,
         totalPrice: total,
         items: cartData.map(item => ({
             productId: item.productId,

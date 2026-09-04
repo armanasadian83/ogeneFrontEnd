@@ -10,7 +10,7 @@ const ForgotPassword = () => {
     const context = useContext(MyContext);
     const history = useNavigate();
     
-    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");  // Only phone number
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
 
@@ -31,21 +31,31 @@ const ForgotPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate email
-        if (!email) {
+        // Validate input - only phone number
+        if (!phone) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "ایمیل خود را وارد کنید!"
+                msg: "شماره تلفن خود را وارد کنید!"
             });
             return;
         }
 
-        if (!email.includes('@') || !email.includes('.')) {
+        // Validate phone number format
+        if (phone.length !== 11) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "ایمیل معتبر وارد کنید!"
+                msg: "شماره تلفن معتبر وارد کنید! (مثال: 09123456789)"
+            });
+            return;
+        }
+
+        if (!phone.startsWith('09')) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "شماره تلفن باید با 09 شروع شود!"
             });
             return;
         }
@@ -54,10 +64,10 @@ const ForgotPassword = () => {
         setBtnDisabled(true);
 
         try {
-            console.log("Sending forgot password request for email:", email); // Debug log
+            console.log("Sending forgot password request for phone:", phone);
             
-            const res = await postData("/api/client/forgot-password", { email });
-            console.log("Forgot password response:", res); // Debug log
+            const res = await postData("/api/client/forgot-password", { email: phone });
+            console.log("Forgot password response:", res);
 
             if (res?.error === true) {
                 context.setAlertBox({
@@ -68,9 +78,9 @@ const ForgotPassword = () => {
                 setLoader(false);
                 setBtnDisabled(false);
             } else if (res?.success === true) {
-                // Save email for OTP verification
-                localStorage.setItem("resetEmail", email);
-                console.log("Reset email saved to localStorage:", email); // Debug log
+                // Save phone for OTP verification
+                localStorage.setItem("resetIdentifier", phone);
+                console.log("Reset phone saved to localStorage:", phone);
                 
                 context.setAlertBox({
                     open: true,
@@ -119,19 +129,19 @@ const ForgotPassword = () => {
                             <h2 className="mx-1">بازیابی رمز عبور</h2>
                         </div>
 
-                        <p className="text-muted mb-4 text-center">ایمیل خود را وارد کنید تا کد بازیابی برای شما ارسال شود.</p>
+                        <p className="text-muted mb-4 text-center">شماره تلفن خود را وارد کنید تا کد بازیابی برای شما ارسال شود.</p>
 
                         <div className="form-group">
-                            <label className="mb-1">ایمیل</label>
+                            <label className="mb-1">شماره تلفن</label>
                             <input 
-                                name="email" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                name="phone" 
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
                                 id="standard-basic" 
                                 className="w-100" 
-                                type="email"
-                                placeholder="example@email.com"
+                                placeholder="09123456789"
                                 dir="ltr"
+                                maxLength="11"
                             />
                         </div>
 

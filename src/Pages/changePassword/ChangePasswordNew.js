@@ -19,26 +19,26 @@ const ChangePasswordNew = () => {
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const [isPasswordShown, setIsPasswordShown] = useState(false);
-    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
 
     useEffect(() => {
         context.setIsShowFooter(false);
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
 
-        // Get email from URL parameters
+        // Get phone from URL parameters
         const searchParams = new URLSearchParams(location.search);
-        const emailFromUrl = searchParams.get('email');
+        const phoneFromUrl = searchParams.get('phone');
         
         // Also try to get from localStorage as fallback
-        const emailFromStorage = localStorage.getItem("changePasswordEmail");
+        const phoneFromStorage = localStorage.getItem("changePasswordPhone");
         
-        console.log("ChangePasswordNew - Email from URL:", emailFromUrl);
-        console.log("ChangePasswordNew - Email from localStorage:", emailFromStorage);
+        console.log("ChangePasswordNew - Phone from URL:", phoneFromUrl);
+        console.log("ChangePasswordNew - Phone from localStorage:", phoneFromStorage);
         
-        const resetEmail = emailFromUrl || emailFromStorage;
+        const resetPhone = phoneFromUrl || phoneFromStorage;
         
-        if (!resetEmail) {
+        if (!resetPhone) {
             context.setAlertBox({
                 open: true,
                 error: true,
@@ -48,9 +48,9 @@ const ChangePasswordNew = () => {
                 history('/change-password');
             }, 2000);
         } else {
-            setEmail(resetEmail);
+            setPhone(resetPhone);
             // Save to localStorage as backup
-            localStorage.setItem("changePasswordEmail", resetEmail);
+            localStorage.setItem("changePasswordPhone", resetPhone);
         }
 
         // Check if user is logged in
@@ -126,10 +126,10 @@ const ChangePasswordNew = () => {
         setBtnDisabled(true);
 
         try {
-            console.log("Changing password for email:", email);
+            console.log("Changing password for phone:", phone);
             
             const res = await postData("/api/client/change-password-final", {
-                email: email,
+                phone: phone,
                 newPassword: newPassword,
                 confirmPassword: confirmPassword
             });
@@ -152,7 +152,7 @@ const ChangePasswordNew = () => {
                 });
 
                 // Clear reset data
-                localStorage.removeItem("changePasswordEmail");
+                localStorage.removeItem("changePasswordPhone");
 
                 setTimeout(() => {
                     history('/profile');

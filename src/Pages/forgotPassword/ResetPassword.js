@@ -19,27 +19,29 @@ const ResetPassword = () => {
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
     const [isPasswordShown, setIsPasswordShown] = useState(false);
-    const [email, setEmail] = useState("");
+    const [identifier, setIdentifier] = useState("");
 
     useEffect(() => {
         context.setIsShowFooter(false);
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
 
-        // Get email from URL parameters
+        // Get identifier from URL parameters (either email or phone)
         const searchParams = new URLSearchParams(location.search);
         const emailFromUrl = searchParams.get('email');
+        const phoneFromUrl = searchParams.get('phone');
         
         // Also try to get from localStorage as fallback
-        const emailFromStorage = localStorage.getItem("resetEmail");
+        const identifierFromStorage = localStorage.getItem("resetIdentifier");
         
         console.log("ResetPassword - Email from URL:", emailFromUrl);
-        console.log("ResetPassword - Email from localStorage:", emailFromStorage);
+        console.log("ResetPassword - Phone from URL:", phoneFromUrl);
+        console.log("ResetPassword - Identifier from localStorage:", identifierFromStorage);
         
-        // Use email from URL first, then localStorage
-        const resetEmail = emailFromUrl || emailFromStorage;
+        // Use identifier from URL first, then localStorage
+        const resetIdentifier = emailFromUrl || phoneFromUrl || identifierFromStorage;
         
-        if (!resetEmail) {
+        if (!resetIdentifier) {
             context.setAlertBox({
                 open: true,
                 error: true,
@@ -49,10 +51,10 @@ const ResetPassword = () => {
                 history('/forgot-password');
             }, 2000);
         } else {
-            setEmail(resetEmail);
+            setIdentifier(resetIdentifier);
             // Save to localStorage as backup
-            localStorage.setItem("resetEmail", resetEmail);
-            console.log("ResetPassword - Email set:", resetEmail);
+            localStorage.setItem("resetIdentifier", resetIdentifier);
+            console.log("ResetPassword - Identifier set:", resetIdentifier);
         }
     }, [location, context, history]);
 
@@ -122,13 +124,18 @@ const ResetPassword = () => {
         setBtnDisabled(true);
 
         try {
-            console.log("Resetting password for email:", email);
+            // Determine if identifier is phone or email
+            const isPhone = /^[0-9]+$/.test(identifier) && (identifier.length === 11 || identifier.startsWith('09'));
             
-            const res = await postData("/api/client/reset-password", {
-                email: email,
+            const payload = {
                 newPassword: newPassword,
-                confirmPassword: confirmPassword
-            });
+                confirmPassword: confirmPassword,
+                ...(isPhone ? { phone: identifier } : { email: identifier })
+            };
+
+            console.log("Resetting password with payload:", payload);
+            
+            const res = await postData("/api/client/reset-password", payload);
 
             console.log("Reset password response:", res);
 
@@ -148,7 +155,7 @@ const ResetPassword = () => {
                 });
 
                 // Clear reset data
-                localStorage.removeItem("resetEmail");
+                localStorage.removeItem("resetIdentifier");
 
                 setTimeout(() => {
                     history('/login');

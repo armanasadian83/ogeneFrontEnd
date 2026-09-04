@@ -27,7 +27,6 @@ const SignUp = () => {
         setAcceptPolicies(!acceptPolicies);
     }
 
-    // signin and signup
     const history = useNavigate();
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -63,159 +62,148 @@ const SignUp = () => {
         setIsPasswordShown(!isPasswordShown);
     }
 
-
     const register = (e) => {
-            e.preventDefault();
-    
-            try {
-                if(formFields.name === ""){
+        e.preventDefault();
+
+        try {
+            if(formFields.name === ""){
                 context.setAlertBox({
                     open: true,
                     error: true,
                     msg: "نام را وارد کنید!"
                 });
                 return false;
-                }
+            }
 
-                if(formFields.email === ""){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "ایمیل را وارد کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.phone === ""){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "شماره تماس را وارد کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.phone.length !== 11){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "شماره تماس معتبر وارد کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.password === ""){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "رمز عبور را وارد کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.confirmPassword !== formFields.password){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "رمز عبور ها باهم تطابق ندارند!"
-                    });
-                    return false;
-                }
-  
-                if(acceptPolicies === false){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "قوانین و ضوابط را قبول کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.password.length < 7){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "رمز عبور حداقل باید 7 حرف/عدد باشد!"
-                    });
+            // Phone is now REQUIRED
+            if(formFields.phone === ""){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "شماره تلفن را وارد کنید!"
+                });
                 return false;
-                }
+            }
 
-                if(formFields.password.includes(" ")){
+            if(formFields.phone.length !== 11){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "شماره تلفن معتبر وارد کنید!"
+                });
+                return false;
+            }
+
+            // Email is now OPTIONAL - only validate if provided
+            if(formFields.email && !formFields.email.includes('@')){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "ایمیل معتبر وارد کنید!"
+                });
+                return false;
+            }
+
+            if(formFields.password === ""){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "رمز عبور را وارد کنید!"
+                });
+                return false;
+            }
+
+            if(formFields.confirmPassword !== formFields.password){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "رمز عبور ها باهم تطابق ندارند!"
+                });
+                return false;
+            }
+
+            if(acceptPolicies === false){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "قوانین و ضوابط را قبول کنید!"
+                });
+                return false;
+            }
+
+            if(formFields.password.length < 7){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "رمز عبور حداقل باید 7 حرف/عدد باشد!"
+                });
+                return false;
+            }
+
+            if(formFields.password.includes(" ")){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "فاصله در رمز عبور مجاز نیست!"
+                });
+                return false;
+            }
+
+            setLoader(true);
+            setBtnDisabled(true);
+
+            postAuthData("/api/client/signup", formFields).then((res) => {
+
+                if(res.error !== true){
+                    // CHANGED: Save phone instead of email for OTP verification
+                    localStorage.setItem("userPhone", formFields.phone);
+                    // Also save email if provided (for other purposes)
+                    if(formFields.email) {
+                        localStorage.setItem("userEmail", formFields.email);
+                    }
+
+                    // CHANGED: SMS message instead of email
+                    context.setAlertBox({
+                        open: true,
+                        error: false,
+                        msg: "کد تایید به شماره تلفن شما ارسال گردید!"
+                    }); 
+
+                    setTimeout(() => {
+                        history('/verifyOTP')
+                    }, 2000);
+
+                } else {
+                    setLoader(false);
                     context.setAlertBox({
                         open: true,
                         error: true,
-                        msg: "فاصله در رمز عبور مجاز نیست!"
+                        msg: res.msg
                     });
-                    return false;
-                }
-    
-                setLoader(true);
-                setBtnDisabled(true);
-    
-                postAuthData("/api/client/signup", formFields).then((res) => {
-                    //console.log(res);
-    
-                    if(res.error !== true){
 
-                        // otp
-                        localStorage.setItem("userEmail", formFields.email);
-
-                        context.setAlertBox({
-                            open: true,
-                            error: false,
-                            msg: "کد تایید به ایمیل شما ارسال گردید!"
-                        }); 
-
+                    if(res?.isVerify === false){
                         setTimeout(() => {
-                            history('/verifyOTP')
-                        }, 2000);
-
-                        //
-                        /*context.setAlertBox({
-                            open: true,
-                            error: false,
-                            msg: "کاربر جدید با موفقیت افزوده شد!"
-                        });
-    
-                        setTimeout(() => {
-                            history("/login"); 
-                        }, 1000);
-
-                        setTimeout(() => {
-                            setBtnDisabled(false);
-                        }, 2000);
-    
-                        setLoader(false);*/
-    
-                    }else{
-                        setLoader(false);
-                        context.setAlertBox({
-                            open: true,
-                            error: true,
-                            msg: res.msg
-                        });
-
-                        if(res?.isVerify === false){
-                            console.log('true');
-                            setTimeout(() => {
-                                history('/logIn')
-                            }, 2000);
-                        }
-                        
-                        setTimeout(() => {
-                            setBtnDisabled(false);
+                            history('/logIn')
                         }, 2000);
                     }
-    
-                }).catch(error => {
-                    console.error('Error posting data:', error);
-                });
-                
-            }
-            catch (error){
-                console.log(error);
-            }
+                    
+                    setTimeout(() => {
+                        setBtnDisabled(false);
+                    }, 2000);
+                }
+
+            }).catch(error => {
+                console.error('Error posting data:', error);
+                setLoader(false);
+                setBtnDisabled(false);
+            });
+            
+        } catch (error){
+            console.log(error);
+            setLoader(false);
+            setBtnDisabled(false);
         }
+    }
 
     return (
         <>
@@ -252,7 +240,7 @@ const SignUp = () => {
 
                             <div className="form-group">
                                 <label className="mb-1">ایمیل</label>
-                                <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" />
+                                <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" placeholder="اختیاری" />
                             </div>
 
                             <div className="row">
@@ -301,7 +289,6 @@ const SignUp = () => {
                             <p className="txt">قبلا حساب کاربری ساخته اید؟<Link to="/logIn" className="border-effect me-2">ورود به حساب کاربری</Link></p>
 
                             <h6 className="mt-5 text-center font-weight-bold">آموزشگاه آزاد نانوزیست فناوری اوژن</h6>
-
 
                         </form>
                     </div>

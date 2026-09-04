@@ -9,7 +9,7 @@ import { Button, CircularProgress } from "@mui/material";
 const ChangePasswordVerifyOTP = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [otp, setOtp] = useState("");
-    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
 
     const context = useContext(MyContext);
     const history = useNavigate();
@@ -19,10 +19,10 @@ const ChangePasswordVerifyOTP = () => {
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
 
-        const changeEmail = localStorage.getItem("changePasswordEmail");
-        console.log("ChangePasswordVerify - Email from localStorage:", changeEmail);
+        const changePhone = localStorage.getItem("changePasswordPhone");
+        console.log("ChangePasswordVerify - Phone from localStorage:", changePhone);
         
-        if (!changeEmail) {
+        if (!changePhone) {
             context.setAlertBox({
                 open: true,
                 error: true,
@@ -30,7 +30,7 @@ const ChangePasswordVerifyOTP = () => {
             });
             history('/change-password');
         } else {
-            setEmail(changeEmail);
+            setPhone(changePhone);
         }
 
         // Check if user is logged in
@@ -61,14 +61,14 @@ const ChangePasswordVerifyOTP = () => {
         try {
             const obj = {
                 otp: otp,
-                email: email
+                phone: phone
             };
 
             const res = await postData(`/api/client/change-password-verify-otp`, obj);
 
             if (res?.success === true) {
-                // Make sure email is preserved
-                localStorage.setItem("changePasswordEmail", email);
+                // Make sure phone is preserved
+                localStorage.setItem("changePasswordPhone", phone);
                 
                 context.setAlertBox({
                     open: true,
@@ -76,9 +76,9 @@ const ChangePasswordVerifyOTP = () => {
                     msg: res.message
                 });
                 
-                // Navigate to set new password page with email in URL
+                // Navigate to set new password page with phone in URL
                 setTimeout(() => {
-                    history(`/change-password-new?email=${encodeURIComponent(email)}`);
+                    history(`/change-password-new?phone=${encodeURIComponent(phone)}`);
                 }, 1500);
             } else {
                 context.setAlertBox({
@@ -101,13 +101,13 @@ const ChangePasswordVerifyOTP = () => {
 
     const resendOTP = async () => {
         try {
-            const res = await postData(`/api/client/change-password-send-otp`, { email });
+            const res = await postData(`/api/client/change-password-send-otp`, { phone });
             
             if (res?.success === true) {
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: "کد جدید به ایمیل شما ارسال شد!"
+                    msg: "کد جدید به شماره تلفن شما ارسال شد!"
                 });
             } else {
                 context.setAlertBox({
@@ -142,7 +142,7 @@ const ChangePasswordVerifyOTP = () => {
                     <form className="mt-0" onSubmit={verifyOTP}>
                         <h2 className="mb-1 text-center">تایید کد</h2>
                         <p className="text-center text-muted">
-                            کد تایید به ایمیل <b>{email}</b> ارسال شد.
+                            کد تایید به شماره تلفن <b>{phone}</b> ارسال شد.
                         </p>
 
                         <p className="text-center text-muted mt-4">کد ارسال شده را وارد کنید:</p>

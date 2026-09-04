@@ -10,7 +10,7 @@ const ChangePassword = () => {
     const context = useContext(MyContext);
     const history = useNavigate();
 
-    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
 
@@ -19,12 +19,12 @@ const ChangePassword = () => {
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
 
-        // Get user email from localStorage
+        // Get user phone from localStorage
         const userData = localStorage.getItem("user");
         if (userData) {
             try {
                 const user = JSON.parse(userData);
-                setEmail(user.email);
+                setPhone(user.phone);
             } catch (error) {
                 console.error("Error parsing user data:", error);
             }
@@ -45,20 +45,20 @@ const ChangePassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!email) {
+        if (!phone) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "ایمیل خود را وارد کنید!"
+                msg: "شماره تلفن خود را وارد کنید!"
             });
             return;
         }
 
-        if (!email.includes('@') || !email.includes('.')) {
+        if (phone.length !== 11) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "ایمیل معتبر وارد کنید!"
+                msg: "شماره تلفن معتبر وارد کنید!"
             });
             return;
         }
@@ -67,7 +67,7 @@ const ChangePassword = () => {
         setBtnDisabled(true);
 
         try {
-            const res = await postData("/api/client/change-password-send-otp", { email });
+            const res = await postData("/api/client/change-password-send-otp", { phone });
 
             if (res?.error === true) {
                 context.setAlertBox({
@@ -78,8 +78,8 @@ const ChangePassword = () => {
                 setLoader(false);
                 setBtnDisabled(false);
             } else if (res?.success === true) {
-                // Save email for OTP verification
-                localStorage.setItem("changePasswordEmail", email);
+                // Save phone for OTP verification
+                localStorage.setItem("changePasswordPhone", phone);
                 
                 context.setAlertBox({
                     open: true,
@@ -120,21 +120,21 @@ const ChangePassword = () => {
                         </div>
 
                         <p className="text-muted mb-4 text-center">
-                            کد تایید به ایمیل شما ارسال خواهد شد.
+                            کد تایید به شماره تلفن شما ارسال خواهد شد.
                         </p>
 
                         <div className="form-group">
-                            <label className="mb-1">ایمیل</label>
+                            <label className="mb-1">شماره تلفن</label>
                             <input 
-                                name="email" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                name="phone" 
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
                                 className="w-100" 
-                                type="email"
-                                placeholder="example@email.com"
+                                placeholder="09123456789"
                                 dir="ltr"
-                                readOnly={email ? true : false}
-                                style={{ backgroundColor: email ? '#f5f5f5' : 'white' }}
+                                maxLength="11"
+                                readOnly={phone ? true : false}
+                                style={{ backgroundColor: phone ? '#f5f5f5' : 'white' }}
                             />
                         </div>
 
@@ -157,7 +157,7 @@ const ChangePassword = () => {
                                 </Button>
                             </div>
                             <div className="w-50">
-                                <Link to='/profile'>
+                                <Link to='/'>
                                     <Button className="col btn-lg ml-1 cancel" variant="outlined">
                                         بازگشت
                                     </Button>

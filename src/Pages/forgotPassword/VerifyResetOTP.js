@@ -9,7 +9,7 @@ import { Button, CircularProgress } from "@mui/material";
 const VerifyResetOTP = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [otp, setOtp] = useState("");
-    const [email, setEmail] = useState("");
+    const [identifier, setIdentifier] = useState("");  // Can be email OR phone
 
     const context = useContext(MyContext);
     const history = useNavigate();
@@ -19,10 +19,10 @@ const VerifyResetOTP = () => {
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
 
-        const resetEmail = localStorage.getItem("resetEmail");
-        console.log("VerifyResetOTP - Email from localStorage:", resetEmail);
+        const resetIdentifier = localStorage.getItem("resetIdentifier");
+        console.log("VerifyResetOTP - Identifier from localStorage:", resetIdentifier);
         
-        if (!resetEmail) {
+        if (!resetIdentifier) {
             context.setAlertBox({
                 open: true,
                 error: true,
@@ -30,7 +30,7 @@ const VerifyResetOTP = () => {
             });
             history('/forgot-password');
         } else {
-            setEmail(resetEmail);
+            setIdentifier(resetIdentifier);
         }
     }, [context, history]);
 
@@ -53,12 +53,14 @@ const VerifyResetOTP = () => {
         setIsLoading(true);
 
         try {
+            // Determine if identifier is phone or email
+            const isPhone = /^[0-9]+$/.test(identifier) && (identifier.length === 11 || identifier.startsWith('09'));
             const obj = {
                 otp: otp,
-                email: email
+                ...(isPhone ? { phone: identifier } : { email: identifier })
             };
 
-            console.log("Verifying OTP for email:", email);
+            console.log("Verifying OTP for:", identifier);
             const res = await postData(`/api/client/verify-reset-otp`, obj);
             console.log("Verify OTP Response:", res);
 
@@ -69,9 +71,10 @@ const VerifyResetOTP = () => {
                     msg: res.message
                 });
                 
-                // Navigate to reset password page with email in URL
+                // Navigate to reset password page with identifier in URL
                 setTimeout(() => {
-                    history(`/reset-password?email=${encodeURIComponent(email)}`);
+                    const paramName = isPhone ? 'phone' : 'email';
+                    history(`/reset-password?${paramName}=${encodeURIComponent(identifier)}`);
                 }, 1500);
             } else {
                 context.setAlertBox({
@@ -94,13 +97,13 @@ const VerifyResetOTP = () => {
 
     const resendOTP = async () => {
         try {
-            const res = await postData(`/api/client/forgot-password`, { email });
+            const res = await postData(`/api/client/forgot-password`, { email: identifier });
             
             if (res?.success === true) {
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: "کد جدید به ایمیل شما ارسال شد!"
+                    msg: "کد جدید به شماره تلفن / ایمیل شما ارسال شد!"
                 });
             } else {
                 context.setAlertBox({
@@ -127,6 +130,11 @@ const VerifyResetOTP = () => {
         }
     }, [history]);
 
+    // Determine display text based on identifier type
+    const displayText = /^[0-9]+$/.test(identifier) && (identifier.length === 11 || identifier.startsWith('09')) 
+        ? `شماره تلفن ${identifier}` 
+        : `ایمیل ${identifier}`;
+
     return (
         <section className="section signInPage otpPage">
             <div className="shape-bottom">
@@ -143,7 +151,7 @@ const VerifyResetOTP = () => {
                     <form className="mt-0" onSubmit={verifyOTP}>
                         <h2 className="mb-1 text-center">تایید کد بازیابی</h2>
                         <p className="text-center text-muted">
-                            کد بازیابی به ایمیل <b>{email}</b> ارسال شد.
+                            کد بازیابی به {displayText} ارسال شد.
                         </p>
 
                         <p className="text-center text-muted mt-4">کد ارسال شده را وارد کنید:</p>

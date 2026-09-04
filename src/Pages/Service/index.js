@@ -16,6 +16,7 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
+import { MdSupportAgent } from "react-icons/md";
 
 const ITEM_HEIGHT = 70;
 const ITEM_PADDING_TOP = 12;
@@ -323,7 +324,7 @@ const Service = () => {
                                 <div class="overlap-container">
                                     <div class="bottom-div"></div>
                                     <div class="top-div text-center">
-                                        <p>{item?.name}</p>
+                                        <p className="serviceItemText">{item?.name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -424,7 +425,7 @@ const Service = () => {
             </div>
         </div>
         </>
-    );
+    ); 
 }
  
 export default Service;

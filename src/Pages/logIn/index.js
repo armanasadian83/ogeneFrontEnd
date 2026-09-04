@@ -28,7 +28,7 @@ const SignIn = () => {
     const [btnDisabled, setBtnDisabled] = useState(false);
 
     const [formFields, setFormFields] = useState({
-        email: "",
+        email: "",  // Can be email OR phone
         password: ""
     });
 
@@ -47,7 +47,7 @@ const SignIn = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "ایمیل را وارد کنید!"
+                msg: "ایمیل یا شماره تلفن را وارد کنید!"
             });
             return false;
         }
@@ -83,6 +83,7 @@ const SignIn = () => {
                     name: res.user?.name,
                     lastName: res.user?.lastName,
                     email: res.user?.email,
+                    phone: res.user?.phone,  // CHANGED: Added phone
                     userId: res.user?.id
                 }
     
@@ -108,14 +109,15 @@ const SignIn = () => {
                     setLoader(false);
                     setBtnDisabled(false);
 
+                    // CHANGED: If user is not verified, send OTP to phone
                     if(res.verified === false){
-                        // otp
-                        localStorage.setItem("userEmail", formFields.email);
+                        // Save phone to localStorage for OTP verification
+                        localStorage.setItem("userPhone", res.phone || formFields.email);
 
                         context.setAlertBox({
                             open: true,
                             error: false,
-                            msg: "کد تایید به ایمیل شما ارسال گردید!"
+                            msg: "کد تایید به شماره تلفن شما ارسال گردید!"
                         }); 
 
                         setTimeout(() => {
@@ -176,11 +178,11 @@ const SignIn = () => {
                     <div className="box card p-3 shadow border-0">
                         <form className="mt-3" onSubmit={logIn}>
                             <div className="d-flex align-items-center mb-3 ms-4">
-                                <img src={Logo} className="signInLogo" />
+                                <img src={Logo} className="signInLogo" alt="Logo" />
                                 <h2 className="mx-1">ورود به حساب کاربری</h2>
                             </div>
                             <div className="form-group">
-                                <label className="mb-1">ایمیل</label>
+                                <label className="mb-1">ایمیل یا شماره تلفن</label>  {/* CHANGED: Updated label */}
                                 <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" />
                             </div>
                             <div className="form-group">

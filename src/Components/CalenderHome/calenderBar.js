@@ -5,15 +5,15 @@ const CalenderBar = () => {
 
     const handleDownload = () => {
         const link = document.createElement("a");
-        link.href = "/mordad1405.pdf"; // file path in public folder
-        link.download = "/mordad1405.pdf";
+        link.href = "/shahrivar1405.pdf"; // file path in public folder
+        link.download = "/shahrivar1405.pdf";
         link.click();
     }
 
     return (
         <>
         <div className="w-100 calenderBar d-flex align-items-center justify-content-center">
-                <p>تقویم مردادماه منتشر شد!</p>
+                <p>تقویم شهریورماه منتشر شد!</p>
                 <Button onClick={handleDownload}>مشاهده تقویم</Button>
         </div>
         </>

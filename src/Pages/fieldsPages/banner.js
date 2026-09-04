@@ -10,7 +10,7 @@ const FieldsBanner = (props) => {
     };
     return (
         <>
-        <div className="banner text-center">
+        <div className="banner text-center w-100">
             <h1>{props.name}</h1>
             <p>دوره های آموزشی، مطالب آموزشی و خدمات</p>
                 <Button onClick={handleClick}>
