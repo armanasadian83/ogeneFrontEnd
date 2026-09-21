@@ -1,35 +1,19 @@
-import imgServiceAnformatic from "./../../assets/ServiceAnformaticImg.jpeg";
-
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Checkbox from '@mui/material/Checkbox';
-import ListItemText from '@mui/material/ListItemText';
-import InputLabel from "@mui/material/InputLabel";
-import Button from "@mui/material/Button";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { fetchDataFromApi, postData } from "../../utils/api";
 
 import { MyContext } from "../../App";
 import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 import { useSearchParams } from "react-router-dom";
-import { MdSupportAgent } from "react-icons/md";
+import { TbFlask, TbSearch, TbCheck, TbBrandWhatsapp, TbMessageCircle, TbArrowLeft, TbArrowRight } from "react-icons/tb";
 
-const ITEM_HEIGHT = 70;
-const ITEM_PADDING_TOP = 12;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+import Logo from "./../../assets/baleLogo.png";
 
-const names = [
+// TODO: replace with the real support numbers/usernames.
+const WHATSAPP_NUMBER = "989050168316"; // digits only, country code, no leading 0 or +
+const BALE_USERNAME = "Ogenetech2";
+
+const fields = [
     'سلولی، مولکولی و ژنتیک',
     'میکروبیولوژی',
     'نانوفناوری',
@@ -42,8 +26,10 @@ const COOLDOWN_SECONDS = 300; // how long the user must wait to resubmit
 
 const Service = () => {
 
+    const context = useContext(MyContext);
+
     useEffect(() => {
-        context.setIsShowFooter(true); 
+        context.setIsShowFooter(true);
         context.setIsShowNavbar(true);
         context.setIsShowCalenderBar(true);
 
@@ -54,71 +40,29 @@ const Service = () => {
         reqName: [],
         name: '',
         phone: '',
+        description: '',
         userId: ''
     });
 
-    const context = useContext(MyContext);
-
+    // Step 1 — which field the services belong to.
     const [personName, setPersonName] = useState('');
-    const [serviceName, setServiceName] = useState([]);
-    
-    const handleChange = (event) => {
-        setPersonName(event.target.value);
-    };
 
-    const handleChangeServiceName = (event) => {
-        const {
-          target: { value },
-        } = event;
-        setServiceName(
-          typeof value === 'string' ? value.split(',') : value,
+    // Step 2 — which services are selected, and a filter for the search box.
+    const [serviceName, setServiceName] = useState([]);
+    const [serviceSearch, setServiceSearch] = useState('');
+
+    const toggleService = (name) => {
+        setServiceName((prev) =>
+            prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
         );
     };
 
-    const [openPortionsSelect, setOpenPortionsSelect] = useState(false);
-    const [openServiceSelect, setOpenServiceSelect] = useState(false);
-    
-    const handleClosePortions = () => {
-        setOpenPortionsSelect(false);
-    }
-
-    const handleCloseServiceSelect = () => {
-        setOpenServiceSelect(false);
-    }
-
-    const handleOpenPortions = () => {
-        setOpenPortionsSelect(true);
-    };
-
-    const handleOpenServiceSelect = () => {
-        setOpenServiceSelect(true);
-    };
-
+    // Changing the field starts the service selection over — a service
+    // name only makes sense in the context of the field it belongs to.
     useEffect(() => {
-      const handleScroll = () => {
-        if (openPortionsSelect) {
-          handleClosePortions();
-        }
-      };
-      window.addEventListener('scroll', handleScroll);
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-      };
-    }, [openPortionsSelect]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (openServiceSelect) {
-                handleCloseServiceSelect();
-            }
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [openServiceSelect]);
-
-    const ref = useRef(null);
+        setServiceName([]);
+        setServiceSearch('');
+    }, [personName]);
 
     // cool down
     const [cooldown, setCooldown] = useState(0);
@@ -131,25 +75,25 @@ const Service = () => {
     useEffect(() => {
         const storedUntil = localStorage.getItem(cooldownKey);
         if (!storedUntil) return;
-            const msRemaining = Number(storedUntil) - Date.now();
+        const msRemaining = Number(storedUntil) - Date.now();
         if (msRemaining > 0) {
             setCooldown(Math.ceil(msRemaining / 1000));
-        }else{
+        } else {
             localStorage.removeItem(cooldownKey);
         }
     }, [cooldownKey]);
 
-    // 3) Tick the countdown once per second while active
-    useEffect(() => {  
+    // Tick the countdown once per second while active
+    useEffect(() => {
         if (cooldown <= 0) return;
-            const id = setInterval(() => {
+        const id = setInterval(() => {
             setCooldown((s) => {
                 const next = s - 1;
                 if (next <= 0) localStorage.removeItem(cooldownKey);
-                    return Math.max(0, next);
-                });
+                return Math.max(0, next);
+            });
         }, 1000);
-      return () => clearInterval(id);
+        return () => clearInterval(id);
     }, [cooldown, cooldownKey]);
 
     const formatTime = (totalSeconds) => {
@@ -158,15 +102,12 @@ const Service = () => {
         return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
     };
 
-
-    //
-
-    //backend
+    // backend
 
     const [searchParams] = useSearchParams();
     const fieldName = searchParams.get("fieldName");
     useEffect(() => {
-        if(fieldName !== null){
+        if (fieldName !== null) {
             setPersonName(fieldName);
         }
         window.scrollTo(0, 600);
@@ -175,18 +116,28 @@ const Service = () => {
     const [serviceData, setServiceData] = useState([]);
 
     useEffect(() => {
+        if (!personName) {
+            setServiceData([]);
+            return;
+        }
         fetchDataFromApi(`/api/service?filterKey=${personName}`).then((res) => {
             setServiceData(res);
         });
     }, [personName]);
 
-    const inputChange = (e) => {
-        setFormFields(() => ({
-            ...formFields,
-            [e.target.name] : e.target.value
-        }));
-    }
+    const visibleServices = (serviceData ?? []).filter((item) =>
+        (item?.name ?? '').toLowerCase().includes(serviceSearch.toLowerCase())
+    );
 
+    const inputChange = (e) => {
+        setFormFields((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+    };
+
+    // Pre-fill name/phone for a logged-in user, but the fields stay
+    // editable in case they're submitting on someone else's behalf.
     useEffect(() => {
         if (context.isLoggedIn === true) {
             const user = JSON.parse(localStorage.getItem("user"));
@@ -204,228 +155,319 @@ const Service = () => {
 
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
-    const history = useNavigate();
 
+    // Two-step wizard: 1 = field + service selection, 2 = contact form.
+    const [step, setStep] = useState(1);
+
+    const goToContactStep = () => {
+        if (!personName) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "لطفاً ابتدا حوزه خدمات را انتخاب کنید!"
+            });
+            return;
+        }
+
+        if (serviceName.length === 0) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "حداقل یک خدمت باید انتخاب شود!"
+            });
+            return;
+        }
+
+        setStep(2);
+    };
+
+    const goBackToSelection = () => {
+        setStep(1);
+    };
+
+    // Anyone can submit a request — logged in or not. A logged-in
+    // user's request is just tagged with their userId.
     const sendRequest = (e) => {
         e.preventDefault();
         if (cooldown > 0) return;
 
-        formFields.reqName = serviceName;
+        const payload = { ...formFields, reqName: serviceName };
 
-        if(context?.isLoggedIn === true){
-            try {
-                if(formFields.name === ""){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "نام را وارد کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.phone === ""){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "شماره تماس را وارد کنید!"
-                    });
-                    return false;
-                }
-
-                if(formFields.reqName.length === 0){
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: "حداقل یک خدمت باید انتخاب شود!"
-                    });
-                    return false;
-                }
-
-                setLoader(true);
-                setBtnDisabled(true);
-
-                postData('/api/request/create', formFields).then((res) => {
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: "درخواست با موفقیت ثبت شد!"
-                    });
-
-                    setLoader(false);
-                    setTimeout(() => {
-                        setBtnDisabled(false);
-                    }, 1000);
-
-                    setServiceName([]);
-                });
-
-                // start cooldown
-                const until = Date.now() + COOLDOWN_SECONDS * 1000;
-                localStorage.setItem(cooldownKey, String(until));
-                setCooldown(COOLDOWN_SECONDS);
-
-            } catch (error) {
-                console.log(error);
-
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: "مشکلی در ثبت درخواست وجود دارد!"
-                });
-            }
-        }
-        else{
-            history('/login');
-            
+        if (payload.name.trim() === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "برای ثبت درخواست وارد حساب کاربری خود شوید!"
+                msg: "نام را وارد کنید!"
+            });
+            return;
+        }
+
+        if (payload.phone.trim() === "") {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "شماره تماس را وارد کنید!"
+            });
+            return;
+        }
+
+        if (payload.reqName.length === 0) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "حداقل یک خدمت باید انتخاب شود!"
+            });
+            return;
+        }
+
+        try {
+            setLoader(true);
+            setBtnDisabled(true);
+
+            postData('/api/request/create', payload).then(() => {
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "درخواست با موفقیت ثبت شد!"
+                });
+
+                setLoader(false);
+                setTimeout(() => {
+                    setBtnDisabled(false);
+                }, 1000);
+
+                setServiceName([]);
+                setFormFields((prev) => ({ ...prev, description: '' }));
+                setStep(1);
+            });
+
+            // start cooldown
+            const until = Date.now() + COOLDOWN_SECONDS * 1000;
+            localStorage.setItem(cooldownKey, String(until));
+            setCooldown(COOLDOWN_SECONDS);
+
+        } catch (error) {
+            console.log(error);
+
+            setLoader(false);
+            setBtnDisabled(false);
+
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "مشکلی در ثبت درخواست وجود دارد!"
             });
         }
-    }
+    };
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [step]);
 
     return (
-        <>
         <div className="container serviceAnformaticSection">
 
-            <div className="text-center imgWrapper">
-                <img src={imgServiceAnformatic} />
-            </div>
-            <div className="text-center info">
-                <h1>خدمات اوژن</h1>
-            </div>
-            <div className="fieldSelection mt-4">
-                <InputLabel id="demo-simple-select-label" className="my-1">حوزه خدمات را انتخاب کنید:</InputLabel>
-                <FormControl className="w-100">
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={personName}
-                        onChange={handleChange}
-                        input={<OutlinedInput />}
-                        MenuProps={MenuProps}
-                        open={openPortionsSelect}
-                        onClose={handleClosePortions}
-                        onOpen={handleOpenPortions}
-                    >
-                    {names.map((name) => (
-                         <MenuItem value={name}>{name}</MenuItem>
-                    ))}
-                    </Select>
-                </FormControl>
-            </div>
-            <div className="row mt-4">
-                {
-                    serviceData?.length !== undefined && serviceData?.length !== 0 && serviceData?.map((item, index) => {
-                        return(
-                            <div className="col-12 col-lg-4" key={index}>
-                                <div class="overlap-container">
-                                    <div class="bottom-div"></div>
-                                    <div class="top-div text-center">
-                                        <p className="serviceItemText">{item?.name}</p>
-                                    </div>
+            <div className="serviceWizard">
+                <div
+                    className="serviceWizard-track"
+                    style={{ transform: `translateX(${step === 1 ? "0%" : "-50%"})` }}
+                >
+
+                    {/* Panel 1 — pick a field, then services */}
+                    <div className="serviceWizard-panel">
+
+                        <div className="serviceHero">
+                            <span className="serviceHero-icon"><TbFlask /></span>
+                            <h1 className="serviceHero-title">خدمات اوژن</h1>
+                            <p className="serviceHero-subtitle">حوزه مورد نظر را انتخاب کنید و خدمات لازم را از میان گزینه‌ها مشخص کنید</p>
+                        </div>
+
+                        <div className="serviceStep">
+                            <p className="serviceStep-label">۱. حوزه خدمات</p>
+                            <div className="fieldChipRow">
+                                {fields.map((name) => (
+                                    <button
+                                        key={name}
+                                        type="button"
+                                        className={`fieldChip${personName === name ? " is-active" : ""}`}
+                                        onClick={() => setPersonName(name)}
+                                    >
+                                        {name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {personName && (
+                            <div className="serviceStep">
+                                <div className="serviceStep-header">
+                                    <p className="serviceStep-label">۲. انتخاب خدمات</p>
+                                    {serviceName.length !== 0 && (
+                                        <span className="selectedCount">{serviceName.length} مورد انتخاب شد</span>
+                                    )}
+                                </div>
+
+                                <div className="serviceSearch">
+                                    <TbSearch className="serviceSearch-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="جستجوی خدمت..."
+                                        value={serviceSearch}
+                                        onChange={(e) => setServiceSearch(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="serviceCardGrid">
+                                    {visibleServices.map((item, index) => {
+                                        const selected = serviceName.includes(item?.name);
+                                        return (
+                                            <button
+                                                type="button"
+                                                key={index}
+                                                className={`serviceCard${selected ? " is-selected" : ""}`}
+                                                onClick={() => toggleService(item?.name)}
+                                                aria-pressed={selected}
+                                            >
+                                                <span className="serviceCard-check">
+                                                    {selected && <TbCheck />}
+                                                </span>
+                                                <span className="serviceCard-text">{item?.name}</span>
+                                            </button>
+                                        );
+                                    })}
+
+                                    {serviceData?.length !== 0 && visibleServices.length === 0 && (
+                                        <p className="serviceCardGrid-empty">خدمتی با این عنوان پیدا نشد.</p>
+                                    )}
+                                </div>
+
+                                <div className="serviceWizard-nextRow">
+                                    <button type="button" className="nextButton" onClick={goToContactStep}>
+                                        مرحله بعدی
+                                        <TbArrowLeft />
+                                    </button>
                                 </div>
                             </div>
-                        )
-                    })
-                }
-            </div>
+                        )}
 
-
-            <div className="serviceForm">
-                <div className="text-center">
-                    <h1>درخواست خود را برای ما ارسال کنید</h1>
-                    <p>تمامی خدمات توسط ما ارائه می شود</p>
-                </div>
-
-                <form onSubmit={sendRequest}>
-
-                <div className="row container">
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>نام و نام خانوادگی</label>
-                            <input name="name" onChange={inputChange} value={formFields.name} disabled={context.isLoggedIn === true} className="w-100" type="text" />
-                        </div>
                     </div>
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>شماره تماس</label>
-                            <input name="phone" onChange={inputChange} value={formFields.phone} disabled={context.isLoggedIn === true} className="w-100" type="text" />
-                        </div>
-                    </div>
-                </div>
-                <br />
-                                
 
-                <div className="row container specialMobile">
-                    <div className="col-12">
-                        <label>خدمات</label>
-                        <br />
-                        <FormControl className="w-100">
-                            <Select
-                                labelId="demo-multiple-checkbox-label"
-                                id="demo-multiple-checkbox"
-                                multiple
-                                value={serviceName}
-                                onChange={handleChangeServiceName}
-                                input={<OutlinedInput />}
-                                renderValue={(selected) => selected.join(', ')}
-                                MenuProps={MenuProps}
-                                open={openServiceSelect}
-                                onClose={handleCloseServiceSelect}
-                                onOpen={handleOpenServiceSelect}
+                    {/* Panel 2 — contact info & submit */}
+                    <div className="serviceWizard-panel">
+
+                        <button type="button" className="backButton" onClick={goBackToSelection}>
+                            <TbArrowRight />
+                            بازگشت به انتخاب خدمات
+                        </button>
+
+                        <div className="contactCard">
+                            <p className="serviceStep-label">۳. اطلاعات تماس</p>
+
+                            <form onSubmit={sendRequest}>
+
+                                <div className="formRow">
+                                    <div className="formGroup">
+                                        <label className="formLabel">نام و نام خانوادگی</label>
+                                        <input
+                                            className="formInput"
+                                            name="name"
+                                            type="text"
+                                            placeholder=""
+                                            value={formFields.name}
+                                            onChange={inputChange}
+                                        />
+                                    </div>
+                                    <div className="formGroup">
+                                        <label className="formLabel">شماره تماس</label>
+                                        <input
+                                            className="formInput"
+                                            name="phone"
+                                            type="text"
+                                            placeholder=""
+                                            value={formFields.phone}
+                                            onChange={inputChange}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="formGroup">
+                                    <label className="formLabel">توضیحات (اختیاری)</label>
+                                    <textarea
+                                        className="formTextarea"
+                                        name="description"
+                                        rows={3}
+                                        placeholder="توضیح دهید دقیقاً به چه چیزی نیاز دارید..."
+                                        value={formFields.description}
+                                        onChange={inputChange}
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="submitButton"
+                                    disabled={cooldown > 0 || btnDisabled}
+                                >
+                                    ثبت درخواست
+                                    {loader === true && (
+                                        <CircularProgress
+                                            sx={() => ({
+                                                color: '#fff',
+                                                marginRight: '10px',
+                                            })}
+                                            enableTrackSlot
+                                            size="20px"
+                                        />
+                                    )}
+                                </button>
+
+                            </form>
+
+                            {cooldown > 0 && (
+                                <p className="contactCard-cooldown">
+                                    برای ارسال دوباره، لطفاً {formatTime(cooldown)} ثانیه صبر کنید.
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Direct support links — an alternative to the form above. */}
+                        <div className="supportLinks">
+                            <a
+                                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="supportLink supportLink--whatsapp"
                             >
-                            {serviceData?.length !== undefined && serviceData?.length !== 0 && serviceData?.map((item, index) => (
-                                <MenuItem key={index} value={item?.name}>
-                                    <Checkbox checked={serviceName.includes(item?.name)} />
-                                    <ListItemText primary={item?.name} />
-                                </MenuItem>
-                            ))}
-                            </Select>
-                        </FormControl>
+                                <span className="supportLink-icon"><TbBrandWhatsapp /></span>
+                                <span className="supportLink-text">
+                                    <span className="supportLink-title">پیام به پشتیبانی</span>
+                                    <span className="supportLink-subtitle">دریافت مشاوره در واتساپ</span>
+                                </span>
+                                <TbArrowLeft className="supportLink-arrow" />
+                            </a>
+
+                            <a
+                                href={`https://ble.ir/${BALE_USERNAME}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="supportLink supportLink--bale"
+                            >
+                                {/* Swap TbMessageCircle for the real Bale logo asset if one exists in the project. */}
+                                <span className="supportLink-icon"><img src={Logo} /></span>
+                                <span className="supportLink-text">
+                                    <span className="supportLink-title">پیام به پشتیبانی</span>
+                                    <span className="supportLink-subtitle">دریافت مشاوره در بله</span>
+                                </span>
+                                <TbArrowLeft className="supportLink-arrow" />
+                            </a>
+                        </div>
+
                     </div>
+
                 </div>
-
-                {
-                    serviceName.length !== 0 &&
-                    <div className="container serviceNotifier">
-                        <p>
-                            شما &nbsp;<span className="badge">{serviceName.length}</span>&nbsp; نوع از خدمات را انتخاب کردید.
-                        </p>
-                    </div>
-                }
-
-                <div className="w-100 mb-4 btnWrapper">
-                    <Button type="submit" className={`w-100 ${btnDisabled !== false && 'btnDisabled'}`} disabled={cooldown > 0}>
-                        ثبت درخواست
-                        {
-                            loader === true && 
-                            <CircularProgress
-                                sx={() => ({
-                                    color: '#000',
-                                    marginRight: '15px',
-                                })}
-                                enableTrackSlot size="25px" 
-                            />
-                        }
-                    </Button>
-                </div>
-
-                </form>
-
-                {cooldown > 0 && (
-                  <div className="col-12 mt-2 mx-4 mb-2">
-                    <small className="text-muted">
-                        برای ارسال دوباره، لطفاً {`${formatTime(cooldown)}`} ثانیه صبر کنید.
-                    </small>
-                  </div>
-                )}
             </div>
+
         </div>
-        </>
-    ); 
+    );
 }
- 
+
 export default Service;

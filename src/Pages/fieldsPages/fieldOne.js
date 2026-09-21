@@ -1,153 +1,59 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import FieldsBanner from "./banner";
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowUp } from "react-icons/io";
 import CourseCard from "../../Components/Cards/courseCard";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { useTheme } from '@mui/material/styles';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import { SiMicrogenetics } from "react-icons/si";
-import { FaEye, FaRegEye } from "react-icons/fa";
+import {
+    TbSchool,
+    TbArticle,
+    TbFlask,
+    TbArrowLeft,
+    TbDna,
+    TbChevronLeft,
+    TbChevronRight,
+    TbTestPipe,
+} from "react-icons/tb";
 import { fetchDataFromApi } from "../../utils/api";
 
 import { MyContext } from "../../App";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-/*const names = [
-    ' استخراج RNA و DNA ',
-    ' سنتز cDNA ',
-    ' انجام کلیه آزمون ها و آنالیز بررسی های Real-time PCR ',
-    ' آنالیز بررسی میزان رشد، تکثیر و مرگ سلولی',
-    ' آنالیز به روش وسترن بلات',
-    ' آزمون واکنش های زنجیره ای پلیمراز (PCR) ',
-    ' آنالیز شناسایی دقیق انواع پروتئین ها ',
-    ' خدمات انتقال افقی ژن به روش ترانسفرماسیون به سلول یا باکتری ',
-    ' آزمون آنتی ژن های مجموعه سازگاری بافتی اصلی مولکول های پروتئینی به روش SSP-PCR و SSO ',
-    ' آزمون زنده مانی سلولی' ,
-    ' خدمات تهیه بافر ',
-    ' خدمات جداسازی سلول از PBMC ',
-    ' خدمات جداسازی و تکثیر سلول اولیه از نمونه بافت با استفاده از آنزیم یا بدون آنزیم ',
-    ' آزمون جداسازی و شناسایی سلول های بنیادی سرطان(CSCs) ',
-    ' خدمات کشت دو بعدی و سه بعدی سلول ها ',
-    ' آنالیز تعیین همسانی در لوکوس های HLA ',
-    ' محاسبه دلتا-دلتا سی تی RT-PCR ',
-    ' خدمات تیمار سلول ها ',
-    ' آنالیز تعیین توالی بیماری های ژنتیک ',
-    ' خدمات شمارش سلول با استفاده از میکروسکوپ ',
-    ' خدمات جداسازی و کشت سلول از انواع بافت های بدن (Primary culture) ',
-    ' خدمات ترانسداکشن (ترانسداکسیون) سلول با ویروس ',
-    ' خدمات انتقال افقی ژن به روش هم یوغی با کونژوگاسیون (conjugation) ',
-    ' خدمات جداسازی سلول بر اساس مارکر های سطحی با روش MACS ',
-    ' خدمات انتقال پلاسمید به داخل سلول CHO و ایجاد سلول ترانسژنیک ',
-    ' خدمات تهیه محیط کشت آماده مصرف RPMI ',
-    ' آنالیز بررسی میزان ROS ',
-    ' آنالیز بررسی آپوپتوز در سلول ',
-    ' آنالیز بررسی شکست DNA ',
-    ' آنالیز بررسی شاخص های سطحی و درون سلولی ',
-    ' آنالیز بررسی چرخه سلولی و پلوئید ',
-    ' الکتروفورز عمودی و افقی ',
-    ' طراحی پرایمر ',
-    ' سنتز پرایمر ',
-    ' آزمون MTT به روش عصاری گیری ',
-    ' خدمات انواع رنگ آمیزی '
-];*/
-
-
-function getStyles(name, personName, theme) {
-    return {
-        fontWeight: personName.includes(name)
-            ? theme.typography.fontWeightMedium
-            : theme.typography.fontWeightRegular,
-    };
-}
+// Static placeholder content for the articles section.
+// Swap for a real endpoint (e.g. /api/article?filterKey=...) once one exists.
+const articles = [
+    { title: "روش‌های شناخت واکنش‌های زنجیره‌ای پلیمراز", href: "/" },
+    { title: "اصول پایه کشت سلولی دو بعدی و سه بعدی", href: "/" },
+    { title: "تفسیر نتایج آنالیز دلتا-دلتا سی‌تی", href: "/" },
+    { title: "روش‌های استخراج RNA و DNA با کیفیت بالا", href: "/" },
+    { title: "آشنایی با آزمون‌های زنده‌مانی سلولی", href: "/" },
+    { title: "مقدمه‌ای بر آنالیز چرخه سلولی و پلوئیدی", href: "/" },
+];
 
 const FieldOne = () => {
 
     const context = useContext(MyContext);
 
     useEffect(() => {
-        context.setIsShowFooter(true); 
+        context.setIsShowFooter(true);
         context.setIsShowNavbar(true);
         context.setIsShowCalenderBar(true);
     }, []);
-    
-    const theme = useTheme();
-    const [personName, setPersonName] = useState([]);
-
-    const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-    
-    const [sectionOneIndex, setSectionOneIndex] = useState(false);
-    const [sectionTwoIndex, setSectionTwoIndex] = useState(false);
-    const [sectionThreeIndex, setSectionThreeIndex] = useState(false);
-
-    const openSectionOne = () => {
-        setSectionOneIndex(!sectionOneIndex);
-    }
-
-    const openSectionTwo = () => {
-        setSectionTwoIndex(!sectionTwoIndex);
-    }
-
-    const openSectionThree = () => {
-        setSectionThreeIndex(!sectionThreeIndex);
-    }
 
     useEffect(() => {
-        window.scrollTo(0,0);
-    } ,[]);
+        window.scrollTo(0, 0);
+    }, []);
 
-    //
-    const [openPortionsSelect, setOpenPortionsSelect] = useState(false);
+    // Which section is showing in the content panel.
+    // "courses" is selected automatically on first mount.
+    const [activeSection, setActiveSection] = useState("courses");
 
-    const handleClosePortions = () => {
-        setOpenPortionsSelect(false);
-    }
+    const servicesListRef = useRef(null);
 
-    const handleOpenPortions = () => {
-        setOpenPortionsSelect(true);
-    };
+    // Services pagination — 4 items per page.
+    const SERVICES_PER_PAGE = 4;
+    const [servicesPage, setServicesPage] = useState(1);
 
-    useEffect(() => {
-      const handleScroll = () => {
-        if (openPortionsSelect) {
-          handleClosePortions();
-        }
-      };
-      window.addEventListener('scroll', handleScroll);
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-      };
-    }, [openPortionsSelect]);
-
-    const ref = useRef(null);
-
-
-    //backend 
+    // backend
 
     const [serviceData, setServiceData] = useState([]);
     const [courseData, setCourseData] = useState([]);
@@ -159,244 +65,213 @@ const FieldOne = () => {
 
         fetchDataFromApi(`/api/course?filterKey=سلولی، مولکولی و ژنتیک`).then((res) => {
             setCourseData(res);
-        })
+        });
     }, []);
+
+    useEffect(() => {
+        setServicesPage(1);
+    }, [serviceData]);
+
+    const totalServicePages = Math.max(1, Math.ceil((serviceData?.length ?? 0) / SERVICES_PER_PAGE));
+
+    const currentServices = (serviceData ?? []).slice(
+        (servicesPage - 1) * SERVICES_PER_PAGE,
+        servicesPage * SERVICES_PER_PAGE
+    );
+
+    const goToServicesPage = (page) => {
+        const clamped = Math.min(Math.max(page, 1), totalServicePages);
+        setServicesPage(clamped);
+        servicesListRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    // Builds a compact page list like: 1 2 3 ... 9
+    const getServicePageNumbers = () => {
+        const pages = [];
+        const total = totalServicePages;
+        const current = servicesPage;
+
+        pages.push(1);
+        if (current > 3) pages.push("...");
+
+        for (let p = Math.max(2, current - 1); p <= Math.min(total - 1, current + 1); p++) {
+            pages.push(p);
+        }
+
+        if (current < total - 2) pages.push("...");
+        if (total > 1) pages.push(total);
+
+        return [...new Set(pages)];
+    };
 
     const fieldName = "سلولی، مولکولی و ژنتیک";
 
+    const sections = [
+        {
+            key: "courses",
+            icon: <TbSchool />,
+            title: "دوره‌های آموزشی",
+            meta: `${courseData?.length ?? 0} دوره فعال`,
+        },
+        {
+            key: "articles",
+            icon: <TbArticle />,
+            title: "مقالات و مطالب آموزشی",
+            meta: `${articles.length} مقاله`,
+        },
+        {
+            key: "services",
+            icon: <TbFlask />,
+            title: "خدمات",
+            meta: `${serviceData?.length ?? 0} نوع خدمت`,
+        },
+    ];
 
+    const renderNavItem = (section) => (
+        <button
+            key={section.key}
+            type="button"
+            className={`fieldNav-item${activeSection === section.key ? " is-active" : ""}`}
+            onClick={() => setActiveSection(section.key)}
+        >
+            <span className="fieldNav-left">
+                <span className="fieldNav-iconChip">{section.icon}</span>
+                <span className="fieldNav-text">
+                    <span className="fieldNav-title">{section.title}</span>
+                    <span className="fieldNav-meta">{section.meta}</span>
+                </span>
+            </span>
+            <TbChevronLeft className="fieldNav-arrow" />
+        </button>
+    );
 
     return (
-        <>
         <div className="feildCellularAndMolecular">
-            
-            <FieldsBanner name={'سلولی، مولکولی و ژنتیک'} ref={ref} />
+
+            <FieldsBanner
+                name={fieldName}
+                courseCount={courseData?.length ?? 0}
+                serviceCount={serviceData?.length ?? 0}
+                articleCount={articles.length}
+            />
 
             <div className="container">
-                <div className="section" ref={ref}>
-                    <div className="d-flex align-items-center p-1 cursor" onClick={openSectionOne}>
-                        <h1>دوره های آموزشی</h1>
-                        {
-                            sectionOneIndex === false ? <span><IoIosArrowDown /></span> : <span><IoIosArrowUp /></span>
-                        }
+                <div className="fieldPanel">
+
+                    {/* Right column: section nav */}
+                    <div className="fieldNav">
+                        {sections.map(renderNavItem)}
                     </div>
-                    {
-                        sectionOneIndex === true &&
-                        <>
-                    <div className="courseList">
-                        <div className="row">
-                            {
-                                courseData?.length !== undefined && courseData?.length !== 0 && courseData?.map((item, index) => {
-                                    return(
-                                        <div className="col-12 col-md-6 col-lg-3" key={index}>
+
+                    {/* Left column: active section content */}
+                    <div className="fieldContent">
+
+                        {activeSection === "courses" && (
+                            <div className="courseGrid">
+                                {courseData?.length !== undefined && courseData?.length !== 0 &&
+                                    courseData.map((item, index) => (
+                                        <div className="courseGrid-item" key={index}>
                                             <CourseCard item={item} />
-                                        </div>  
-                                    )
-                                })
-                            }                          
-                        </div>
-                    </div>
-                    <div className="text-center py-1 mb-4 viewAllCourses">
-                        <Link to='/courseShop'>
-                            <Button>مشاهده تمامی دوره ها</Button>
-                        </Link>
-                    </div>
-                    </>
-                    }
-                </div>
-
-                <div className="section">
-                   <div className="d-flex align-items-center cursor p-1" onClick={openSectionTwo}>
-                        <h1>مقالات و مطالب آموزشی</h1>
-                        {
-                            sectionTwoIndex === false ? <span><IoIosArrowDown /></span> : <span><IoIosArrowUp /></span>
-                        }
-                    </div>
-                    {
-                        sectionTwoIndex === true &&
-                        <>
-                        <div className="articleItem">
-                            <div className="d-flex align-items-center">
-                                <SiMicrogenetics />
-                                <p className="mb-0">روش های شناخت واکنش های زنجیره ای پلیمراز</p>
-                                <Link className="mx-5" to='/'>
-                                    <span className="mobileHide">مشاهده مقاله</span>
-                                    <span className="desktopHide"><FaEye /></span>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="articleItem">
-                            <div className="d-flex align-items-center">
-                                <SiMicrogenetics />
-                                <p className="mb-0">روش های شناخت واکنش های زنجیره ای پلیمراز</p>
-                                <Link className="mx-5" to='/'>
-                                    <span className="mobileHide">مشاهده مقاله</span>
-                                    <span className="desktopHide"><FaEye /></span>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="articleItem">
-                            <div className="d-flex align-items-center">
-                                <SiMicrogenetics />
-                                <p className="mb-0">روش های شناخت واکنش های زنجیره ای پلیمراز</p>
-                                <Link className="mx-5" to='/'>
-                                    <span className="mobileHide">مشاهده مقاله</span>
-                                    <span className="desktopHide"><FaEye /></span>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="articleItem">
-                            <div className="d-flex align-items-center">
-                                <SiMicrogenetics />
-                                <p className="mb-0">روش های شناخت واکنش های زنجیره ای پلیمراز</p>
-                                <Link className="mx-5" to='/'>
-                                    <span className="mobileHide">مشاهده مقاله</span>
-                                    <span className="desktopHide"><FaEye /></span>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="articleItem">
-                            <div className="d-flex align-items-center">
-                                <SiMicrogenetics />
-                                <p className="mb-0">روش های شناخت واکنش های زنجیره ای پلیمراز</p>
-                                <Link className="mx-5" to='/'>
-                                    <span className="mobileHide">مشاهده مقاله</span>
-                                    <span className="desktopHide"><FaEye /></span>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="articleItem">
-                            <div className="d-flex align-items-center">
-                                <SiMicrogenetics />
-                                <p className="mb-0">روش های شناخت واکنش های زنجیره ای پلیمراز</p>
-                                <Link className="mx-5" to='/'>
-                                    <span className="mobileHide">مشاهده مقاله</span>
-                                    <span className="desktopHide"><FaEye /></span>
-                                </Link>
-                            </div>
-                        </div>
-                        
-                        <br />
-                        </>
-                    }
-                </div>
-
-                <div className="section">
-                    <div className="d-flex align-items-center cursor p-1" onClick={openSectionThree}>
-                        <h1>خدمات</h1>
-                        {
-                            sectionThreeIndex === false ? <span><IoIosArrowDown /></span> : <span><IoIosArrowUp /></span>
-                        }
-                    </div>
-                    {
-                        sectionThreeIndex === true &&
-                        <>
-                        <div className="text-center info">
-                            <h5>خدمات ارائه شده در این بخش</h5>
-                        </div>
-                        <div className="serviceAnformaticSection">
-                        <div className="row mt-4">
-                            {
-                                serviceData?.length !== undefined && serviceData?.length !== 0 && serviceData?.map((item, index) => {
-                                    return(
-                                        <div className="col-12 col-md-6 col-lg-3" key={index}>
-                                            <div class="overlap-container">
-                                                <div class="bottom-div"></div>
-                                                <div class="top-div text-center">
-                                                    <p>{item?.name}</p>
-                                                </div>
-                                            </div>
                                         </div>
-                                    )
-                                })
-                            }
-                        </div>
-
-                        
-                        </div>
-                        
-                        <div className="serviceForm">
-                            <div className="text-center">
-                                <h1>درخواست خود را برای ما ارسال کنید</h1>
-                                <p>تمامی خدمات توسط ما ارائه می شود</p>
-                            </div>
-
-                            <form>
-
-                                
-
-                                {/*<div className="row container">
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group">
-                                            <label>نام و نام خانوادگی</label>
-                                            <input className="w-100" type="text" />
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group">
-                                            <label>شماره تماس</label>
-                                            <input className="w-100" type="text" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <br />
-                                
-
-                                <div className="row container specialMobile">
-                                    <div className="col-12">
-                                        <label>خدمات</label>
-                                        <br />
-                                        <FormControl className="w-100">
-                                            <Select
-                                                labelId="demo-multiple-checkbox-label"
-                                                id="demo-multiple-checkbox"
-                                                multiple
-                                                value={personName}
-                                                onChange={handleChange}
-                                                input={<OutlinedInput />}
-                                                renderValue={(selected) => selected.join(', ')}
-                                                MenuProps={MenuProps}
-                                                open={openPortionsSelect}
-                                                onClose={handleClosePortions}
-                                                onOpen={handleOpenPortions}
-                                            >
-                                            {serviceData?.length !== undefined && serviceData?.length !== 0 && serviceData?.map((item, index) => (
-                                                <MenuItem key={index} value={item?.name}>
-                                                    <Checkbox checked={personName.includes(item?.name)} />
-                                                    <ListItemText primary={item?.name} />
-                                                </MenuItem>
-                                            ))}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                </div>
-
-                                {
-                                    personName.length !== 0 &&
-                                    <div className="container serviceNotifier">
-                                        <p>
-                                            شما &nbsp;<span className="badge">{personName.length}</span>&nbsp; نوع از خدمات را انتخاب کردید.
-                                        </p>
-                                    </div>
-                                }*/}
-
-                                <div className="w-100 mb-4 btnWrapper">
-                                    <Link to={`/service?fieldName=${encodeURIComponent(fieldName)}`}>
-                                        <Button className="w-100">ثبت درخواست</Button>
+                                    ))
+                                }
+                                <div className="fieldContent-footer">
+                                    <Link to="/courseShop">
+                                        <Button variant="outlined" className="outlineButton">مشاهده تمامی دوره‌ها</Button>
                                     </Link>
                                 </div>
-
-                            </form>
-                        </div>
-
-                        </>
-                    }
                             </div>
-                        </div>
+                        )}
+
+                        {activeSection === "articles" && (
+                            <div className="articleList">
+                                {articles.map((article, index) => (
+                                    <Link className="articleRow" to={article.href} key={index}>
+                                        <span className="articleRow-icon"><TbDna /></span>
+                                        <span className="articleRow-title">{article.title}</span>
+                                        <span className="articleRow-cta">
+                                            مشاهده مقاله <TbArrowLeft />
+                                        </span>
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+
+                        {activeSection === "services" && (
+                            <div className="servicesPanel" ref={servicesListRef}>
+                                <div className="servicesPanel-header">
+                                    <h3 className="servicesIntro">خدمات ارائه شده در این بخش</h3>
+                                    <p className="servicesPanel-meta">
+                                        {serviceData?.length ?? 0} خدمت &middot; صفحه {servicesPage} از {totalServicePages}
+                                    </p>
+                                </div>
+
+                                <div className="serviceList">
+                                    {currentServices.map((item, index) => (
+                                        <div className="serviceRow" key={index}>
+                                            <span className="serviceRow-icon"><TbTestPipe /></span>
+                                            <p className="serviceRow-text">{item?.name}</p>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {totalServicePages > 1 && (
+                                    <nav className="pagination" aria-label="صفحه‌بندی خدمات">
+                                        <button
+                                            type="button"
+                                            className="pagination-arrow"
+                                            onClick={() => goToServicesPage(servicesPage - 1)}
+                                            disabled={servicesPage === 1}
+                                            aria-label="صفحه قبل"
+                                        >
+                                            <TbChevronRight />
+                                        </button>
+
+                                        {getServicePageNumbers().map((page, index) =>
+                                            page === "..." ? (
+                                                <span className="pagination-ellipsis" key={`ellipsis-${index}`}>...</span>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    key={page}
+                                                    className={`pagination-item${page === servicesPage ? " is-active" : ""}`}
+                                                    onClick={() => goToServicesPage(page)}
+                                                    aria-current={page === servicesPage ? "page" : undefined}
+                                                >
+                                                    {page}
+                                                </button>
+                                            )
+                                        )}
+
+                                        <button
+                                            type="button"
+                                            className="pagination-arrow"
+                                            onClick={() => goToServicesPage(servicesPage + 1)}
+                                            disabled={servicesPage === totalServicePages}
+                                            aria-label="صفحه بعد"
+                                        >
+                                            <TbChevronLeft />
+                                        </button>
+                                    </nav>
+                                )}
+
+                                <div className="ctaCard">
+                                    <h3 className="ctaCard-title">درخواست خود را برای ما ارسال کنید</h3>
+                                    <p className="ctaCard-subtitle">تمامی خدمات این بخش توسط تیم ما ارائه می‌شود</p>
+                                    <Link to={`/service?fieldName=${encodeURIComponent(fieldName)}`}>
+                                        <Button className="ctaButton">ثبت درخواست</Button>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
+
+                </div>
+            </div>
 
         </div>
-        </>
     );
 }
- 
+
 export default FieldOne;

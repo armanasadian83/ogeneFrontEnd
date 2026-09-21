@@ -748,3 +748,189 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   Field page — responsive rules
+   Append to responsive.css (or @import this file from it).
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 991px) {
+    .fieldHero {
+        padding: 32px 20px;
+    }
+
+    .fieldHero-title {
+        font-size: 24px;
+    }
+
+    .fieldNav {
+        flex: 0 0 240px;
+    }
+
+    .courseGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Below this, the two-column layout stacks: nav becomes a horizontal
+   row of tabs above the content panel. */
+@media (max-width: 767px) {
+    .fieldHero {
+        padding: 28px 16px;
+        border-radius: 16px;
+    }
+
+    .fieldHero-stats {
+        gap: 16px;
+    }
+
+    .fieldPanel {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .fieldNav {
+        flex: 1 1 auto;
+        width: 100%;
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 4px;
+    }
+
+    .fieldNav-item {
+        flex: 0 0 auto;
+        width: auto;
+        padding: 10px 14px;
+    }
+
+    .fieldNav-text {
+        display: none; /* icon + active state only; title shown in content heading */
+    }
+
+    .fieldNav-arrow {
+        display: none;
+    }
+
+    .fieldContent {
+        padding: 16px;
+    }
+
+    .courseGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .articleRow-cta span {
+        display: none; /* icon-only "view" affordance on small screens */
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .fieldHero-stats {
+        gap: 10px;
+    }
+
+    .fieldHero-statLabel {
+        font-size: 11px;
+    }
+
+    .courseGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .serviceTagList {
+        justify-content: flex-start;
+    }
+
+    .ctaCard {
+        padding: 22px 16px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   Service page — responsive rules
+   Append to responsive.css (or @import this file from it).
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .serviceAnformaticSection {
+        padding-top: 24px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .serviceHero-title {
+        font-size: 22px;
+    }
+
+    .serviceCardGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .formRow {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .contactCard {
+        padding: 18px;
+    }
+
+    .supportLinks {
+        grid-template-columns: 1fr;
+    }
+
+    .fieldChip{
+        width: 47%;
+        text-wrap: nowrap;
+    }
+}
+
+/* Wider screens: the container is no longer capped at 720px, so let the
+   service grid use the extra room instead of stretching 2 huge columns. */
+@media (min-width: 992px) {
+    .serviceCardGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+
+
+
