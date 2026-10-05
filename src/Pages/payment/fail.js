@@ -1,17 +1,70 @@
-
-import { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MyContext } from "../../App";
+import { fetchDataFromApi } from "../../utils/api";
+
+const REFUND_NOTE = " در صورت کسر وجه، مبلغ تا ۷۲ ساعت آینده به حساب شما بازخواهد گشت.";
+const DEFAULT_REASON = "علت: تراکنش تکمیل یا تایید نشد." + REFUND_NOTE;
+
+// متن قابل‌فهم برای کاربر؛ کدهای فنی به کاربر نشان داده نمی‌شوند
+const getReasonText = (status, reason) => {
+    if (status === "canceled") {
+        return "علت: پرداخت توسط شما لغو شد. مبلغی از حساب شما کسر نشده است.";
+    }
+    if (status === "expired" || reason === "SessionIsNull") {
+        return "علت: مهلت پرداخت به پایان رسید." + REFUND_NOTE;
+    }
+    if (reason === "Failed") {
+        return "علت: تراکنش توسط بانک صادرکننده کارت رد شد یا تکمیل نشد." + REFUND_NOTE;
+    }
+    if (typeof reason === "string" && (reason.startsWith("verify_") || reason === "amount_or_terminal_mismatch" || reason === "refnum_reused")) {
+        return "علت: تایید نهایی تراکنش توسط بانک انجام نشد." + REFUND_NOTE;
+    }
+    return DEFAULT_REASON;
+};
 
 const FailedPayment = () => {
 
     const context = useContext(MyContext);
-    
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const resNum = searchParams.get("resNum");
+
+    // اگر resNum داریم، متن دقیق بعد از گرفتن وضعیت نمایش داده می‌شود (بدون پرش متن)
+    const [reasonText, setReasonText] = useState(resNum ? null : DEFAULT_REASON);
+
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const cartPath = user?.userId ? `/cart/${user.userId}` : "/";
+
     useEffect(() => {
-        context.setIsShowFooter(false); 
+        context.setIsShowFooter(false);
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
     }, []);
+
+    useEffect(() => {
+        if (!resNum) return;
+        let cancelled = false;
+
+        fetchDataFromApi(`/api/payment/status/${resNum}`)
+            .then((raw) => {
+                if (cancelled) return;
+                // در صورت خطا fetchDataFromApi شیء خطای axios را برمی‌گرداند؛ بدنه پاسخ در raw.response.data است
+                const res = raw?.response?.data ?? raw;
+
+                // پرداخت در واقع موفق بوده یا هنوز در حال تایید است -> صفحه موفقیت وضعیت را نشان می‌دهد
+                if (["paid", "verifying", "verify_pending", "needs_review"].includes(res?.status)) {
+                    navigate(`/payment-success?resNum=${resNum}`, { replace: true });
+                    return;
+                }
+                setReasonText(getReasonText(res?.status, res?.reason));
+            })
+            .catch(() => {
+                if (!cancelled) setReasonText(DEFAULT_REASON);
+            });
+
+        return () => { cancelled = true; };
+    }, [resNum]);
 
     return (
         <>
@@ -60,13 +113,14 @@ const FailedPayment = () => {
                     <h1>پرداخت ناموفق بود</h1>
                     <p className="paymentSub">متأسفانه تراکنش شما تکمیل نشد. سبد خرید شما همچنان محفوظ است و می‌توانید مجدداً تلاش کنید.</p>
 
-                    {/* placeholder reason — will be replaced with the real gateway error message once wired up */}
-                    <div className="reasonBox">
-                        <span className="reasonDot"></span>
-                        <span>علت: تراکنش توسط بانک صادرکننده کارت رد شد. در صورت کسر وجه، مبلغ تا ۷۲ ساعت آینده به حساب شما بازخواهد گشت.</span>
-                    </div>
+                    {reasonText && (
+                        <div className="reasonBox">
+                            <span className="reasonDot"></span>
+                            <span>{reasonText}</span>
+                        </div>
+                    )}
 
-                    <Link to="/payment-failed" className="primaryBtn">
+                    <Link to={cartPath} className="primaryBtn">
                         بازگشت به سبد خرید
                     </Link>
                     <a href="tel:+98212244961487" className="secondaryLink">تماس با پشتیبانی</a>
@@ -76,5 +130,6 @@ const FailedPayment = () => {
         </>
     );
 }
- 
+
 export default FailedPayment;
+

@@ -79,3 +79,25 @@ export const updateAccountData = async (url, updatedData) => {
         return error.response?.data || error;
     }
 }
+
+
+
+// ============================================================
+// به انتهای فایل src/utils/api.js اضافه کنید (هیچ تابع موجودی را تغییر نمی‌دهد)
+// ============================================================
+
+// فقط برای درخواست‌هایی که سرور باید کاربر را از JWT بشناسد (الان فقط: شروع پرداخت)
+// برخلاف postData: هدر Authorization می‌فرستد و بدنه‌ی خطای سرور را برمی‌گرداند
+// (مثلاً { success:false, code:'PRICE_CHANGED', message:'...' }) تا Cart بتواند پیام فارسی سرور را نشان دهد.
+export const postDataWithAuth = async (url, formData) => {
+    try {
+        const token = localStorage.getItem("token");
+        const res = await axios.post(process.env.REACT_APP_BASE_URL + url, formData, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return error.response?.data || { success: false, message: 'خطا در ارتباط با سرور!' };
+    }
+}
