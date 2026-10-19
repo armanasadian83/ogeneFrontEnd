@@ -3048,3 +3048,337 @@ table.v-align td .scrollBox{text-wrap: nowrap; width: 270px; overflow: scroll; p
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   COMPLETE INFO PAGE  (paste at the END of App.css)
+   All class names are prefixed with "ci" and are
+   independent from the .account* classes.
+   ===================================================== */
+
+.ciPage {
+    --ci-primary: #1fa793;
+    --ci-primary-dark: #168a79;
+    --ci-primary-soft: #e8f6f3;
+    --ci-text: #1f2a37;
+    --ci-muted: #6b7280;
+    --ci-border: #edf0f2;
+    --ci-field-bg: #fafbfb;
+
+    direction: rtl;
+    padding-bottom: 60px;
+}
+
+/* ---------- Card ---------- */
+.ciCard {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 30px rgba(15, 40, 35, 0.07);
+    margin-top: 14px;
+}
+
+.ciCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 35px;
+    border-bottom: 1px solid var(--ci-border);
+}
+
+.ciCardTitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ciCardTitle svg {
+    font-size: 30px;
+    color: var(--ci-primary);
+}
+
+.ciCardTitle h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ci-text);
+}
+
+/* ---------- Body ---------- */
+.ciCardBody {
+    padding: 28px 35px 35px;
+}
+
+.ciDescription {
+    margin: 0 0 28px;
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--ci-muted);
+}
+
+/* ---------- Fields grid ---------- */
+.ciGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 26px;
+}
+
+.ciField {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ciLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ci-muted);
+}
+
+.ciLabel svg {
+    font-size: 17px;
+    color: var(--ci-primary);
+}
+
+/* ---------- Inputs (text + date picker) ---------- */
+.ciInput,
+.ciDateContainer .ciInput {
+    width: 100%;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0 22px;
+    border: 1px solid var(--ci-border);
+    border-radius: 16px;
+    background: var(--ci-field-bg);
+    color: var(--ci-text);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: right;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.ciInput::placeholder {
+    color: #b3bac2;
+    font-weight: 400;
+}
+
+.ciInput:focus,
+.ciDateContainer .ciInput:focus {
+    border-color: var(--ci-primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(31, 167, 147, 0.12);
+}
+
+/* date picker wrapper must be full width */
+.ciDateContainer {
+    display: block !important;
+    width: 100%;
+}
+
+
+/* ---------- Buttons ---------- */
+.ciActions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.ciSaveBtn.MuiButton-root,
+.ciCancelBtn.MuiButton-root {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 56px;
+    padding: 0 30px;
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: none;
+    box-shadow: none;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.ciSaveBtn.MuiButton-root {
+    background: var(--ci-primary);
+    color: #fff;
+}
+
+.ciSaveBtn.MuiButton-root:hover {
+    background: var(--ci-primary-dark);
+}
+
+.ciSaveBtn.MuiButton-root.Mui-disabled {
+    background: #a9ddd5;
+    color: #fff;
+}
+
+.ciCancelBtn.MuiButton-root {
+    background: #f1f3f4;
+    color: var(--ci-muted);
+}
+
+.ciCancelBtn.MuiButton-root:hover {
+    background: #e6e9eb;
+}
+
+.ciSaveBtn svg,
+.ciCancelBtn svg {
+    font-size: 18px;
+    margin-inline-start: 8px;
+}
+
+/* =====================================================
+   DATE PICKER POPUP – modern look
+   (react-multi-date-picker renders .rmdp-* classes)
+   ===================================================== */
+.rmdp-wrapper {
+    font-family: inherit;
+    border: 0 !important;
+    border-radius: 22px !important;
+    padding: 12px 10px 14px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(15, 40, 35, 0.18), 0 2px 8px rgba(15, 40, 35, 0.06) !important;
+}
+
+.rmdp-wrapper * {
+    font-family: inherit;
+}
+
+.rmdp-calendar {
+    padding: 4px 8px;
+}
+
+/* header (month / year) */
+.rmdp-header {
+    margin-top: 6px;
+}
+
+.rmdp-header-values {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2a37;
+}
+
+.rmdp-header-values span {
+    padding: 2px 4px;
+}
+
+/* month arrows */
+.rmdp-arrow-container {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.rmdp-arrow-container:hover,
+.rmdp-arrow-container:hover .rmdp-arrow {
+    background: #e8f6f3;
+    box-shadow: none;
+}
+
+.rmdp-arrow {
+    border: solid #1fa793;
+    border-width: 0 2px 2px 0;
+}
+
+/* week days */
+.rmdp-week-day {
+    color: #1fa793;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* day cells */
+.rmdp-day,
+.rmdp-day span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2a37;
+}
+
+.rmdp-day.rmdp-disabled,
+.rmdp-day.rmdp-disabled span {
+    color: #c5cbd1 !important;
+}
+
+.rmdp-day.rmdp-deactive span {
+    color: #c5cbd1;
+}
+
+.rmdp-day span {
+    border-radius: 12px !important;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+    background: #e8f6f3 !important;
+    color: #168a79;
+}
+
+/* today (day / month / year) - outlined, text stays visible.
+   !important on color is needed because the library's own stylesheet
+   sets white text on today and loads after App.css */
+.rmdp-day.rmdp-today span {
+    background: transparent !important;
+    color: #1fa793 !important;
+    box-shadow: inset 0 0 0 1.5px #1fa793 !important;
+}
+
+/* selected (day / month / year) - always wins, even when it is also today */
+.rmdp-day.rmdp-selected span:not(.highlight),
+.rmdp-day.rmdp-today.rmdp-selected span:not(.highlight) {
+    background: #1fa793 !important;
+    color: #fff !important;
+    box-shadow: 0 6px 14px rgba(31, 167, 147, 0.35) !important;
+}
+
+/* month / year pickers */
+.rmdp-month-picker,
+.rmdp-year-picker {
+    background: #fff;
+    border-radius: 18px;
+}
+
+.rmdp-ym .rmdp-day span {
+    border-radius: 12px;
+}
+
+/* small arrow that points at the input */
+.rmdp-ep-arrow[direction="top"],
+.rmdp-ep-arrow[direction="bottom"] {
+    filter: drop-shadow(0 -2px 3px rgba(15, 40, 35, 0.06));
+}
+
+
+
+
+
+
+

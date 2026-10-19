@@ -4,10 +4,35 @@ import { fetchDataFromApi, updateAccountData } from "../../utils/api";
 
 import { VscAccount } from "react-icons/vsc";
 import { FiEdit2 } from "react-icons/fi";
-import { HiOutlineMail, HiOutlinePhone, HiOutlineCalendar, HiOutlineUser } from "react-icons/hi";
+import {
+    HiOutlineMail,
+    HiOutlinePhone,
+    HiOutlineCalendar,
+    HiOutlineUser,
+    HiOutlineIdentification,
+} from "react-icons/hi";
 import { FiSave, FiX } from "react-icons/fi";
 import Button from "@mui/material/Button";
 import { MyContext } from "../../App";
+
+// Persian (Jalali) date picker
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+
+// Helper: convert Persian/Arabic digits → English digits
+const toEnglishDigits = (str) => {
+    if (!str) return str;
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+    return String(str).replace(/[۰-۹٠-٩]/g, (ch) => {
+        const p = persianDigits.indexOf(ch);
+        if (p > -1) return String(p);
+        const a = arabicDigits.indexOf(ch);
+        if (a > -1) return String(a);
+        return ch;
+    });
+};
 
 const AccountPage = () => {
 
@@ -17,6 +42,14 @@ const AccountPage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ name: '', lastName: '', email: '' });
     const context = useContext(MyContext);
+
+    // ✅ New state for the 4 extra fields
+    const [extraData, setExtraData] = useState({
+        englishName: "",
+        englishLastName: "",
+        nationalCode: "",
+        birthdate: "",
+    });
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -28,12 +61,36 @@ const AccountPage = () => {
                     lastName: res?.lastName || '',
                     email: res?.email || ''
                 });
+                // ✅ Pre-fill the 4 extra fields
+                setExtraData({
+                    englishName: res?.englishName || '',
+                    englishLastName: res?.englishLastName || '',
+                    nationalCode: toEnglishDigits(res?.nationalCode) || '',
+                    birthdate: toEnglishDigits(res?.birthdate) || '',
+                });
             })
         }
     }, [id]);
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    // ✅ Handler for the extra 4 fields
+    const handleExtraInputChange = (e) => {
+        const { name, value } = e.target;
+        setExtraData((prev) => ({
+            ...prev,
+            [name]: name === "nationalCode" ? toEnglishDigits(value) : value,
+        }));
+    };
+
+    // ✅ Birthdate handler
+    const handleBirthdateChange = (date) => {
+        setExtraData((prev) => ({
+            ...prev,
+            birthdate: date ? toEnglishDigits(date.format("YYYY/MM/DD")) : "",
+        }));
     };
 
     const handleEditToggle = () => {
@@ -46,10 +103,42 @@ const AccountPage = () => {
             lastName: user?.lastName || '',
             email: user?.email || ''
         });
+        // ✅ Reset extra fields too
+        setExtraData({
+            englishName: user?.englishName || '',
+            englishLastName: user?.englishLastName || '',
+            nationalCode: toEnglishDigits(user?.nationalCode) || '',
+            birthdate: toEnglishDigits(user?.birthdate) || '',
+        });
         setIsEditing(false);
     };
 
     const [isLoading, setIsLoading] = useState(false);
+
+    // ✅ Validation for the 4 extra fields
+    const validateExtra = () => {
+        const { nationalCode, birthdate } = extraData;
+
+        if (nationalCode && !/^\d{10}$/.test(nationalCode)) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: 'کد ملی باید ۱۰ رقم باشد!'
+            });
+            return false;
+        }
+
+        if (birthdate && !/^\d{4}\/\d{2}\/\d{2}$/.test(birthdate)) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: 'تاریخ تولد معتبر نیست!'
+            });
+            return false;
+        }
+
+        return true;
+    };
 
     const handleSave = async () => {
 
@@ -80,8 +169,11 @@ const AccountPage = () => {
             return;
         }
 
+        // ✅ Validate the extra fields too
+        if (!validateExtra()) return;
+
         if (isLoading) return;
-    
+
         setIsLoading(true);
 
         try {
@@ -92,7 +184,12 @@ const AccountPage = () => {
             const updatedData = {
                 name: formData.name,
                 lastName: formData.lastName,
-                email: formData.email
+                email: formData.email,
+                // ✅ Send the 4 extra fields
+                englishName: extraData.englishName,
+                englishLastName: extraData.englishLastName,
+                nationalCode: toEnglishDigits(extraData.nationalCode),
+                birthdate: toEnglishDigits(extraData.birthdate),
             };
 
             // Make the API call to update user using the new function
@@ -107,7 +204,12 @@ const AccountPage = () => {
                     ...user,
                     name: response.name,
                     lastName: response.lastName,
-                    email: response.email
+                    email: response.email,
+                    // ✅ Persist the 4 extra fields to localStorage too
+                    englishName: response.englishName || '',
+                    englishLastName: response.englishLastName || '',
+                    nationalCode: response.nationalCode || '',
+                    birthdate: response.birthdate || '',
                 };
                 localStorage.setItem('user', JSON.stringify(updatedUser));
 
@@ -252,6 +354,99 @@ const AccountPage = () => {
                                         />
                                     ) : (
                                         <p>{user?.email || '-'}</p>
+                                    )
+                                }
+                            </div>
+
+                            {/* ============================================ */}
+                            {/* ✅ NEW: The 4 extra fields                   */}
+                            {/* ============================================ */}
+
+                            <div className="accountField">
+                                <label>
+                                    <HiOutlineUser />
+                                    نام به انگلیسی
+                                </label>
+                                {
+                                    isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="englishName"
+                                            value={extraData.englishName}
+                                            onChange={handleExtraInputChange}
+                                            className="accountInput"
+                                        />
+                                    ) : (
+                                        <p>{user?.englishName || '-'}</p>
+                                    )
+                                }
+                            </div>
+
+                            <div className="accountField">
+                                <label>
+                                    <HiOutlineUser />
+                                    نام خانوادگی به انگلیسی
+                                </label>
+                                {
+                                    isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="englishLastName"
+                                            value={extraData.englishLastName}
+                                            onChange={handleExtraInputChange}
+                                            className="accountInput"
+                                        />
+                                    ) : (
+                                        <p>{user?.englishLastName || '-'}</p>
+                                    )
+                                }
+                            </div>
+
+                            <div className="accountField">
+                                <label>
+                                    <HiOutlineIdentification />
+                                    کد ملی
+                                </label>
+                                {
+                                    isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="nationalCode"
+                                            value={extraData.nationalCode}
+                                            onChange={handleExtraInputChange}
+                                            className="accountInput"
+                                            placeholder="ده رقمی"
+                                            maxLength="10"
+                                        />
+                                    ) : (
+                                        <p>{user?.nationalCode || '-'}</p>
+                                    )
+                                }
+                            </div>
+
+                            <div className="accountField">
+                                <label>
+                                    <HiOutlineCalendar />
+                                    تاریخ تولد
+                                </label>
+                                {
+                                    isEditing ? (
+                                        <DatePicker
+                                            value={extraData.birthdate}
+                                            onChange={handleBirthdateChange}
+                                            calendar={persian}
+                                            locale={persian_fa}
+                                            calendarPosition="bottom-center"
+                                            containerStyle={{ width: "100%" }}
+                                            containerClassName="ciDateContainer"
+                                            inputClass="accountInput"
+                                            format="YYYY/MM/DD"
+                                            minDate="1300/01/01"
+                                            maxDate={new Date()}
+                                            digits={["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]}
+                                        />
+                                    ) : (
+                                        <p>{user?.birthdate || '-'}</p>
                                     )
                                 }
                             </div>

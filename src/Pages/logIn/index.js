@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import Button from '@mui/material/Button';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MyContext } from "../../App";
 import Logo from "./../../assets/logo.png"
 import { useState } from "react";
@@ -14,6 +14,11 @@ import { RiEyeCloseFill } from "react-icons/ri";
 const SignIn = () => {
     
     const context = useContext(MyContext);
+
+    // ✅ Read returnTo from the URL once
+    const [searchParams] = useSearchParams();
+    const returnTo = searchParams.get("returnTo");
+    const goAfterLogin = returnTo ? decodeURIComponent(returnTo) : "/";
 
     useEffect(() => {
         context.setIsShowFooter(false); 
@@ -47,7 +52,7 @@ const SignIn = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "ایمیل یا شماره تلفن را وارد کنید!"
+                msg: "شماره موبایل را وارد کنید!"
             });
             return false;
         }
@@ -96,7 +101,8 @@ const SignIn = () => {
                 });
         
                 setTimeout(() => {
-                    window.location.href = "/"
+                    // ✅ Go back to where the user came from (or home)
+                    window.location.href = goAfterLogin;
                 }, 1000);
 
                 setTimeout(() => {
@@ -117,7 +123,7 @@ const SignIn = () => {
                         context.setAlertBox({
                             open: true,
                             error: false,
-                            msg: "کد تایید به شماره تلفن شما ارسال گردید!"
+                            msg: "کد تایید به شماره موبایل شما ارسال گردید!"
                         }); 
 
                         setTimeout(() => {
@@ -151,7 +157,8 @@ const SignIn = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if(token !== null && token !== undefined && token !== ''){
-            history('/');
+            // ✅ If already logged in, still respect returnTo
+            history(goAfterLogin);
         }else{
             context.setIsLoggedIn(false);
         }
@@ -182,7 +189,7 @@ const SignIn = () => {
                                 <h2 className="mx-1">ورود به حساب کاربری</h2>
                             </div>
                             <div className="form-group">
-                                <label className="mb-1">ایمیل یا شماره تلفن</label>  {/* CHANGED: Updated label */}
+                                <label className="mb-1">شماره موبایل</label>  {/* CHANGED: Updated label */}
                                 <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" />
                             </div>
                             <div className="form-group">

@@ -42,6 +42,7 @@ import ChangePasswordVerifyOTP from "./Pages/changePassword/ChangePasswordVerify
 import ChangePasswordNew from "./Pages/changePassword/ChangePasswordNew";
 import FailedPayment from "./Pages/payment/fail";
 import SuccessPayment from "./Pages/payment/success";
+import CompleteInfo from "./Pages/completeInfo";
 
 export const MyContext = createContext();
 
@@ -249,6 +250,8 @@ const App = () => {
 
                     <Route path="/payment-success" element={<SuccessPayment />} />
                     <Route path="/payment-failed" element={<FailedPayment />} />
+
+                    <Route path="/complete-info/:id" element={<CompleteInfo />} />
 
                     <Route path="/field/I" element={<FieldOne />} />
                     <Route path="/field/II" element={<FieldTwo />} />

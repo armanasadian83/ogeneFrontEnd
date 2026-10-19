@@ -21,7 +21,7 @@ const content = {
         contactTitle: "تماس با اوژن",
         address:
             "آدرس: تهران، صادقیه، بلوار فردوس شرق، انتهای خیابان ولیعصر، جنب متروی صادقیه، خیابان رز غربی، پلاک 7، طبقه همکف",
-        phones: "شماره های تماس : 09120169816 - 09050168316 - 02144961487",
+        phones: "شماره های تماس : 09050160316 - 09050167216 - 02144961487",
         email: "ایمیل : ogenetech@gmail.com",
         toggleLabel: "English",
     },
@@ -40,7 +40,7 @@ const content = {
         contactTitle: "Contact Ogen",
         address:
             "Address: Tehran, Sadeghieh, Ferdows Sharq Blvd, end of Valiasr St., next to Sadeghieh Metro Station, Rose West St., No. 7, Ground Floor",
-        phones: "Phone Numbers: 09120169816 - 09050168316 - 02144961487",
+        phones: "Phone Numbers: 09050160316 - 09050167216 - 02144961487",
         email: "Email: ogenetech@gmail.com",
         toggleLabel: "فارسی",
     },

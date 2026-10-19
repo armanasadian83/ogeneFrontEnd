@@ -58,8 +58,8 @@ const Footer = () => {
                         </p>
                         <ul className="footer-phones">
                             <li><a href="tel:+982144961487"><IoCallOutline /><span>021-44961487</span></a></li>
-                            <li><a href="tel:+989120169816"><IoCallOutline /><span>0912-0169816</span></a></li>
-                            <li><a href="tel:+989050168316"><IoCallOutline /><span>0905-0168316</span></a></li>
+                            <li><a href="tel:+989050167216"><IoCallOutline /><span>0905-0167216</span></a></li>
+                            <li><a href="tel:+989050160316"><IoCallOutline /><span>0905-0160316</span></a></li>
                         </ul>
                     </div>
 

@@ -80,7 +80,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "شماره تلفن را وارد کنید!"
+                    msg: "شماره موبایل را وارد کنید!"
                 });
                 return false;
             }
@@ -89,13 +89,22 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "شماره تلفن معتبر وارد کنید!"
+                    msg: "شماره موبایل معتبر وارد کنید!"
                 });
                 return false;
             }
 
-            // Email is now OPTIONAL - only validate if provided
-            if(formFields.email && !formFields.email.includes('@')){
+            // Email is now REQUIRED
+            if(formFields.email === ""){
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "ایمیل را وارد کنید!"
+                });
+                return false;
+            }
+
+            if(!formFields.email.includes('@')){
                 context.setAlertBox({
                     open: true,
                     error: true,
@@ -166,7 +175,7 @@ const SignUp = () => {
                     context.setAlertBox({
                         open: true,
                         error: false,
-                        msg: "کد تایید به شماره تلفن شما ارسال گردید!"
+                        msg: "کد تایید به شماره موبایل شما ارسال گردید!"
                     }); 
 
                     setTimeout(() => {
@@ -233,14 +242,17 @@ const SignUp = () => {
                                     <input name="lastName" onChange={onChangeInput} id="standard-basic" className="w-100" />
                                 </div>
                             </div>
+                            <p className="txt text-muted">
+                                توجه: نام و نام خانوادگی باید حتماً مطابق شناسنامه وارد شود.
+                            </p>
                             <div className="form-group">
-                                <label className="mb-1">شماره تلفن</label>
+                                <label className="mb-1">شماره موبایل</label>
                                 <input name="phone" onChange={onChangeInput} id="standard-basic" className="w-100" />
                             </div>
 
                             <div className="form-group">
                                 <label className="mb-1">ایمیل</label>
-                                <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" placeholder="اختیاری" />
+                                <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" />
                             </div>
 
                             <div className="row">

@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { FaShoppingCart } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
@@ -120,7 +120,7 @@ const CourseItem = () => {
     const [tabError, setTabError] = useState(false);
     const history = useNavigate();
 
-    const addtoCart = () => {
+    /*const addtoCart = () => {
 
         setBtnDisabled(true);
 
@@ -155,7 +155,102 @@ const CourseItem = () => {
             }, 2000);
         }
 
-    }
+    }*/
+
+
+    const location = useLocation();
+
+    const addtoCart = async () => {
+        setBtnDisabled(true);
+
+        // Save current path so we can come back after login/complete-info
+        const returnTo = location.pathname + location.search;
+
+        // 1️⃣ Not logged in → go to /login (with returnTo)
+        if (context.isLoggedIn !== true) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: 'وارد حساب کاربری خود شوید!'
+            });
+            setTimeout(() => setBtnDisabled(false), 2000);
+            history(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+            return;
+        }
+
+        // 2️⃣ Logged in — read cached user & id
+        const cachedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId =
+            cachedUser?.userId ||
+            cachedUser?._id ||
+            cachedUser?.id ||
+            localStorage.getItem('userId');
+
+        if (!userId) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: 'شناسه کاربر پیدا نشد! لطفاً دوباره وارد شوید.'
+            });
+            setTimeout(() => setBtnDisabled(false), 2000);
+            history(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+            return;
+        }
+
+        // 3️⃣ Fetch fresh user from DB (the 4 fields may not exist in localStorage)
+        let freshUser = cachedUser;
+        try {
+            const res = await fetchDataFromApi(`/api/client/${userId}`);
+            if (res && !res.isAxiosError && !res.error) {
+                freshUser = res;
+            }
+        } catch (err) {
+            console.error('Failed to verify user info:', err);
+        }
+
+        // 4️⃣ Check the 4 required fields
+        const requiredFields = [
+            'englishName',
+            'englishLastName',
+            'nationalCode',
+            'birthdate'
+        ];
+        
+        const isProfileIncomplete = requiredFields.some((field) => {
+            const value = freshUser?.[field];
+            return value === undefined || value === null || String(value).trim() === '';
+        });
+        
+        if (isProfileIncomplete) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: 'برای افزودن دوره به سبد خرید، ابتدا اطلاعات کاربری خود را تکمیل کنید.'
+            });
+        
+            setTimeout(() => {
+                setBtnDisabled(false);
+                history(`/complete-info/${userId}?returnTo=${encodeURIComponent(returnTo)}`);
+            }, 1500);
+            return;
+        }
+
+        // 5️⃣ All good — run the existing add-to-cart logic
+        const user = freshUser; // use the fresh one, not the cached one
+
+        cartFields.productTitle = courseData?.name;
+        cartFields.image = courseData?.images[0];
+        cartFields.price = courseData?.price;
+        cartFields.quantity = 1;
+        cartFields.subTotal = parseInt(courseData?.price);
+        cartFields.productId = courseData?.id;
+        cartFields.userId = user?.userId || user?._id || user?.id;
+        cartFields.typeCourse = true;
+
+        context.addtoCart(cartFields);
+
+        setTimeout(() => setBtnDisabled(false), 2000);
+    };
 
     const [reviews, setReviews] = useState({
         productId: '',

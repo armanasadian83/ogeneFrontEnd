@@ -387,7 +387,7 @@
 
 @media screen and (max-width : 500px){
     .signInPage .box h2{font-size: 21px;}
-    .signInPage.signUp{width: 100%; height: 800px;position: relative; overflow: hidden;}
+    .signInPage.signUp{width: 100%; height: 900px;position: relative; overflow: hidden;}
 }
 
 @media (max-width: 991px) {
@@ -930,6 +930,83 @@
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   COMPLETE INFO PAGE  (paste at the END of responsive.css)
+   ===================================================== */
+
+@media (max-width: 991px) {
+    .ciCardHeader {
+        padding: 20px 24px;
+    }
+
+    .ciCardBody {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .ciGrid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .ciCard {
+        border-radius: 20px;
+    }
+
+    .ciCardTitle h4 {
+        font-size: 17px;
+    }
+
+    .ciCardTitle svg {
+        font-size: 26px;
+    }
+
+    .ciInput,
+    .ciDateContainer .ciInput {
+        height: 54px;
+        font-size: 14px;
+    }
+
+    .ciActions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .ciSaveBtn.MuiButton-root,
+    .ciCancelBtn.MuiButton-root {
+        width: 100%;
+        justify-content: center;
+        height: 52px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ciCardHeader {
+        padding: 16px 18px;
+    }
+
+    .ciCardBody {
+        padding: 18px;
+    }
+
+    .ciDescription {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+}
 
 
 
