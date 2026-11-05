@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -7,12 +8,13 @@ import {Navigation, Autoplay, Pagination} from 'swiper/modules';
 import Button from '@mui/material/Button';
 
 const ProductsSection = () => {
+    const { t } = useLanguage();
     return (
         <>
         <div className='productsSection'>
                 <div className='text-center title'>
-                    <h2>محصولات فروشگاه اوژن  (تکوین)</h2>
-                    <p>فروشگاه آنلاین اوژن</p>
+                    <h2>{t("محصولات فروشگاه اوژن  (تکوین)")}</h2>
+                    <p>{t("فروشگاه آنلاین اوژن")}</p>
                 </div>
                 
                 <div className='productsWrapper'>
@@ -39,10 +41,10 @@ const ProductsSection = () => {
                                 <div className='text-center paddingForMobile'>
                                     <div className='cardInfo'>
                                         <img src='https://c.animaapp.com/NMpalZkr/img/image-11@2x.png' />
-                                        <p className='mt-4'>کتاب زیست شناسی<br />سلولی و مولکولی</p>
+                                        <p className='mt-4'>{t("کتاب زیست شناسی")}<br />{t("سلولی و مولکولی")}</p>
                                     </div>
                                     <div className='cardBtn'>
-                                        <Button>مشاهده جزئیات محصول</Button>
+                                        <Button>{t("مشاهده جزئیات محصول")}</Button>
                                     </div>
                                 </div>
                             </div>
@@ -53,10 +55,10 @@ const ProductsSection = () => {
                                 <div className='text-center paddingForMobile'>
                                     <div className='cardInfo'>
                                         <img src='https://c.animaapp.com/NMpalZkr/img/image-11@2x.png' />
-                                        <p className='mt-4'>کتاب زیست شناسی<br />سلولی و مولکولی</p>
+                                        <p className='mt-4'>{t("کتاب زیست شناسی")}<br />{t("سلولی و مولکولی")}</p>
                                     </div>
                                     <div className='cardBtn'>
-                                        <Button>مشاهده جزئیات محصول</Button>
+                                        <Button>{t("مشاهده جزئیات محصول")}</Button>
                                     </div>
                                 </div>
                             </div>
@@ -67,10 +69,10 @@ const ProductsSection = () => {
                                 <div className='text-center paddingForMobile'>
                                     <div className='cardInfo'>
                                         <img src='https://c.animaapp.com/NMpalZkr/img/image-11@2x.png' />
-                                        <p className='mt-4'>کتاب زیست شناسی<br />سلولی و مولکولی</p>
+                                        <p className='mt-4'>{t("کتاب زیست شناسی")}<br />{t("سلولی و مولکولی")}</p>
                                     </div>
                                     <div className='cardBtn'>
-                                        <Button>مشاهده جزئیات محصول</Button>
+                                        <Button>{t("مشاهده جزئیات محصول")}</Button>
                                     </div>
                                 </div>
                             </div>
@@ -81,10 +83,10 @@ const ProductsSection = () => {
                                 <div className='text-center paddingForMobile'>
                                     <div className='cardInfo'>
                                         <img src='https://c.animaapp.com/NMpalZkr/img/image-11@2x.png' />
-                                        <p className='mt-4'>کتاب زیست شناسی<br />سلولی و مولکولی</p>
+                                        <p className='mt-4'>{t("کتاب زیست شناسی")}<br />{t("سلولی و مولکولی")}</p>
                                     </div>
                                     <div className='cardBtn'>
-                                        <Button>مشاهده جزئیات محصول</Button>
+                                        <Button>{t("مشاهده جزئیات محصول")}</Button>
                                     </div>
                                 </div>
                             </div>
@@ -95,10 +97,10 @@ const ProductsSection = () => {
                                 <div className='text-center paddingForMobile'>
                                     <div className='cardInfo'>
                                         <img src='https://c.animaapp.com/NMpalZkr/img/image-11@2x.png' />
-                                        <p className='mt-4'>کتاب زیست شناسی<br />سلولی و مولکولی</p>
+                                        <p className='mt-4'>{t("کتاب زیست شناسی")}<br />{t("سلولی و مولکولی")}</p>
                                     </div>
                                     <div className='cardBtn'>
-                                        <Button>مشاهده جزئیات محصول</Button>
+                                        <Button>{t("مشاهده جزئیات محصول")}</Button>
                                     </div>
                                 </div>
                             </div>
@@ -109,10 +111,10 @@ const ProductsSection = () => {
                                 <div className='text-center paddingForMobile'>
                                     <div className='cardInfo'>
                                         <img src='https://c.animaapp.com/NMpalZkr/img/image-11@2x.png' />
-                                        <p className='mt-4'>کتاب زیست شناسی<br />سلولی و مولکولی</p>
+                                        <p className='mt-4'>{t("کتاب زیست شناسی")}<br />{t("سلولی و مولکولی")}</p>
                                     </div>
                                     <div className='cardBtn'>
-                                        <Button>مشاهده جزئیات محصول</Button>
+                                        <Button>{t("مشاهده جزئیات محصول")}</Button>
                                     </div>
                                 </div>
                             </div>

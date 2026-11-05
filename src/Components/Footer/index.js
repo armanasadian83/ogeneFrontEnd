@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { Link } from 'react-router-dom';
 
 import logo from "./../../assets/logo.png"
@@ -8,8 +9,9 @@ import { FiMapPin, FiArrowLeft } from "react-icons/fi";
 import { PiCopyrightFill } from "react-icons/pi";
 
 const Footer = () => {
+    const { t, dir } = useLanguage();
     return (
-        <footer className="site-footer">
+        <footer className="site-footer" dir={dir}>
 
             {/* decorative DNA-helix line, purely visual */}
             <svg className="footer-helix" viewBox="0 0 200 800" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -25,36 +27,34 @@ const Footer = () => {
 
                     <div className="footer-brand">
                         <div className="footer-logo">
-                            <img src={logo} alt="لوگوی آموزشگاه اوژن" />
-                            <h3>آموزشگاه آزاد نانو زیست فناوری اوژن</h3>
+                            <img src={logo} alt={t("لوگوی آموزشگاه اوژن", "Ogene institute logo")} />
+                            <h3>{t("آموزشگاه آزاد نانو زیست فناوری اوژن", "Ogene Nano-Biotechnology Institute")}</h3>
                         </div>
                         <p className="footer-desc">
-                            با هدف برگزاری دوره ها و کارگاه های آموزشی، انجام خدمات آزمایشگاهی و پژوهشی از جمله تعریف،
-                            تعیین و هدایت پایان نامه و پروژه های کارشناسی ارشد و دکتری در رشته ژنتیک پزشکی و مولکولی، نانوفناوری،
-                            میکروبیولوژی، بیوتکنولوژی، مهندسی بافت، بیوانفورماتیک و سایر رشته های مرتبط، تاسیس شده است.
+                            {t("با هدف برگزاری دوره ها و کارگاه های آموزشی، انجام خدمات آزمایشگاهی و پژوهشی از جمله تعریف،\r\n                            تعیین و هدایت پایان نامه و پروژه های کارشناسی ارشد و دکتری در رشته ژنتیک پزشکی و مولکولی، نانوفناوری،\r\n                            میکروبیولوژی، بیوتکنولوژی، مهندسی بافت، بیوانفورماتیک و سایر رشته های مرتبط، تاسیس شده است.", "Established to offer educational courses and workshops, laboratory and research services, and guidance for master’s and doctoral theses and projects in medical and molecular genetics, nanotechnology, microbiology, biotechnology, tissue engineering, bioinformatics and related fields.")}
                         </p>
                         <div className="footer-social">
-                            <a href="https://www.instagram.com/ogenetech?igsh=dXJlb3BuajJ1cGFq" aria-label="اینستاگرام" className="social-btn"><FaInstagram /></a>
-                            <a href="https://t.me/Ogenetechnology" aria-label="تلگرام" className="social-btn"><FaTelegram /></a>
+                            <a href="https://www.instagram.com/ogenetech?igsh=dXJlb3BuajJ1cGFq" aria-label={t("اینستاگرام", "Instagram")} className="social-btn"><FaInstagram /></a>
+                            <a href="https://t.me/Ogenetechnology" aria-label={t("تلگرام", "Telegram")} className="social-btn"><FaTelegram /></a>
                         </div>
                     </div>
 
                     <div className="footer-links">
-                        <h4>دسترسی سریع</h4>
+                        <h4>{t("دسترسی سریع", "Quick links")}</h4>
                         <ul>
-                            <li><Link to='/courseShop'><FiArrowLeft className="link-arrow" /><span>دوره های آموزشی</span></Link></li>
-                            <li><Link to='/shop'><FiArrowLeft className="link-arrow" /><span>فروشگاه</span></Link></li>
-                            <li><Link to='/degree'><FiArrowLeft className="link-arrow" /><span>مدرک فنی و حرفه ای</span></Link></li>
-                            <li><Link to='/blog'><FiArrowLeft className="link-arrow" /><span>بلاگ</span></Link></li>
-                            <li><Link to='/aboutUs'><FiArrowLeft className="link-arrow" /><span>درباره و  تماس</span></Link></li>
+                            <li><Link to='/courseShop'><FiArrowLeft className="link-arrow" /><span>{t("دوره های آموزشی", "Courses")}</span></Link></li>
+                            <li><Link to='/shop'><FiArrowLeft className="link-arrow" /><span>{t("فروشگاه", "Shop")}</span></Link></li>
+                            <li><Link to='/degree'><FiArrowLeft className="link-arrow" /><span>{t("مدرک فنی و حرفه ای", "Technical and vocational certificate")}</span></Link></li>
+                            <li><Link to='/blog'><FiArrowLeft className="link-arrow" /><span>{t("بلاگ", "Blog")}</span></Link></li>
+                            <li><Link to='/aboutUs'><FiArrowLeft className="link-arrow" /><span>{t("درباره و  تماس", "About and contact")}</span></Link></li>
                         </ul> 
                     </div>
 
                     <div className="footer-contact">
-                        <h4>ارتباط با ما</h4>
+                        <h4>{t("ارتباط با ما", "Contact us")}</h4>
                         <p className="footer-address">
                             <FiMapPin className="address-icon" />
-                            <span>تهران، صادقیه، بلوار فردوس شرق، انتهای خیابان ولیعصر، جنب متروی صادقیه، خیابان رز غربی، پلاک ۷، طبقه همکف</span>
+                            <span>{t("تهران، صادقیه، بلوار فردوس شرق، انتهای خیابان ولیعصر، جنب متروی صادقیه، خیابان رز غربی، پلاک ۷، طبقه همکف", "Ground floor, No. 7, Rose West St., next to Sadeghieh Metro Station, end of Valiasr St., Ferdows East Blvd., Sadeghieh, Tehran")}</span>
                         </p>
                         <ul className="footer-phones">
                             <li><a href="tel:+982144961487"><IoCallOutline /><span>021-44961487</span></a></li>
@@ -67,7 +67,7 @@ const Footer = () => {
                         <div
                             className="trust-seal"
                             dangerouslySetInnerHTML={{
-                                __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY' alt='نماد اعتماد الکترونیکی' style='cursor:pointer' code='DCUvppqG13XGco7UU3cpoZFr82zDH5vY' /></a>`
+                                __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY' alt='${t("نماد اعتماد الکترونیکی", "Electronic Trust Symbol")}' style='cursor:pointer' code='DCUvppqG13XGco7UU3cpoZFr82zDH5vY' /></a>`
                             }}
                         />
                     </div>
@@ -79,10 +79,10 @@ const Footer = () => {
                 <div className="footer-bottom">
                     <span className="footer-copy">
                         <PiCopyrightFill />
-                        تمامی حقوق این وب سایت متعلق به آموزشگاه اوژن می باشد
+                        {t("تمامی حقوق این وب سایت متعلق به آموزشگاه اوژن می باشد", "All rights reserved by Ogene Institute")}
                     </span>
                     <Link className="footer-credit" to='https://armanassadian.ir' target='_blank'>
-                        توسعه داده شده توسط تیم فیوژن
+                        {t("توسعه داده شده توسط تیم فیوژن", "Developed by the Fugen team")}
                     </Link>
                 </div>
             </div>
@@ -94,7 +94,7 @@ export default Footer;
 
 
 
-{/*import { Link } from 'react-router-dom';
+/*import { Link } from 'react-router-dom';
 
 import logo from "./../../assets/logo.png"
 
@@ -195,4 +195,4 @@ const Footer = () => {
     );
 }
  
-export default Footer;*/}
+export default Footer;*/

@@ -1,3 +1,5 @@
+import { useLanguage } from "../i18n/LanguageContext";
+import LanguageSelector from "./LanguageSelector";
 import logo from "./../assets/logo.png"
 import { Link, Links, useNavigate } from "react-router-dom";
 import { FaUser, FaUserCircle } from "react-icons/fa";
@@ -26,6 +28,7 @@ import { GiShoppingBag } from "react-icons/gi";
 import { IoChevronDownOutline } from "react-icons/io5";
 
 const Navbar = () => {
+    const { t, dir } = useLanguage();
 
     const [dialogWidth, setDialogWidth] = useState('lg');
     const context = useContext(MyContext);
@@ -138,7 +141,7 @@ const Navbar = () => {
         context.setAlertBox({
             open: true,
             error: false,
-            msg: "با موفقیت خارج شدید!"
+            msg: t("با موفقیت خارج شدید!")
         });
 
         setAnchorEl(null);
@@ -160,13 +163,13 @@ const Navbar = () => {
     }, [userId]);
 
     const handleSearch = () => {
-        alert('به زودی امکان جستجو فراهم میشود!')
+        alert(t("به زودی امکان جستجو فراهم میشود!"))
     }
 
     return (
         <>
             {/* PC Navbar */}
-            <div className="special">
+            <div className="special" dir={dir}>
                 <div className="myNavbar" data-model-id="51:46">
                     <div className="navbarInner">
 
@@ -180,47 +183,32 @@ const Navbar = () => {
                             <ul className="list-unstyled d-flex justify-content-center">
                                 <div ref={dropdownRef} style={{ position: 'relative' }}>
                                     <li className={`flex align-items-center cursor-pointer ${navbarDropDown && 'fixedBold'}`}
-                                        onClick={() => setNavbarDropDown(!navbarDropDown)}>
-                                        دوره های آموزشی &nbsp;
-                                        <span><IoChevronDownOutline
+                                        onClick={() => setNavbarDropDown(!navbarDropDown)}>{t("دوره های آموزشی  ")}<span><IoChevronDownOutline
                                             className={`icon ${navbarDropDown ? 'rotatefull' : ''}`} /></span>
                                     </li>
                                     {
                                         navbarDropDown &&
                                         <div className="dropdownMenu shadow shadow-md">
-                                            <div onClick={() => handleClick('سلولی، مولکولی و ژنتیک')}>
-                                                سلولی، مولکولی و ژنتیک
-                                            </div>
-                                            <div onClick={() => handleClick('میکروبیولوژی')}>
-                                                میکروبیولوژی
-                                            </div>
-                                            <div onClick={() => handleClick('خدمات عمومی')}>
-                                                خدمات عمومی
-                                            </div>
-                                            <div onClick={() => handleClick('نانوفناوری')}>
-                                                نانوفناوری
-                                            </div>
-                                            <div onClick={() => handleClick('بالینی و مدل حیوانی')} className="text-nowrap">
-                                                بالینی و مدل حیوانی/هیستولوژی
-                                            </div>
-                                            <div onClick={() => handleClick('زیست پزشکی')}>
-                                                زیست پزشکی و گیاهی
-                                            </div>
-                                            <div onClick={() => handleClick(0)}>
-                                                تمامی دوره ها
-                                            </div>
+                                            <div onClick={() => handleClick('سلولی، مولکولی و ژنتیک')}>{t("سلولی، مولکولی و ژنتیک")}</div>
+                                            <div onClick={() => handleClick('میکروبیولوژی')}>{t("میکروبیولوژی")}</div>
+                                            <div onClick={() => handleClick('خدمات عمومی')}>{t("خدمات عمومی")}</div>
+                                            <div onClick={() => handleClick('نانوفناوری')}>{t("نانوفناوری")}</div>
+                                            <div onClick={() => handleClick('بالینی و مدل حیوانی')} className="text-nowrap">{t("بالینی و مدل حیوانی/هیستولوژی")}</div>
+                                            <div onClick={() => handleClick('زیست پزشکی')}>{t("زیست پزشکی و گیاهی")}</div>
+                                            <div onClick={() => handleClick(0)}>{t("تمامی دوره ها")}</div>
                                         </div>
                                     }
                                 </div>
-                                <Link to='/degree'><li>مدرک فنی و حرفه ای</li></Link>
-                                <Link to='/service'><li>خدمات</li></Link>
-                                <Link to='/shop'><li>فروشگاه</li></Link>
-                                <Link to='/blog'><li>بلاگ</li></Link>
-                                <Link to='/aboutUs'><li>درباره و تماس</li></Link>
+                                <Link to='/degree'><li>{t("مدرک فنی و حرفه ای")}</li></Link>
+                                <Link to='/service'><li>{t("خدمات")}</li></Link>
+                                <Link to='/shop'><li>{t("فروشگاه")}</li></Link>
+                                <Link to='/blog'><li>{t("بلاگ")}</li></Link>
+                                <Link to='/aboutUs'><li>{t("درباره و تماس")}</li></Link>
                             </ul>
                         </div>
 
                         <div className="navbarActions d-flex align-items-center justify-content-center">
+                            <LanguageSelector />
                             {
                                 context.isLoggedIn === true ?
                                     <Link className="iconBtn">
@@ -236,37 +224,29 @@ const Navbar = () => {
                                                 <MenuItem className="menuItemInMobile mobile" onClick={handleOpenMyAccDropMobile}>
                                                     <ListItemIcon>
                                                         <FaUserCog />
-                                                    </ListItemIcon>
-                                                    حساب من
-                                                </MenuItem>
+                                                    </ListItemIcon>{t("حساب من")}</MenuItem>
                                             </Link>
                                             <Link to={`/orders/${userId}`}>
                                                 <MenuItem className="menuItemInMobile" onClick={handleCloseMyAccDrop}>
                                                     <ListItemIcon>
                                                         <GiShoppingBag />
-                                                    </ListItemIcon>
-                                                    سفارشات من
-                                                </MenuItem>
+                                                    </ListItemIcon>{t("سفارشات من")}</MenuItem>
                                             </Link>
                                             <Link to={'/change-password'}>
                                                 <MenuItem className="menuItemInMobile mobile" onClick={handleCloseMyAccDropMobile}>
                                                     <ListItemIcon>
                                                         <MdPublishedWithChanges />
-                                                    </ListItemIcon>
-                                                    تغییر رمز عبور
-                                                </MenuItem>
+                                                    </ListItemIcon>{t("تغییر رمز عبور")}</MenuItem>
                                             </Link>
                                             <MenuItem className={`menuItemInMobile ${btnDisabled !== false && 'btnDisabled'}`} onClick={logout}>
                                                 <ListItemIcon>
                                                     <BiLogOut fontSize="small" />
-                                                </ListItemIcon>
-                                                خروج از حساب
-                                            </MenuItem>
+                                                </ListItemIcon>{t("خروج از حساب")}</MenuItem>
                                         </Menu>
                                     </Link>
                                     :
                                     <Link to='/logIn'>
-                                        <div className="hideInMobile ms-1 logInBtn">ورود / ثبت نام</div>
+                                        <div className="hideInMobile ms-1 logInBtn">{t("ورود / ثبت نام")}</div>
                                     </Link>
                             }
                             {
@@ -278,7 +258,7 @@ const Navbar = () => {
                                 </Link>
                             }
                             <div className="d-flex align-items-center justify-content-center iconBtn search">
-                                <Tooltip title="جستجو" arrow>
+                                <Tooltip title={t("جستجو")} arrow>
                                     <div onClick={context.handleClickOpenSearchModal}>
                                         <IoSearch />
                                     </div>
@@ -298,10 +278,7 @@ const Navbar = () => {
                         {
                             context.isLoggedIn === false ?
                                 <Link to='/logIn'>
-                                    <FaUserCircle />
-                                    &nbsp;
-                                    ورود / ثبت نام
-                                </Link>
+                                    <FaUserCircle />{t("  ورود / ثبت نام")}</Link>
                                 :
                                 <>
                                     <div
@@ -310,10 +287,7 @@ const Navbar = () => {
                                     >
                                         <Link className="cartIcon">
                                             <div>
-                                                <FaUserCircle />
-                                                &nbsp;
-                                                پنل کاربری
-                                                <IoChevronDownOutline className={`mobileAccPanelArrow ${mobileAccPanelOpen ? 'rotated' : ''}`} />
+                                                <FaUserCircle />{t("  پنل کاربری")}<IoChevronDownOutline className={`mobileAccPanelArrow ${mobileAccPanelOpen ? 'rotated' : ''}`} />
                                             </div>
                                         </Link>
                                     </div>
@@ -323,33 +297,25 @@ const Navbar = () => {
                                             <div className="mobileAccPanelItem">
                                                 <ListItemIcon>
                                                     <FaUserCog />
-                                                </ListItemIcon>
-                                                حساب من
-                                            </div>
+                                                </ListItemIcon>{t("حساب من")}</div>
                                         </Link>
                                         <Link to={`/orders/${userId}`} onClick={SideNavClose}>
                                             <div className="mobileAccPanelItem">
                                                 <ListItemIcon>
                                                     <GiShoppingBag />
-                                                </ListItemIcon>
-                                                سفارشات من
-                                            </div>
+                                                </ListItemIcon>{t("سفارشات من")}</div>
                                         </Link>
                                         <Link to={'/change-password'} onClick={SideNavClose}>
                                             <div className="mobileAccPanelItem">
                                                 <ListItemIcon>
                                                     <MdPublishedWithChanges />
-                                                </ListItemIcon>
-                                                تغییر رمز عبور
-                                            </div>
+                                                </ListItemIcon>{t("تغییر رمز عبور")}</div>
                                         </Link>
                                         <Link>
                                             <div className={`mobileAccPanelItem ${btnDisabled !== false && 'btnDisabled'}`} onClick={logout}>
                                                 <ListItemIcon>
                                                     <BiLogOut fontSize="small" />
-                                                </ListItemIcon>
-                                                خروج از حساب
-                                            </div>
+                                                </ListItemIcon>{t("خروج از حساب")}</div>
                                         </Link>
                                     </div>
                                 </>
@@ -358,10 +324,7 @@ const Navbar = () => {
                             context.isLoggedIn === true &&
                             <Link onClick={SideNavClose} to={`/cart/${context.user?.userId}`} className="cartIcon">
                                 <div>
-                                    <BsBasket3Fill />
-                                    &nbsp;
-                                    سبد خرید
-                                </div>
+                                    <BsBasket3Fill />{t("  سبد خرید")}</div>
                             </Link>
                         }
                     </div>
@@ -369,13 +332,13 @@ const Navbar = () => {
 
                     <div className="list-unstyled">
                         <Button className="closeBtn" onClick={SideNavClose}>&times;</Button>
-                        <Link to='/' onClick={SideNavClose}><li>صفحه اصلی</li></Link>
-                        <Link to='/courseShop' onClick={SideNavClose}><li>دوره های آموزشی</li></Link>
-                        <Link to='/degree' onClick={SideNavClose}><li>مدرک فنی و حرفه ای</li></Link>
-                        <Link to='/service' onClick={SideNavClose}><li>خدمات</li></Link>
-                        <Link to='/shop' onClick={SideNavClose}><li>فروشگاه</li></Link>
-                        <Link to='/blog' onClick={SideNavClose}><li>بلاگ</li></Link>
-                        <Link to='/aboutUs' onClick={SideNavClose} className="mb-5"><li>درباره اوژن</li></Link>
+                        <Link to='/' onClick={SideNavClose}><li>{t("صفحه اصلی")}</li></Link>
+                        <Link to='/courseShop' onClick={SideNavClose}><li>{t("دوره های آموزشی")}</li></Link>
+                        <Link to='/degree' onClick={SideNavClose}><li>{t("مدرک فنی و حرفه ای")}</li></Link>
+                        <Link to='/service' onClick={SideNavClose}><li>{t("خدمات")}</li></Link>
+                        <Link to='/shop' onClick={SideNavClose}><li>{t("فروشگاه")}</li></Link>
+                        <Link to='/blog' onClick={SideNavClose}><li>{t("بلاگ")}</li></Link>
+                        <Link to='/aboutUs' onClick={SideNavClose} className="mb-5"><li>{t("درباره اوژن")}</li></Link>
                     </div>
                 </div>
 
@@ -425,9 +388,7 @@ const Navbar = () => {
                                 }}
                             >
                                 <BsSearch />
-                            </Box>
-                            جستجو
-                        </DialogTitle>
+                            </Box>{t("جستجو")}</DialogTitle>
                             
                         <DialogContent
                             sx={{
@@ -448,7 +409,7 @@ const Navbar = () => {
                                     <Box
                                         component="input"
                                         autoFocus
-                                        placeholder="جستجو بر اساس دوره، محصول و ..."
+                                        placeholder={t("جستجو بر اساس دوره، محصول و ...")}
                                         sx={{
                                             width: '100%',
                                             padding: { xs: '12px 42px 12px 14px', sm: '14px 46px 14px 18px' },
@@ -490,9 +451,7 @@ const Navbar = () => {
                                         background: '#eef2f0',
                                     },
                                 }}
-                            >
-                                انصراف
-                            </Button>
+                            >{t("انصراف")}</Button>
                             <Button
                                 onClick={handleSearch}
                                 sx={{
@@ -510,9 +469,7 @@ const Navbar = () => {
                                         transform: 'translateY(-2px)',
                                     },
                                 }}
-                            >
-                                جستجو
-                            </Button>
+                            >{t("جستجو")}</Button>
                         </DialogActions>
                     </Dialog>
                 </div>

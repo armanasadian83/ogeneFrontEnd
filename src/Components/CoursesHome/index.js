@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -22,6 +23,7 @@ const CourseSkeletonCard = () => (
 );
 
 const CoursesSection = () => {
+    const { t, localize, language, dir } = useLanguage();
 
     // backend
     const [courseData, setCourseData] = useState([]);
@@ -62,14 +64,16 @@ const CoursesSection = () => {
         <>
             <div className='CoursesSection'>
                 <div className='text-center title'>
-                    <span className='titleTag'>دوره‌های آموزشی</span>
-                    <h2>تقویم آموزشی مهرماه <span>1405</span></h2>
+                    <span className='titleTag'>{t("دوره‌های آموزشی")}</span>
+                    <h2>{t("تقویم آموزشی مهرماه ")}<span>1405</span></h2>
                 </div>
 
                 <div className='CoursesWrapper'>
                     {
                         isLoading ? (
                             <Swiper
+                                key={`loading-${language}`}
+                                dir={dir}
                                 slidesPerView={4}
                                 spaceBetween={28}
                                 navigation={false}
@@ -84,6 +88,8 @@ const CoursesSection = () => {
                             </Swiper>
                         ) : (
                             <Swiper
+                                key={language}
+                                dir={dir}
                                 slidesPerView={4}
                                 spaceBetween={28}
                                 navigation={false}
@@ -103,15 +109,13 @@ const CoursesSection = () => {
                                             <SwiperSlide key={index}>
                                                 <div className='courseCard'>
                                                     <div className='courseImgWrapper'>
-                                                        <img src={item?.images[0]} />
-                                                        <span className='courseBadge'>دوره آموزشی</span>
+                                                        <img src={item?.images[0]} alt={localize(item, "name")} />
+                                                        <span className='courseBadge'>{t("دوره آموزشی")}</span>
                                                     </div>
                                                     <div className='courseCardBody'>
-                                                        <p className='courseTitle'>{item?.name?.substring(0, 62)}</p>
+                                                        <p className='courseTitle'>{localize(item, "name").substring(0, 62)}</p>
                                                         <Link to={`/course/${item?.id}`} className='courseCardLink'>
-                                                            <Button className='courseCardBtn'>
-                                                                مشاهده جزئیات دوره
-                                                                <IoArrowBackOutline className='courseCardBtnIcon' />
+                                                            <Button className='courseCardBtn'>{t("مشاهده جزئیات دوره")}<IoArrowBackOutline className='courseCardBtnIcon' />
                                                             </Button>
                                                         </Link>
                                                     </div>

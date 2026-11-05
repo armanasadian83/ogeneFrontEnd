@@ -1,3 +1,5 @@
+import { customerMessage } from "../account/customerMessages";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../App";
@@ -8,6 +10,7 @@ import { RiEye2Fill, RiEyeCloseFill } from "react-icons/ri";
 import { postData } from "../../utils/api";
 
 const ResetPassword = () => {
+    const { t, dir } = useLanguage();
     const context = useContext(MyContext);
     const history = useNavigate();
     const location = useLocation();
@@ -30,22 +33,22 @@ const ResetPassword = () => {
         const searchParams = new URLSearchParams(location.search);
         const emailFromUrl = searchParams.get('email');
         const phoneFromUrl = searchParams.get('phone');
-        
+
         // Also try to get from localStorage as fallback
         const identifierFromStorage = localStorage.getItem("resetIdentifier");
-        
+
         console.log("ResetPassword - Email from URL:", emailFromUrl);
         console.log("ResetPassword - Phone from URL:", phoneFromUrl);
         console.log("ResetPassword - Identifier from localStorage:", identifierFromStorage);
-        
+
         // Use identifier from URL first, then localStorage
         const resetIdentifier = emailFromUrl || phoneFromUrl || identifierFromStorage;
-        
+
         if (!resetIdentifier) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "لطفا ابتدا مراحل بازیابی رمز عبور را طی کنید!"
+                msg: t("لطفا ابتدا مراحل بازیابی رمز عبور را طی کنید!", "Please complete the password recovery steps first.")
             });
             setTimeout(() => {
                 history('/forgot-password');
@@ -56,7 +59,7 @@ const ResetPassword = () => {
             localStorage.setItem("resetIdentifier", resetIdentifier);
             console.log("ResetPassword - Identifier set:", resetIdentifier);
         }
-    }, [location, context, history]);
+    }, [location, context, history, t]);
 
     const handleChange = (e) => {
         setFormData({
@@ -79,7 +82,7 @@ const ResetPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "رمز عبور جدید را وارد کنید!"
+                msg: t("رمز عبور جدید را وارد کنید!", "Enter your new password.")
             });
             return;
         }
@@ -88,7 +91,7 @@ const ResetPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "رمز عبور حداقل باید 7 حرف/عدد باشد!"
+                msg: t("رمز عبور حداقل باید 7 حرف/عدد باشد!", "Your password must contain at least 7 letters or numbers.")
             });
             return;
         }
@@ -97,7 +100,7 @@ const ResetPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "فاصله در رمز عبور مجاز نیست!"
+                msg: t("فاصله در رمز عبور مجاز نیست!", "Passwords cannot contain spaces.")
             });
             return;
         }
@@ -106,7 +109,7 @@ const ResetPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "تکرار رمز عبور را وارد کنید!"
+                msg: t("تکرار رمز عبور را وارد کنید!", "Confirm your password.")
             });
             return;
         }
@@ -115,7 +118,7 @@ const ResetPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "رمز عبور ها باهم تطابق ندارند!"
+                msg: t("رمز عبور ها باهم تطابق ندارند!", "The passwords do not match.")
             });
             return;
         }
@@ -126,7 +129,7 @@ const ResetPassword = () => {
         try {
             // Determine if identifier is phone or email
             const isPhone = /^[0-9]+$/.test(identifier) && (identifier.length === 11 || identifier.startsWith('09'));
-            
+
             const payload = {
                 newPassword: newPassword,
                 confirmPassword: confirmPassword,
@@ -134,7 +137,7 @@ const ResetPassword = () => {
             };
 
             console.log("Resetting password with payload:", payload);
-            
+
             const res = await postData("/api/client/reset-password", payload);
 
             console.log("Reset password response:", res);
@@ -143,7 +146,7 @@ const ResetPassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: res.msg
+                    msg: customerMessage(t, res.msg)
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -151,7 +154,7 @@ const ResetPassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: res.message
+                    msg: customerMessage(t, res.message)
                 });
 
                 // Clear reset data
@@ -164,7 +167,7 @@ const ResetPassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "مشکلی در تغییر رمز عبور وجود دارد!"
+                    msg: t("مشکلی در تغییر رمز عبور وجود دارد!", "Your password could not be changed. Please try again.")
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -174,7 +177,7 @@ const ResetPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "مشکلی در تغییر رمز عبور وجود دارد!"
+                msg: t("مشکلی در تغییر رمز عبور وجود دارد!", "Your password could not be changed. Please try again.")
             });
             setLoader(false);
             setBtnDisabled(false);
@@ -190,7 +193,7 @@ const ResetPassword = () => {
     }, [history]);
 
     return (
-        <section className="section signInPage">
+        <section dir={dir} className="section signInPage">
             <div className="shape-bottom">
                 <svg fill="#fff" id="layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8">
                     <path className="st0" d="M1921,413.1v406.7H0V0.Sh0.41228.1,598.3c30,74.4,80.8,130.6,152.5,168.6c107.6,57,212.1,40.7,245.7,34.4 c22.4-4.2,54.9-13.1,97.5-26.6L1921,400.5V413.1z"></path>
@@ -202,24 +205,24 @@ const ResetPassword = () => {
                     <form className="mt-3" onSubmit={handleSubmit}>
                         <div className="d-flex align-items-center mb-3 ms-4">
                             <img src={Logo} className="signInLogo" alt="Logo" />
-                            <h2 className="mx-1">تغییر رمز عبور</h2>
+                            <h2 className="mx-1">{t("تغییر رمز عبور", "Change password")}</h2>
                         </div>
 
-                        <p className="text-muted mb-4 text-center">رمز عبور جدید خود را وارد کنید.</p>
+                        <p className="text-muted mb-4 text-center">{t("رمز عبور جدید خود را وارد کنید.", "Enter your new password.")}</p>
 
                         <div className="form-group">
-                            <label className="mb-1">رمز عبور جدید</label>
+                            <label className="mb-1">{t("رمز عبور جدید", "New password")}</label>
                             <span className='mx-2' style={{cursor: 'pointer'}}>
-                                {isPasswordShown === false ? 
-                                    <RiEyeCloseFill onClick={revealPassword} /> : 
+                                {isPasswordShown === false ?
+                                    <RiEyeCloseFill onClick={revealPassword} /> :
                                     <RiEye2Fill onClick={revealPassword} />
                                 }
                             </span>
-                            <input 
-                                name="newPassword" 
+                            <input
+                                name="newPassword"
                                 value={formData.newPassword}
                                 onChange={handleChange}
-                                type={isPasswordShown === false ? 'password' : 'text'} 
+                                type={isPasswordShown === false ? 'password' : 'text'}
                                 className="w-100"
                                 onKeyDown={(e) => {
                                     if (e.key === " ") e.preventDefault();
@@ -228,30 +231,30 @@ const ResetPassword = () => {
                         </div>
 
                         <div className="form-group mt-3">
-                            <label className="mb-1">تکرار رمز عبور جدید</label>
-                            <input 
-                                name="confirmPassword" 
+                            <label className="mb-1">{t("تکرار رمز عبور جدید", "Confirm new password")}</label>
+                            <input
+                                name="confirmPassword"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
-                                type={isPasswordShown === false ? 'password' : 'text'} 
+                                type={isPasswordShown === false ? 'password' : 'text'}
                                 className="w-100"
                             />
                         </div>
 
                         <div className="d-flex align-items-center mt-3 mb-3 actionBtnWrapper">
                             <div className="w-50">
-                                <Button 
-                                    type="submit" 
+                                <Button
+                                    type="submit"
                                     className={`col btn-lg enter ${btnDisabled !== false && 'btnDisabled'}`}
                                 >
-                                    تغییر رمز
-                                    {loader === true && 
+                                    {t("تغییر رمز", "Change password")}
+                                    {loader === true &&
                                         <CircularProgress
                                             sx={() => ({
                                                 color: '#000',
                                                 marginRight: '15px',
                                             })}
-                                            enableTrackSlot size="25px" 
+                                            enableTrackSlot size="25px"
                                         />
                                     }
                                 </Button>
@@ -259,19 +262,19 @@ const ResetPassword = () => {
                             <div className="w-50">
                                 <Link to='/login'>
                                     <Button className="col btn-lg ml-1 cancel" variant="outlined">
-                                        بازگشت
+                                        {t("بازگشت", "Back")}
                                     </Button>
                                 </Link>
                             </div>
                         </div>
 
                         <p className="txt">
-                            حساب کاربری دارید؟ 
-                            <Link to="/logIn" className="border-effect me-2">ورود به حساب</Link>
+                            {t("حساب کاربری دارید؟", "Already have an account?")}
+                            <Link to="/logIn" className="border-effect me-2">{t("ورود به حساب", "Sign in")}</Link>
                         </p>
 
                         <h6 className="mt-5 text-center font-weight-bold">
-                            آموزشگاه آزاد نانوزیست فناوری اوژن
+                            {t("آموزشگاه آزاد نانوزیست فناوری اوژن", "Ogene Nanobiotechnology Training Institute")}
                         </h6>
                     </form>
                 </div>

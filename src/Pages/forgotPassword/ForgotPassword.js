@@ -1,3 +1,5 @@
+import { customerMessage } from "../account/customerMessages";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../App";
@@ -7,9 +9,10 @@ import { CircularProgress } from "@mui/material";
 import { postData } from "../../utils/api";
 
 const ForgotPassword = () => {
+    const { t, dir } = useLanguage();
     const context = useContext(MyContext);
     const history = useNavigate();
-    
+
     const [phone, setPhone] = useState("");  // Only phone number
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -36,7 +39,7 @@ const ForgotPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "شماره تلفن خود را وارد کنید!"
+                msg: t("شماره تلفن خود را وارد کنید!", "Enter your phone number.")
             });
             return;
         }
@@ -46,7 +49,7 @@ const ForgotPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "شماره تلفن معتبر وارد کنید! (مثال: 09123456789)"
+                msg: t("شماره تلفن معتبر وارد کنید! (مثال: 09123456789)", "Enter a valid phone number (for example, 09123456789).")
             });
             return;
         }
@@ -55,7 +58,7 @@ const ForgotPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "شماره تلفن باید با 09 شروع شود!"
+                msg: t("شماره تلفن باید با 09 شروع شود!", "The phone number must start with 09.")
             });
             return;
         }
@@ -65,7 +68,7 @@ const ForgotPassword = () => {
 
         try {
             console.log("Sending forgot password request for phone:", phone);
-            
+
             const res = await postData("/api/client/forgot-password", { email: phone });
             console.log("Forgot password response:", res);
 
@@ -73,7 +76,7 @@ const ForgotPassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: res.msg
+                    msg: customerMessage(t, res.msg)
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -81,11 +84,11 @@ const ForgotPassword = () => {
                 // Save phone for OTP verification
                 localStorage.setItem("resetIdentifier", phone);
                 console.log("Reset phone saved to localStorage:", phone);
-                
+
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: res.message
+                    msg: customerMessage(t, res.message)
                 });
 
                 setTimeout(() => {
@@ -96,7 +99,7 @@ const ForgotPassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "مشکلی در ارسال کد بازیابی وجود دارد!"
+                    msg: t("مشکلی در ارسال کد بازیابی وجود دارد!", "The recovery code could not be sent.")
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -106,7 +109,7 @@ const ForgotPassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "مشکلی در ارتباط با سرور وجود دارد!"
+                msg: t("مشکلی در ارتباط با سرور وجود دارد!", "Could not connect to the server. Please try again.")
             });
             setLoader(false);
             setBtnDisabled(false);
@@ -114,7 +117,7 @@ const ForgotPassword = () => {
     };
 
     return (
-        <section className="section signInPage">
+        <section dir={dir} className="section signInPage">
             <div className="shape-bottom">
                 <svg fill="#fff" id="layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8">
                     <path className="st0" d="M1921,413.1v406.7H0V0.Sh0.41228.1,598.3c30,74.4,80.8,130.6,152.5,168.6c107.6,57,212.1,40.7,245.7,34.4 c22.4-4.2,54.9-13.1,97.5-26.6L1921,400.5V413.1z"></path>
@@ -126,19 +129,19 @@ const ForgotPassword = () => {
                     <form className="mt-3" onSubmit={handleSubmit}>
                         <div className="d-flex align-items-center mb-3 ms-4">
                             <img src={Logo} className="signInLogo" alt="Logo" />
-                            <h2 className="mx-1">بازیابی رمز عبور</h2>
+                            <h2 className="mx-1">{t("بازیابی رمز عبور", "Reset password")}</h2>
                         </div>
 
-                        <p className="text-muted mb-4 text-center">شماره تلفن خود را وارد کنید تا کد بازیابی برای شما ارسال شود.</p>
+                        <p className="text-muted mb-4 text-center">{t("شماره تلفن خود را وارد کنید تا کد بازیابی برای شما ارسال شود.", "Enter your phone number to receive a recovery code.")}</p>
 
                         <div className="form-group">
-                            <label className="mb-1">شماره تلفن</label>
-                            <input 
-                                name="phone" 
+                            <label className="mb-1">{t("شماره تلفن", "Phone number")}</label>
+                            <input
+                                name="phone"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
-                                id="standard-basic" 
-                                className="w-100" 
+                                id="standard-basic"
+                                className="w-100"
                                 placeholder="09123456789"
                                 dir="ltr"
                                 maxLength="11"
@@ -147,18 +150,18 @@ const ForgotPassword = () => {
 
                         <div className="d-flex align-items-center mt-3 mb-3 actionBtnWrapper">
                             <div className="w-50">
-                                <Button 
-                                    type="submit" 
+                                <Button
+                                    type="submit"
                                     className={`col btn-lg enter ${btnDisabled !== false && 'btnDisabled'}`}
                                 >
-                                    ارسال کد
-                                    {loader === true && 
+                                    {t("ارسال کد", "Send code")}
+                                    {loader === true &&
                                         <CircularProgress
                                             sx={() => ({
                                                 color: '#000',
                                                 marginRight: '15px',
                                             })}
-                                            enableTrackSlot size="25px" 
+                                            enableTrackSlot size="25px"
                                         />
                                     }
                                 </Button>
@@ -166,19 +169,19 @@ const ForgotPassword = () => {
                             <div className="w-50">
                                 <Link to='/login'>
                                     <Button className="col btn-lg ml-1 cancel" variant="outlined">
-                                        بازگشت
+                                        {t("بازگشت", "Back")}
                                     </Button>
                                 </Link>
                             </div>
                         </div>
 
                         <p className="txt">
-                            حساب کاربری دارید؟ 
-                            <Link to="/logIn" className="border-effect me-2">ورود به حساب</Link>
+                            {t("حساب کاربری دارید؟", "Already have an account?")}
+                            <Link to="/logIn" className="border-effect me-2">{t("ورود به حساب", "Sign in")}</Link>
                         </p>
 
                         <h6 className="mt-5 text-center font-weight-bold">
-                            آموزشگاه آزاد نانوزیست فناوری اوژن
+                            {t("آموزشگاه آزاد نانوزیست فناوری اوژن", "Ogene Nanobiotechnology Training Institute")}
                         </h6>
                     </form>
                 </div>

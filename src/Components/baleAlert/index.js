@@ -1,8 +1,10 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext } from "react";
 import Logo from "./../../assets/baleLogo.png";
 import { MyContext } from "../../App";
 
 const BaleAlert = () => {
+    const { t } = useLanguage();
 
     const context = useContext(MyContext);
 
@@ -15,7 +17,7 @@ const BaleAlert = () => {
                         <img src={Logo} />
                     </a>
                     <div className="text d-flex align-items-center">
-                        <p className="mb-0 text-nowrap">در چنل بله ما عضو شوید!</p>
+                        <p className="mb-0 text-nowrap">{t("در چنل بله ما عضو شوید!")}</p>
 
                         <span className="svg" onClick={() => context.setIsBaleIconShown(false)}>&times;</span>
                     </div>

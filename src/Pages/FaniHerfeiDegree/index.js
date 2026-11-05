@@ -1,212 +1,169 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from "./../../assets//degree/full logo.png";
-import OrgLogo from "./../../assets/degree/faniherfeiOrg.png";
-import TablePic from "./../../assets/degree/table.png";
-import DegreeExample from "./../../assets/degree/degreeExample.jpeg";
-
+import { FiArrowLeft, FiArrowUpLeft, FiChevronDown, FiChevronLeft, FiExternalLink } from "react-icons/fi";
+import Logo from "../../assets/degree/full logo.png";
+import OrgLogo from "../../assets/degree/faniherfeiOrg.png";
+import TablePic from "../../assets/degree/table.png";
+import DegreeExample from "../../assets/degree/degreeExample.jpeg";
 import { MyContext } from "../../App";
+import { degreeGuideGroups } from "./degreeGuideData";
+import "./degree.css";
+
+const certificateTypes = [
+  { number: "۰۱", title: "مدرک رسمی", description: "گواهینامه‌ای که پس از قبولی در آزمون‌های سازمان آموزش فنی و حرفه‌ای صادر می‌شود.", titleEn: "Official certificate", descriptionEn: "A certificate issued after passing examinations held by the Technical and Vocational Training Organization." },
+  { number: "۰۲", title: "مدرک مورد تأیید", description: "گواهینامه‌ای که آموزشگاه‌های آزادِ مورد تأیید سازمان، برای دوره‌های خود ارائه می‌کنند.", titleEn: "Approved certificate", descriptionEn: "A course certificate issued by a private institute approved by the organization." },
+  { number: "۰۳", title: "گذر مهارتی", description: "گواهینامه شرکت در همایش‌ها، سمینارها و کارگاه‌های کوتاه‌مدت مهارتی.", titleEn: "Skills participation", descriptionEn: "A participation certificate for conferences, seminars and short skills workshops." },
+];
+const degreeSteps = [
+  { number: "۰۱", title: "دوره", description: "شرکت در دوره آموزشی مرتبط با مهارت مورد نظر", titleEn: "Course", descriptionEn: "Complete training relevant to your chosen skill" },
+  { number: "۰۲", title: "آزمون", description: "شرکت در آزمون‌های نظری و عملی مطابق برنامه سازمان", titleEn: "Examination", descriptionEn: "Take the theoretical and practical examinations on the organization’s schedule" },
+  { number: "۰۳", title: "ارزیابی", description: "سنجش مهارت و کسب نمره قبولی در ارزیابی‌ها", titleEn: "Assessment", descriptionEn: "Demonstrate your skills and achieve the required passing scores" },
+  { number: "۰۴", title: "استعلام", description: "دریافت و استعلام گواهینامه از طریق سامانه سازمان", titleEn: "Verification", descriptionEn: "Receive and verify your certificate through the organization’s portal" },
+];
+// English rendering of the existing comparison image, using the same ratings.
+const comparisonColumns = ["Official education diploma", "Government employment", "Migration abroad", "Private companies", "Official translation value"];
+const comparisonRows = [
+  { name: "Academic-centre certificate", ratings: ["yes", "discretionary", "no", "yes", "no"] },
+  { name: "Government-employee certificate", ratings: ["no", "no", "no", "discretionary", "no"] },
+  { name: "Technical and vocational certificate", ratings: ["yes", "yes", "yes", "yes", "yes"] },
+  { name: "Neighbourhood-centre certificate", ratings: ["no", "no", "no", "discretionary", "no"] },
+];
+const comparisonRatings = { yes: "Recognized", no: "Not recognized", discretionary: "Discretionary" };
 
 const FaniHerfeiDegree = () => {
+  const { t, dir, isEnglish, localize } = useLanguage();
+  const { setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar } = useContext(MyContext);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setIsShowFooter(true);
+    setIsShowNavbar(true);
+    setIsShowCalenderBar(true);
+  }, [setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar]);
 
-
-    const context = useContext(MyContext);
-
-    useEffect(() => {
-        window.scrollTo(0,0);
-    } ,[]);
-
-    useEffect(() => {
-        context.setIsShowFooter(true); 
-        context.setIsShowNavbar(true);
-        context.setIsShowCalenderBar(true);
-    }, []);
-
-
-    return (
-        <>
-        <div className="container degreePage">
-            <p className="mb-1 mt-4 me-4 me-lg-0 breadCrumb ">
-                <Link to="/" ><b> خانه </b></Link> /
-                <Link to="" ><b> مدرک فنی حرفه ای </b></Link> 
-            </p>
-            
-            <div className="banner text-center">
-                <h1>مدرک فنی و حرفه‌ ای</h1>
-                <h5>چرا آموزشگاه نانو زیست فناوری اوژن؟</h5>
-                <img src={Logo} /> 
+  return (
+    <main className="degreeLanding" dir={dir}>
+      <section className="degreeHero" aria-labelledby="degree-title">
+        <div className="degreeShell">
+          <nav className="degreeBreadcrumb" aria-label={t("مسیر صفحه", "Breadcrumb")}>
+            <Link to="/">{t("خانه", "Home")}</Link><FiChevronLeft aria-hidden="true" />
+            <span aria-current="page">{t("مدرک فنی و حرفه‌ای", "Technical and vocational certificate")}</span>
+          </nav>
+          <div className="degreeHeroGrid">
+            <div className="degreeHeroCopy">
+              <h1 id="degree-title">{t("مدرک فنی و حرفه‌ای", "Technical and vocational certificate")}</h1>
+              <p>{t("مسیر دریافت گواهینامه مهارت، از آموزش تا ارزیابی", "Your path to skills certification, from training to assessment")}</p>
             </div>
-
-            <div className="content">
-                <p> 
-                    آموزشگاه نانو زیست فناوری اوژن (تکوین) با هدف تعریف، تعیین و هدایت پایان نامه و پروژه های کارشناسی ارشد و دکتری در رشته ژنتیک پزشکی و مولکولی و رشته های مرتبط (میکروبیولوژی، بیوتکنولوژی، بیوانفورماتیک و …) و همچنین برگزاری دوره ها و کارگاه های متفاوت و انجام خدمات آزمایشگاهی مورد نیاز دانشجویان و اساتید محترم، تاسیس شده است. <br /><br />
-                    آموزشگاه نانو زیست فناوری اوژن (تکوین) اولین آموزشگاه رسمی فنی و حرفه ای در تهران است که با در اختیار داشتن تجهیزات و فضای مناسب آزمایشگاهی و همچنین با به کار گیری اساتید مجرب در زمینه ی تکنیک های مختلف آزمایشگاهی و ارائه ی مدرک بین المللی و قابل ترجمه از فنی و حرفه ای برای تقویت رزومه جهت اشتغال، ادامه تحصیل و مهاجرت، در خدمت دانشجویان، کارآموزان و اساتید گرامی می باشد.
-                </p>
-
-
-                <h3>مدارک فنی و حرفه ای؛ مزایا، انواع و نحوه دریافت آنها</h3>
-
-                <p>
-                    مدرک فنی و حرفه ای مدرکی بین‌المللی است که در سایر کشورها نیز اعتبار بالایی دارد. باتوجه به اهمیت مهارت آموزی و دریافت گواهینامه فنی حرفه ای برای ورود به بازار کار و ارتقا شغلی؛ در این مقاله پس از معرفی سازمان فنی و حرفه ای، اطلاعات کاملی در مورد مدرک فنی حرفه ای و به خصوص مزایا و نحوه دریافت آن ارائه شده است.
-                </p>
-                <p>
-                    در ضمن این امکان در آموزشگاه نانو زیست فناوری اوژن (تکوین) فراهم شده است، که دانش پذیران بتوانند در صورت سپری کردن دوره‌های آموزشگاه، برای سرفصل‌های مرتبط اقدام به اخذ مدرک فنی‌ و حرفه‌ای نمایند.
-                </p>
-
-                <h3>تاریخچه سازمان فنی و حرفه‌ ای</h3>
-                <p>
-                    سازمان آموزش فنی و حرفه‌ای کشور از سازمان‌های وابسته به وزارت کار و امور اجتماعی است که ریشه شکل‌گیری آن به تصویب آیین‌نامه کارآموزی و افزایش مهارت در 27 دی سال 1339 شورای عالی کار برمی‌گردد. بعد از انقلاب اسلامی، این سازمان در سال 1359 از ادغام سه واحد آموزشی “اداره کل تعلیمات حرفه‌ای وزارت کار و امور اجتماعی”، “صندوق کارآموزی” و “کانون کارآموزی” با نام “سازمان آموزش فنی و نیروی انسانی” تشکیل شد و در سال 1360 به “سازمان آموزش فنی و حرفه‌ای کشور” تغییر نام یافت.
-                </p>
-                <p>
-                    این سازمان علاوه بر ستاد مرکزی، دارای ۳۱ اداره کل در سطح کشور و یک مرکز تربیت مربی است و به منظور دست‌یابی به تازه‌های علوم و فناوری روز و همگامی با استانداردهای بین‌المللی، همواره سعی بر گسترش روابط بین‌المللی از جمله با سازمان بین‌المللی کار (ILO) و سازمان بین‌المللی آموزش حرفه‌‌ای و کشورهای مختلف دنیا نموده‌است.
-                </p>
-
-                <div className="text-center orgLink mt-3">
-                    <h2>جهت ورود به سایت سازمان فنی و حرفه ای، روی لینک زیر کلیک کنید.</h2>
-                    <a href="https://irantvto.ir/" target="_blank">
-                        <img src={OrgLogo} />
-                    </a>
-                </div>
-                <div className="text-center orgLink mt-3">
-                    <h2>جهت ورود به پورتال سازمان فنی و حرفه ای، روی لینک زیر کلیک کنید.</h2>
-                    <a href="https://www.portaltvto.com/" target="_blank">
-                        <img src={OrgLogo} />
-                    </a>
-                </div>
-
-                <h3>ماموریت اصلی</h3>
-                <p>
-                    ماًموریت اصلی این سازمان، آموزش مهارت، پژوهش، تولید استاندارد آموزشی و ارزشیابی نیروی کار است. سازمان آموزش فنی و حرفه‌ای کشور به کمک 552 مرکز آموزشی ثابت و با همراهی 11.700 آموزشگاه بخش خصوصی و 21 هزار مربی خود، سالانه حدوداً به 1/5 میلیون نفر در دو بخش دولتی و خصوصی، خدمات آموزشی ارائه می‌کند.
-                </p>
-                <h3>گروه‌های هدف مدرک فنی و حرفه‌ ای</h3>
-                <p>
-                    گروه‌های هدف آموزش‌های مهارتی عبارتند از: کارجویان، شاغلین (بنگاه‌های اقتصادی، اتحادیهها و اصناف)، دانشجویان و فارغ‌التحصیلان دانشگاهی، دانش‌آموزان، سربازان وظیفه، ساکنین مناطق محروم، مرزی و سکونت‌گاه‌های غیررسمی، گروه‌های در معرض آسیب (از جمله زنان سرپرست خانوار و کودکان کار)، زنان خانه‌دار، افراد دارای معلولیت، روستاییان، عشایر، زندانیان و خانواده‌هایشان، معتادان بهبود یافته، آسیب‌دیدگان اجتماعی، اتباع خارجی و پناهندگان، مربیان سایر کشورها و … .
-                </p>
-
-                <h3>مرکز تربیت مربی و پژوهش‌های فنی و حرفه‌ ای</h3>
-                <p>
-                    مرکز تربیت مربی و پژوهش های فنی و حرفه‌ای، یکی از مراکز منحصر به فرد آموزشی در خاورمیانه است که به کمک 16 دپارتمان تخصصی خود، در نقش واحد تحقیق و توسعه سازمان عمل کرده و زمینه انتقال دانش و به‌کارگیری فن‌آوری‌های جدید را میسر می‌سازد.
-                </p>
-
-                <h3>تدوین استاندارد</h3>
-                <p>
-                    تدوین استاندارد آموزش مهارت از اقدامات زیربنایی و نخستین حلقه از فرایند آموزش در سازمان است. این مهم با کمک کارگروه‌هایی متشکل از اتحادیه‌ها، اصناف، صاحبان مشاغل و مربیان انجام می‌شود. تاکنون بیش از 5400 استاندارد آموزشی در چهار خوشه صنعت، خدمات، فرهنگ و هنر و کشاورزی تدوین شده است.
-                </p>
-
-                <h3>سنجش مهارت و صلاحیت حرفه‌ ای</h3>
-                <p>
-                    مهارت و صلاحیت حرفه‌ای چهار گروه به صورت مستمر توسط سازمان سنجش می‌شود. این گروه‌ها عبارتند از:
-                </p>
-                <ul className="list-unstyled">
-                    <li>مهارت آموختگان مراکز آموزشی دولتی و غیردولتی</li>
-                    <li>متقاضیان معرفی شده از سوی شورای نظام صنفی برای تعیین صلاحیت فنی و تخصصی</li>
-                    <li>متقاضیان معرفی شده از سوی دستگاه‌ها یا نهادهای طرف تفاهم با سازمان</li>
-                    <li>متقاضیان پروانه مهارت فنی صنعت ساختمان</li>
-                </ul>
-
-                <h3>حضور در عرصه بین‌ المللی</h3>
-                <p>
-                    این سازمان در عرصه بین‌المللی نیز در راستای حضور مؤثر و به منظور ارتقای سطح آموزش‌های فنی و حرفه‌ای و دست‌یابی به استانداردهای روز جهانی، تعاملات گسترده و مستمری در دستور کار دارد. در این زمینه برگزاری 18 دوره مسابقات ملی مهارت با حضور بیش از 10 هزار نفر رقابت‌کننده از سراسر کشور برای آماده‌سازی تیم ملی مهارت و 9 دوره حضور در رقابت‌های بین‌المللی حائز اهمیت است. همچنین همکاری با کمیساریای عالی سازمان ملل در امور پناهندگان، آژانس همکارهای بین‌المللی ژاپن و کره، یونسکو، یونیدو، یونیووک و بی آی بی بی از دیگر اقدامات این سازمان در عرصه بین‌المللی است.
-                </p>
-                <p>
-                    مدارک صادر شده از این سازمان به علت دارا بودن کد ملی آموزش شغل ISCO، بین‌المللی بوده و در سایر کشورها معتبر است و به رسمیت شناخته می‌شود. بسیاری از کشورها جهت پذیرش اقامت و مهاجرت مدارک فنی و حرفه‌ای را به ‌عنوان امتیاز برای متقاضیان در نظر می‌گیرند. این مدارک قابل ترجمه رسمی هستند و به علت دارا بودن کد بین‌المللی در سازمان جهانی کار (ILO) در ۱۸۶ کشور دنیا معتبر است. لیست کشورهای عضو سازمان جهانی کار را اینجا مشاهده نمایید.
-                </p>
-
-                <h3>گفتگوی ملی مهارت</h3>
-                <p>
-                    با توجه به نقش کلیدی سازمان آموزش فني و حرفه‌اي در تحقق دو هدف مهم رفع فقر و توسعه اشتغال از طریق آموزش مهارت، این سازمان؛ برنامه‌های تحولی خود را با ارائه آموزش‌های هدفمند و منطبق با نیاز بازار کار ارائه می‌کند.
-                </p>
-                <p>یقیناً این مهم با حمایت نهادهای سیاستگذار در زمینه تدارک برنامه‌ای منسجم برای تقسیم کار ملی، بین دستگاه‌های مختلف، در عبور از فقر مهارتی حاکم در کشور و فراگیر نمودن گفتگوی ملی مهارت، محقق می‌شود.</p>
-                <p>مدرک فنی و حرفه‌ای بیانگر مهارت انجام یک شغل یا حرفه بوده است که دارای اعتبار در بیش از 70 کشور است.</p>
-
-                <div className="text-center">
-                    <h1>انواع مدارک فنی و حرفه‌ ای</h1>
-                </div>
-
-                <h3>مدارک رسمی فنی و حرفه‌ای</h3>
-                <p>
-                    مدارک رسمی فنی و حرفه‌ای، مدارکی هستند که در سازمان فنی و حرفه ای کشور اعتبار دارند. اعتبار مدرک فنی حرفه‌ای منوط به سازمان فنی و حرفه‌ای نیست و این مدرک در خارج از کشور نیز معتبر است. گرفتن گواهینامه رسمی فنی و حرفه‌ای نیازمند شرکت در آزمون‌هایی است که برگزار می‌شوند. اگر نمرات قبولی در آزمون فنی و حرفه‌ای کشور را کسب کنید، می‌توانید از مزایای مدرک فنی و حرفه‌ای برخوردار شوید. در ادامه می‌توانید درباره‌ی مزایای مدرک فنی و حرفه‌ای بیشتر بخوانید.
-                </p>
-                <h3>مدارک مورد تایید فنی و حرفه‌ای</h3>
-                <p>
-                    مدارک مورد تایید فنی و حرفه‌ای مدارکی هستند که توسط آموزشگاه‌های آزاد که مورد تایید سازمان فنی و حرفه ای کشور هستند ارائه می‌گردند. بر روی این مدارک فنی نام و نشان موسسه آزاد و مدیر موسسه درج شده است. همچنین نشان فنی و حرفه‌ای روی آن مشاهده می‌شود . مدارک مورد تایید چون توسط سازمان فنی و حرفه‌ای مستقیم صادر نمی‌شوند قابل ترجمه نمی‌باشند. همچنین گرفتن وام و تسهیلات برای افرادی که مدارک مورد تایید دارند امکان‌پذیر نیست .
-                </p>
-                <h3>مدارک گذر مهارتی فنی و حرفه‌ای</h3>
-                <p>
-                    مدارک گذر مهارتی فنی و حرفه‌ای از جمله مدارک غیررسمی است. مدارک گذر مهارتی تنها برای همایشها، سمینارهای دو ساعته و کارگاه‌ها به مراجعین اهدا خواهد شد و نباید برای آن‌ها هزینهای دریافت شود.
-                </p>
-                <h3>نحوه دریافت گواهینامه فنی حرفه‌ ای</h3>
-                <p>
-                    مهارت‌آموز جهت دریافت این مدرک طبق ضوابط سازمان آموزش فنی و حرفه‌ای در آزمون‌های هماهنگ یا آنلاین سازمان فنی و حرفه‌ای که پس از پایان دوره است، شرکت کرده و موفق به کسب نمره قبولی شود. این گواهینامه‌ها در سایت رسمی سازمان آموزش فنی و حرفه‌ای قابل استعلام و اعتبارسنجی می‌باشند. آدرس سایت جهت استعلام مدرک و سایت اصلی سازمان فنی و حرفه‌ای http://portaltvto.com است.گواهینامه‌های سازمان آموزش فنی و حرفه‌ای از سال ۱۳۹۲ صرفاً به‌ صورت الکترونیکی می‌باشد.
-                </p>
-                <p>
-                    به علت وجود ضوابط رسمی سازمان آموزش فنی و حرفه‌ای و وجود آزمون تئوری و عملی، صدور مدارک حدود سه تا شش ماه زمان می‌برد. گواهینامه یا مدارک رسمی سازمان فنی و حرفه‌ای نشان‌دهنده مهارت فرد در رشته مربوطه است و در اصل ترجمه رسمی آن به همراه تایید دادگستری و وزارت امور خارجه، حکم یک سند بین‌المللی را خواهد داشت و فرد می‌تواند با ارائه ترجمه رسمی مدارک فنی حرفه‌ای، از مزایای احتمالی آن در هر کشوری بهره‌مند شود.
-                </p>
-
-                <div className="text-center">
-                    <h1>دریافت مدرک فنی و حرفه‌ای با شرکت در دوره‌های آموزشگاه نانو زیست فناوری اوژن</h1>
-                    <p>با شرکت در برخی دوره‌های آموزشگاه نانو زیست فناوری اوژن، امکان دریافت مدرک فنی و حرفه‌ای در برخی سرفصل‌های مرتبط را دارید.</p>
-                </div>
-
-                <h3>مدرک سازمان فنی و حرفه‌ای در خارج از کشور</h3>
-                <p>
-                    ی از دلایلی که افراد مهاجرت می‌کنند کاریابی و اشتغال‌زایی است. مهاجران برای این که بتوانند در کشورهای دیگر کار خوبی پیدا کنند نیاز به مدرک معتبر دارند. مدرک رشته‌های فنی و حرفه‌ای از جمله معتبرترین مدارک موجود در کشور است که هر یک از آن‌ها قابلیت ترجمه دارد. یعنی کارآموز با گذراندن دوره‌های مربوطه در آموزشگاه‌هایی که دارای مجوز از سازمان فنی و حرفه‌ای هستند و پس از گذراندن آزمون مربوطه و کسب نمره قبولی، مدرک خود را دریافت کرده و با مراجعه به دفاتر رسمی ترجمه می‌تواند آن را ترجمه کند و برای مهاجرت استفاده کند. از این رو اگر به دنبال مهاجرت و زندگی در کشورهای دیگر هستید تحصیل در رشته‌های فنی و دریافت این مدرک به شما کمک می‌کند تا آسان‌تر مهاجرت نمایید.
-                </p>
-                <h3>دیگر مزایای مدرک فنی و حرفه‌ ای</h3>
-                <p>
-                    داشتن مدرک فنی و حرفه‌ای علاوه بر این که نشان‌گر مهارت انجام یک کار است و در بیش از ۷۰ کشورهای دنیا اعتبار دارد یک سری مزایای دیگری هم دارد. اولین و مهم‌ترین مزیت این مدرک این است که کارآموز راحت‌تر و سریع‌تر نسبت به سایرین در بازار کار مشغول به کار می‌شود؛ چون که در رشته‌های فنی باید علاوه بر تحصیل، مهارت هم داشت تا در امتحان عملی و کاری موفق شد. یعنی کسانی که در موسسات فنی تحصیل می‌کنند هم مهارت و تجربه کسب می‌کنند و هم مدرک دریافت می‌نمایند.
-                </p>
-                <h3>استفاده از تسهیلات</h3>
-                <p>
-                    یکی دیگر از مزایایی که مدرک فنی و حرفه‌ای برای بسیاری از افراد دارد؛ امکان دریافت وام و تسهیلات است. خیلی از کسانی که می‌خواهند در رشته‌های فنی تحصیل کنند علاقه دارند تا کسب و کار خودشان را ادامه دهند و کار آفرین باشند به همین دلیل برای شروع کار نیاز به کمک و سرمایه مالی دارند. مدرک رسمی فنی و حرفه‌ای به افراد کمک می‌کند تا راحت‌تر بتوانند برای گرفتن وام و تسهیلات اقدام کنند.
-                </p>
-                <h3>اختصاص وام به کارجویان دارای مدرک فنی حرفه‌ای</h3>
-                <p>
-                    دستگاه‌های متولی شغل تسهیلات و وام‌های بسیار خوبی برای کارجویان در نظر گرفته که از جمله آن‌ها اختصاص وام به مشاغل روستایی، مشاغل خانگی و راه‌اندازی بنگاه‌های اقتصادی زودبازده است که از محل صندوق توسعه ملی تسهیلات بسیار خوبی را ارائه می‌دهند که این تسهیلات در بودجه فعلی نسبت به ادوار گذشته عدد و رقم بالاتری دارد.
-                </p>
-                <h3>امکان تدریس در مراکز آموزشی</h3>
-                <p>
-                    اگر مدرک فنی و حرفه‌ای داشته باشید و بتوانید مهارت کافی و تجربه هم کسب کنید در آموزشگاه فنی برای شما کار وجود دارد. مربی‌گری و تدریس آینده کسانی است که در امتحان فنی نمره خوبی کسب کرده‌اند و مهارت معلمی و آموزش هم دارند و می‌توانند مطلب را به خوبی به مخاطب ارائه دهند.
-                </p>
-                <h3>کارت مهارت</h3>
-                <p>
-                    همان‌طور که می‌دانید بخش اعظمی از شاغلان حوزه‌های ساختمان، صنعت، فرش و صنایع دستی نیازمند دریافت کارت مهارت هستند. کارگران نیز از اهمیت داشتن کارت مهارت آگاهند زیرا کارت مهارت از مهم‌ترین شروط بیمه کارگران مهارتی به شمار می‌رود و همچنین می‌توان گفت با داشتن این کارت می‌توانند در لیست بیمه کارفرمایان برای معرفی به سازمان تامین اجتماعی و بهره‌مندی از مزایای بیمهای قرار بگیرند.
-                </p>
-                <p>سازمان فنی و حرفه‌ای متولی صدور کارت‌های مهارت در کشور است.</p>
-                <p>
-                    به منظور ایجاد و افزایش تخصص، کسب توانایی و مهارت شغلی در احراز شغل رکن اصلی فعالیتهای سازمان آموزش فنی و حرفه‌ای کشور، آموزش‌های علمی، عملی و کاربردی است که منجر به دریافت گواهینامه مهارت می‌شود.
-                </p>
-                <p>
-                    افراد متقاضی کارت مهارت ابتدا باید در آزمون‌‌های سنجش مهارت که به منظور تعیین صلاحیت حرفه‌ای و فنی افراد در حوزه مورد نظر برگزار می‌گردد، شرکت کنند و در صورت کسب نمره قبولی موفق به دریافت گواهینامه مهارتی می‌شوند.
-                </p>
-                <h3>سازمان بین‌المللی کار :ILO</h3>
-                <p>
-                    سازمان بین‌المللی کار یکی از موسسات تخصصی سازمان ملل متحد است که به امور مربوط به کار و کارگران می‌پردازد. این سازمان در سال ۱۹۱۹ و در نتیجه بحث‌های کنفرانس صلح پاریس تأسیس شد. سازمان بین‌المللی کار در آغاز وابسته به جامعه ملل بود و پس از تأسیس سازمان ملل متحد از سازمان‌های وابسته به آن شد. منشور فعلی سازمان که به بیانیه فیلادلفیا معروف است در سال ۱۹۴۴ تصویب شد. مقر این سازمان در شهر ژنو در کشور سوئیس است. این سازمان هر سال در ماه خرداد کنفرانسی برگزار می‌کند.
-                </p>
-
-
-                <h3>مقایسه مدرک فنی حرفه‌ ای و مدارک دیگر موسسات</h3>
-                <p>
-                    همان‌طور که می‌دانید ارگان‌ها، نهادها و موسسات زیادی هستند که ادعای صدور مدرک معتبر را دارند. موسساتی مثل جهاد دانشگاهی، موسسات تحت نظارت آموزش و پرورش، موسسات وابسته به وزارت فرهنگ و ارشاد اسلامی، موسسات آموزشی مستقل، آموزشگاه‌های آزاد فنی حرفه‌ای، سرای محله وابسته به شهرداری، شرکت‌های خصوصی و … .
-                </p>
-
-                <p>
-                    برای مثال آموزش‌هایی که توسط جهاد دانشگاهی دانشگاه‌های کشور برگزار می‌شود، بیشتر در جهت استفاده از فضای آموزشی است که در اختیار دانشگاه‌ها قرار می‌گیرد. از این رو اقدام به برگزاری دوره‌های آموزشی می‌نمایند و این واحدها با عقد قرارداد با یک پیمانکار، دوره‌های آموزشی را برگزار نموده و در نهایت مدرکی فاقد اعتبار لازم را به مخاطبین خود ارائه می‌نمایند. همچنین بارها مشاهده شده است افراد زیادی جهت آموزش مهارت به سرای محله‌ که وابسته به شهرداری است مراجعه نموده‌اند، که البته دلیل عمده ثبت‌نام در این مراکز پایین بودن شهریه است، و در نهایت نه آموزش مناسبی گذرانده‌اند و نه مدرک معتبری دریافت کرده‌اند. در جدول زیر به طور خلاصه به مقایسه این مدارک می‌پردازیم:
-                </p>
-
-                <h3>جدول بررسی اعتبار مدارک صادره از سازمان‌های مختلف در ایران</h3>
-                <div className="text-center mt-5 tablePic">
-                    <img src={TablePic} className="" />
-                </div>
-
-                <div className="text-center mt-4">
-                    <h1>نمونه مدرک فنی و حرفه ای</h1>
-                    <img src={DegreeExample} className="w-50" />
-                </div>
-            </div>
+            <figure className="degreeSpecimen">
+              <a href={DegreeExample} target="_blank" rel="noopener noreferrer" aria-label={t("مشاهده نمونه گواهینامه مهارت در اندازه کامل (پنجره جدید)", "View the full-size sample skills certificate (opens in a new window)")}>
+                <img src={DegreeExample} width="750" height="1072" alt={t("نمونه گواهینامه مهارت سازمان آموزش فنی و حرفه‌ای", "Sample skills certificate from the Technical and Vocational Training Organization")} />
+              </a>
+              <figcaption>{t("نمونه گواهینامه مهارت", "Sample skills certificate")} <FiArrowUpLeft aria-hidden="true" /></figcaption>
+            </figure>
+          </div>
         </div>
-        </>
-    );
-}
- 
+      </section>
+
+      <div className="degreeShell">
+        <section className="degreeIntro" aria-labelledby="degree-intro-title">
+          <div>
+            <h2 id="degree-intro-title">{t("چرا آموزشگاه اوژن؟", "Why Ogene Institute?")}</h2>
+            <p>{t("آموزشگاه نانو زیست فناوری اوژن (تکوین)، برگزارکننده دوره‌ها و کارگاه‌های کاربردی در حوزه نانو زیست فناوری است. با گذراندن برخی دوره‌های آموزشگاه، امکان اقدام برای دریافت مدرک فنی و حرفه‌ای در سرفصل‌های مرتبط را دارید.", "Ogene Nano-Biotechnology Institute (Takvin) offers practical courses and workshops in nano-biotechnology. Completing selected courses allows you to apply for technical and vocational certification in relevant subjects.")}</p>
+          </div>
+          <img src={Logo} width="700" height="380" loading="lazy" alt={t("آموزشگاه نانو زیست فناوری اوژن (تکوین)", "Ogene Nano-Biotechnology Institute (Takvin)")} />
+        </section>
+        <section className="degreeTypes" aria-labelledby="degree-types-title">
+          <div className="degreeSectionHeading">
+            <h2 id="degree-types-title">{t("با انواع گواهینامه آشنا شوید", "Explore the types of certificate")}</h2>
+            <p>{t("با تفاوت گواهینامه‌های رسمی، مورد تأیید و گذر مهارتی آشنا شوید.", "Understand the differences between official, approved and skills participation certificates.")}</p>
+          </div>
+          <div className="degreeTypeGrid">
+            {certificateTypes.map((type) => (
+              <article className="degreeType" key={isEnglish ? String(certificateTypes.indexOf(type) + 1).padStart(2, "0") : type.number}>
+                <span className="degreeTypeNumber" aria-hidden="true">{isEnglish ? String(certificateTypes.indexOf(type) + 1).padStart(2, "0") : type.number}</span>
+                <h3>{localize(type, 'title')}</h3><p>{localize(type, 'description')}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <section className="degreeProcess" aria-labelledby="degree-process-title">
+        <div className="degreeShell">
+          <div className="degreeSectionHeading">
+            <h2 id="degree-process-title">{t("مسیر دریافت مدرک", "Your path to certification")}</h2>
+            <p>{t("از شرکت در دوره تا دریافت گواهینامه، این مسیر طی می‌شود.", "Follow these steps from taking a course to receiving your certificate.")}</p>
+          </div>
+          <ol className="degreeStepGrid">
+            {degreeSteps.map((step) => (
+              <li className="degreeStep" key={isEnglish ? String(degreeSteps.indexOf(step) + 1).padStart(2, "0") : step.number}>
+                <div className="degreeStepHeading"><span aria-hidden="true">{isEnglish ? String(degreeSteps.indexOf(step) + 1).padStart(2, "0") : step.number}</span><h3>{localize(step, 'title')}</h3></div>
+                <p>{localize(step, 'description')}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="degreeGuide degreeShell" aria-labelledby="degree-guide-title">
+        <div className="degreeGuideGrid">
+          <div>
+            <h2 id="degree-guide-title">{t("راهنمای مدرک فنی و حرفه‌ای", "Technical and vocational certificate guide")}</h2>
+            <p className="degreeGuideLead">{t("برای آشنایی بیشتر با انواع گواهینامه، شرایط دریافت و مراحل مرتبط، بخش مورد نظر را باز کنید.", "Open a section to learn about certificate types, eligibility and the steps involved.")}</p>
+            <div className="degreeDisclosureList">
+              {degreeGuideGroups.map((group) => (
+                <details className="degreeDisclosure" key={group.id} aria-labelledby={`degree-guide-${group.id}`}>
+                  <summary id={`degree-guide-${group.id}`}><span>{localize(group, 'title')}</span><FiChevronDown aria-hidden="true" /></summary>
+                  <div className="degreeDisclosureBody">
+                    {group.sections.map((section) => (
+                      <section key={localize(section, 'title')}>
+                        <h3>{localize(section, 'title')}</h3>
+                        {(isEnglish ? section.paragraphsEn : section.paragraphs).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+                        {section.items ? <ul>{(isEnglish ? section.itemsEn : section.items).map((item, index) => <li key={index}>{item}</li>)}</ul> : null}
+                      </section>
+                    ))}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+          <figure className="degreeComparison">
+            <figcaption><h3>{t("مقایسه انواع مدارک", "Compare qualifications")}</h3><p>{t("جدول مقایسه مدارک و راهنمای آن", "Qualification comparison table and key")}</p></figcaption>
+            {isEnglish ? (
+              <div className="degreeComparisonScroll" tabIndex={0} role="region" aria-label="Qualification comparison table">
+                <table className="degreeComparisonTable">
+                  <caption>Comparison shown in the institute’s original qualification guide</caption>
+                  <thead><tr><th scope="col">Qualification</th>{comparisonColumns.map((column) => <th scope="col" key={column}>{column}</th>)}</tr></thead>
+                  <tbody>{comparisonRows.map((row) => <tr key={row.name}><th scope="row">{row.name}</th>{row.ratings.map((rating, index) => <td key={comparisonColumns[index]}><span className={`degreeRating degreeRating-${rating}`}>{comparisonRatings[rating]}</span></td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            ) : <a href={TablePic} target="_blank" rel="noopener noreferrer" aria-label={t("مشاهده جدول مقایسه مدارک در اندازه کامل (پنجره جدید)", "View the full-size qualification comparison table (opens in a new window)")}>
+              <img src={TablePic} width="1727" height="527" loading="lazy" alt={t("جدول مقایسه مدارک فنی و حرفه‌ای، جهاد دانشگاهی، کارکنان دولت و سرای محله از نظر کاربرد و ارزش ترجمه؛ همراه با راهنمای رنگ‌ها", "Comparison of vocational, academic-centre, government-employee and neighbourhood-centre certificates by use and translation value, with a colour key")} />
+              <span className="degreeImageLink">{t("مشاهده جدول در اندازه کامل", "View full-size table")} <FiArrowUpLeft aria-hidden="true" /></span>
+            </a>}
+          </figure>
+        </div>
+        <section className="degreeOfficial" aria-labelledby="degree-official-title">
+          <img src={OrgLogo} width="300" height="194" loading="lazy" alt={t("نشان سازمان آموزش فنی و حرفه‌ای کشور", "Iran Technical and Vocational Training Organization emblem")} />
+          <div>
+            <h2 id="degree-official-title">{t("لینک‌های رسمی و مرتبط", "Official and related links")}</h2>
+            <p>{t("برای کسب اطلاعات بیشتر و استعلام گواهینامه، به وب‌سایت‌های سازمان مراجعه کنید.", "Visit the organization’s websites for more information and certificate verification.")}</p>
+            <div className="degreeOfficialLinks">
+              <a href="https://irantvto.ir/" target="_blank" rel="noopener noreferrer">{t("سایت سازمان فنی و حرفه‌ای", "Organization website")} <FiExternalLink aria-hidden="true" /></a>
+              <a href="https://www.portaltvto.com/" target="_blank" rel="noopener noreferrer">{t("پرتال سازمان", "Organization portal")} <FiExternalLink aria-hidden="true" /></a>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section className="degreeRequestBanner" aria-labelledby="degree-request-title">
+        <div className="degreeShell">
+          <h2 id="degree-request-title">{t("برای دریافت مدرک آماده‌اید؟", "Ready to request your certificate?")}</h2>
+          <p>{t("اطلاعات دوره و مشخصات خود را در فرم درخواست وارد کنید.", "Enter your course details and personal information in the request form.")}</p>
+          <Link className="degreeRequestLink" to="/degree/request">{t("دریافت مدرک", "Request a certificate")} <FiArrowLeft aria-hidden="true" /></Link>
+        </div>
+      </section>
+    </main>
+  );
+};
 export default FaniHerfeiDegree;

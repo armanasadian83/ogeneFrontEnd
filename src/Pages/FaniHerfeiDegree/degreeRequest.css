@@ -1,0 +1,106 @@
+.degreeRequestPage {
+    --degree-request-heading: #0b3d38;
+    --degree-request-text: #344b4a;
+    --degree-request-muted: #647674;
+    --degree-request-border: #e0ebe6;
+    --degree-request-accent: #0f766e;
+    padding: 26px 0 48px;
+    background: #f4faf8;
+    color: var(--degree-request-text);
+    font-size: 16px;
+    line-height: 1.8;
+}
+.degreeRequestContainer { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+.degreeRequestBreadcrumb { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; font-size: 14px; }
+.degreeRequestBreadcrumb a { color: var(--degree-request-muted); text-decoration: none; }
+.degreeRequestBreadcrumb a:hover { color: var(--degree-request-accent); }
+.degreeRequestBreadcrumb [aria-current="page"] { color: var(--degree-request-heading); }
+.degreeRequestBreadcrumb svg { width: 15px; height: 15px; color: var(--degree-request-accent); }
+.degreeRequestHeader { text-align: center; margin: 0 0 28px; }
+.degreeRequestHeader h1 { margin: 0 0 8px; color: var(--degree-request-heading); font-size: 36px; font-weight: 800; line-height: 1.5; }
+.degreeRequestHeader p { margin: 0; color: var(--degree-request-text); font-size: 18px; line-height: 1.8; }
+.degreeRequestLayout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: 24px; }
+.degreeRequestForm { min-width: 0; padding: 28px; border: 1px solid var(--degree-request-border); border-radius: 18px; background: #fff; }
+.degreeRequestSection + .degreeRequestSection { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--degree-request-border); }
+.degreeRequestSection h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--degree-request-border); color: var(--degree-request-heading); font-size: 21px; font-weight: 700; line-height: 1.7; }
+.degreeRequestSection h2 svg { width: 25px; height: 25px; flex-shrink: 0; color: var(--degree-request-accent); }
+.degreeRequestGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
+.degreeRequestField { min-width: 0; }
+.degreeRequestField label { display: flex; align-items: baseline; gap: 5px; margin: 0 0 6px; color: #183f3b; font-size: 14px; font-weight: 600; line-height: 1.7; }
+.degreeRequestRequired { color: #d33e3e; }
+.degreeRequestPage .degreeRequestInput, .degreeRequestField textarea {
+    width: 100%;
+    min-width: 0;
+    height: 52px;
+    display: block;
+    padding: 10px 14px;
+    border: 1px solid #d5e5df;
+    border-radius: 12px;
+    outline: none;
+    background: #fff;
+    color: var(--degree-request-heading);
+    font-family: fugen-font, sans-serif !important;
+    font-size: 16px;
+    line-height: 1.8;
+    transition: border-color 150ms, box-shadow 150ms;
+}
+.degreeRequestPage .degreeRequestInput[lang="en"] { font-family: Arial, sans-serif !important; font-size: 14px; }
+.degreeRequestPage[dir="ltr"] .degreeRequestInput, .degreeRequestPage[dir="ltr"] .degreeRequestField textarea { font-family: Arial, sans-serif !important; }
+.degreeRequestPage[dir="ltr"] .degreeRequestBreadcrumb svg, .degreeRequestPage[dir="ltr"] .degreeRequestSubmit svg, .degreeRequestPage[dir="ltr"] .degreeRequestBack svg { transform: scaleX(-1); }
+.degreeRequestPage input::placeholder, .degreeRequestField textarea::placeholder { color: #8c9a98; opacity: 1; }
+.degreeRequestPage .degreeRequestInput:hover, .degreeRequestField textarea:hover { border-color: #a9cbc0; }
+.degreeRequestPage .degreeRequestInput:focus, .degreeRequestField textarea:focus { border-color: #26a999; box-shadow: 0 0 0 3px #26a99914; }
+.degreeRequestDate { position: relative; }
+.degreeRequestDate .degreeRequestInput { padding-left: 44px; text-align: right; }
+.degreeRequestDate > svg { position: absolute; top: 17px; left: 15px; width: 18px; height: 18px; color: #6c807b; pointer-events: none; }
+.degreeRequestDate .rmdp-container { display: block !important; }
+.degreeRequestDate .rmdp-wrapper { color: var(--degree-request-heading); }
+.degreeRequestPage[dir="ltr"] .degreeRequestDate .degreeRequestInput { text-align: left; padding-left: 14px; padding-right: 44px; }
+.degreeRequestPage[dir="ltr"] .degreeRequestDate > svg { left: auto; right: 15px; }
+.degreeRequestPage[dir="ltr"] .degreeRequestAdvice ol { text-align: left; }
+.degreeRequestNotes { grid-column: 1 / -1; }
+.degreeRequestField textarea { min-height: 90px; height: 90px; resize: vertical; }
+.degreeRequestSubmit { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; min-height: 52px; margin-top: 20px; padding: 10px 20px; border: 0; border-radius: 12px; background: var(--degree-request-accent); color: #fff; font-size: 17px; font-weight: 700; line-height: 1.8; cursor: pointer; transition: background 150ms; }
+.degreeRequestSubmit:hover { background: #0c645e; }
+.degreeRequestSubmit svg { width: 22px; height: 22px; }
+.degreeRequestAdvice { padding: 32px 24px 26px; border: 1px solid #e2f1eb; border-radius: 18px; background: #eefaf6; text-align: center; }
+.degreeRequestCertificateIcon { display: block; width: 62px; height: 62px; margin: 0 auto 16px; color: var(--degree-request-accent); }
+.degreeRequestAdvice h2 { margin: 0 0 26px; color: var(--degree-request-heading); font-size: 23px; font-weight: 700; line-height: 1.7; }
+.degreeRequestAdvice ol { display: grid; gap: 22px; list-style: none; margin: 0; padding: 0; text-align: right; }
+.degreeRequestAdvice li { display: flex; align-items: flex-start; gap: 12px; }
+.degreeRequestAdvice li > span { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: #d8efea; color: var(--degree-request-accent); font-size: 15px; font-weight: 700; }
+.degreeRequestAdvice li p { margin: 0; padding-top: 2px; color: var(--degree-request-text); font-size: 15px; line-height: 1.9; }
+.degreeRequestBack { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 28px; padding-top: 22px; border-top: 1px solid #d6ebe4; color: var(--degree-request-accent); font-size: 15px; text-decoration: none; }
+.degreeRequestBack:hover { color: var(--degree-request-heading); }
+.degreeRequestBack svg { width: 20px; height: 20px; flex-shrink: 0; }
+.degreeRequestSubmit:focus-visible, .degreeRequestPage a:focus-visible { outline: 3px solid #26a999; outline-offset: 4px; }
+@media (max-width: 991px) {
+    .degreeRequestLayout { grid-template-columns: minmax(0, 1fr) 250px; gap: 20px; }
+    .degreeRequestForm { padding: 24px; }
+    .degreeRequestAdvice { padding: 28px 20px 24px; }
+    .degreeRequestAdvice h2 { font-size: 21px; }
+}
+@media (max-width: 799px) {
+    .degreeRequestLayout { grid-template-columns: minmax(0, 1fr); }
+    .degreeRequestAdvice { margin-top: 2px; }
+    .degreeRequestAdvice ol { gap: 16px; }
+    .degreeRequestAdvice li { align-items: center; }
+    .degreeRequestBack { margin-top: 22px; padding-top: 18px; }
+}
+@media (max-width: 575px) {
+    .degreeRequestPage { padding: 22px 0 36px; }
+    .degreeRequestContainer { width: calc(100% - 32px); }
+    .degreeRequestBreadcrumb { gap: 7px; margin-bottom: 24px; font-size: 13px; }
+    .degreeRequestBreadcrumb svg { width: 12px; height: 12px; }
+    .degreeRequestHeader { margin-bottom: 24px; }
+    .degreeRequestHeader h1 { font-size: 30px; }
+    .degreeRequestHeader p { font-size: 16px; }
+    .degreeRequestForm { padding: 22px 18px; border-radius: 16px; }
+    .degreeRequestGrid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    .degreeRequestSection h2 { font-size: 20px; }
+    .degreeRequestPage .degreeRequestInput[lang="en"] { font-size: 16px; }
+    .degreeRequestSubmit { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .degreeRequestPage input, .degreeRequestPage textarea, .degreeRequestSubmit { transition: none; }
+}

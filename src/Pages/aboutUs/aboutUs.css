@@ -1,0 +1,2 @@
+.aboutUsSection .changeLangBtn button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.aboutUsSection .changeLangBtn button:focus-visible { outline: 3px solid #26a999; outline-offset: 5px; border-radius: 3px; }

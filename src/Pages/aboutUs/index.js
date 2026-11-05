@@ -1,9 +1,11 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import MainBanner from "./../../assets/aboutUsPage/main.png";
 import SecondImg from "./../../assets/aboutUsPage/second.png";
 import Map from "./../../assets/aboutUsPage//map.png";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { MyContext } from "../../App";
+import "./aboutUs.css";
 
 const content = {
     fa: {
@@ -37,7 +39,7 @@ const content = {
             "Our first priority is to ensure we deliver the highest quality in both the laboratory/practical side and the theoretical/virtual class side to our trainees and colleagues, and we hope to achieve this, with trust in God and your support.",
         whyP2:
             "But beyond being an institute, we want to witness the success of those passionate about medical and molecular genetics. Together with our trainees, students, and esteemed professors, we work to identify our strengths and weaknesses, then strengthen those weaknesses with expert advice and guidance.",
-        contactTitle: "Contact Ogen",
+        contactTitle: "Contact Ogene",
         address:
             "Address: Tehran, Sadeghieh, Ferdows Sharq Blvd, end of Valiasr St., next to Sadeghieh Metro Station, Rose West St., No. 7, Ground Floor",
         phones: "Phone Numbers: 09050160316 - 09050167216 - 02144961487",
@@ -47,28 +49,28 @@ const content = {
 };
 
 const AboutUs = () => {
-    const [lang, setLang] = useState("fa");
+    const { language: lang, setLanguage, dir } = useLanguage();
     const t = content[lang];
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    const context = useContext(MyContext);
+    const { setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar } = useContext(MyContext);
 
     useEffect(() => {
-        context.setIsShowFooter(true);
-        context.setIsShowNavbar(true);
-        context.setIsShowCalenderBar(true);
-    }, []);
+        setIsShowFooter(true);
+        setIsShowNavbar(true);
+        setIsShowCalenderBar(true);
+    }, [setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar]);
 
     const toggleLang = () => {
-        setLang((prev) => (prev === "fa" ? "en" : "fa"));
+        setLanguage(lang === "fa" ? "en" : "fa");
     };
 
     return (
         <>
-            <div className="aboutUsSection container" dir={lang === "fa" ? "rtl" : "ltr"}>
+            <div className="aboutUsSection container" dir={dir}>
                 <div className="d-flex justify-content-between align-items-center mt-4">
                     <p className="mb-1 me-4 me-lg-0 breadCrumb">
                         <Link to="/"><b>{t.home}</b></Link> /
@@ -76,7 +78,7 @@ const AboutUs = () => {
                     </p>
                     <div className="changeLangBtn">
                         {
-                            lang === 'fa' ? <span onClick={toggleLang}>English</span> : <span onClick={toggleLang}>فارسی</span>
+                            lang === 'fa' ? <button type="button" onClick={toggleLang}>English</button> : <button type="button" onClick={toggleLang}>فارسی</button>
                         }
                     </div>
                 </div>
@@ -84,7 +86,7 @@ const AboutUs = () => {
                 <div className="text-center secOne mt-4">
                     <h1>{t.title}</h1>
                     <h3>{t.subtitle}</h3>
-                    <img src={MainBanner} />
+                    <img src={MainBanner} alt={t.subtitle} />
 
                     <p>{t.intro}</p>
                 </div>
@@ -96,7 +98,7 @@ const AboutUs = () => {
                         <p>{t.whyP2}</p>
                     </div>
                     <div className="col-12 col-md-6">
-                        <img src={SecondImg} />
+                        <img src={SecondImg} alt={t.whyTitle} />
                     </div>
                 </div>
 
@@ -105,7 +107,7 @@ const AboutUs = () => {
                 </div>
                 <div className="row secThree">
                     <div className="col-12 col-md-6">
-                        <img src={Map} />
+                        <img src={Map} alt={lang === "en" ? "Ogene institute location map" : "نقشه موقعیت آموزشگاه اوژن"} />
                         <p className="address">{t.address}</p>
                     </div>
                     <div className="col-12 col-md-6">

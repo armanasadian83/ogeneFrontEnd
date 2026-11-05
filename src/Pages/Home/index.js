@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -5,24 +6,24 @@ import 'swiper/css/pagination';
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 
 import ServiceSection from '../../Components/ServiceSectionHome';
-import CoursesInformative from '../../Components/CoursesInformativeHome';
+
 
 import Button from '@mui/material/Button';
 import CoursesSection from '../../Components/CoursesHome';
-import ProductsSection from '../../Components/ProductsHome';
 
-import shopBannerImage from "./../../assets/shopBannerImg.png";
+
+
 import { FaShoppingCart } from "react-icons/fa";
 
 import { MyContext } from "../../App";
 import { useContext, useEffect } from 'react';
 import TabsHome from '../../Components/tabSectionHome';
 import { Link } from 'react-router-dom';
-import BaleAlert from '../../Components/baleAlert';
+
 
 /* Decorative DNA + hexagon SVG used inside each banner card */
 const BannerDecor = () => (
-    <svg className="bannerDecor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <svg aria-hidden="true" className="bannerDecor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
         {/* Faint Hexagons */}
         <g stroke="var(--decor-light)" strokeWidth="2" opacity="0.35">
             <path d="M324 64 L365 88 L365 136 L324 160 L283 136 L283 88 Z"/>
@@ -76,7 +77,7 @@ const BannerDecor = () => (
 );
 
 const CoursesDecor = () => (
-    <svg className="bannerDecor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <svg aria-hidden="true" className="bannerDecor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
         {/* Faint Hexagons */}
         <g stroke="var(--decor-light)" strokeWidth="2" opacity="0.35">
             <path d="M355 55 L396 79 L396 127 L355 151 L314 127 L314 79 Z"/>
@@ -158,7 +159,7 @@ const CoursesDecor = () => (
 );
 
 const ShopDecor = () => (
-    <svg className="bannerDecor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <svg aria-hidden="true" className="bannerDecor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none">
         {/* Faint Hexagons */}
         <g stroke="var(--decor-light)" strokeWidth="2" opacity="0.35">
             <path d="M82 105 L123 81 L164 105 L164 153 L123 177 L82 153 Z"/>
@@ -322,7 +323,7 @@ const BannerDotsBg = () => (
 
 /* Shop banner decorative SVG — lab/book illustration in site palette */
 const ShopBannerDecor = () => (
-    <svg className="shopDecorSvg" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <svg aria-hidden="true" className="shopDecorSvg" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" fill="none">
         {/* ground shadow */}
         <ellipse cx="250" cy="290" rx="190" ry="14" fill="var(--decor-light)" opacity="0.25"/>
 
@@ -370,18 +371,20 @@ const ShopBannerDecor = () => (
 );
 
 /* One card = one slide */
-const BannerCard = ({ id, title, bullets, primaryBtn, secondaryLink }) => (
+const BannerCard = ({ id, title, titleEn, bullets, bulletsEn, primaryBtn }) => {
+    const { t, isEnglish, localize } = useLanguage();
+    return (
     <div className="bannerCard">
         <div className="bannerCardContent">
-            <h2>{title}</h2>
+            <h2>{localize({ title, titleEn }, 'title')}</h2>
             <ul>
-                {bullets.map((b, i) => <li key={i}>{b}</li>)}
+                {(isEnglish ? bulletsEn : bullets).map((b, i) => <li key={i}>{b}</li>)}
             </ul>
             <div className="bannerCardActions">
                 <Link to={primaryBtn.link}>
-                    <Button className="bannerPrimaryBtn">{primaryBtn.text}</Button>
+                    <Button className="bannerPrimaryBtn">{localize(primaryBtn, 'text')}</Button>
                 </Link>
-                <Link to='/aboutUs' className="bannerAskLink">سوالی دارید؟</Link>
+                <Link to='/aboutUs' className="bannerAskLink">{t("سوالی دارید؟", "Have a question?")}</Link>
             </div>
         </div>
         <BannerDotsBg />
@@ -393,6 +396,7 @@ const BannerCard = ({ id, title, bullets, primaryBtn, secondaryLink }) => (
         }
     </div>
 );
+};
 
 /* Flat list — each entry is ONE slide/card.
    Order here = the order they slide in, one by one.
@@ -400,54 +404,63 @@ const BannerCard = ({ id, title, bullets, primaryBtn, secondaryLink }) => (
 const bannerCards = [
     {
         id: 0,
-        title: 'آموزشگاه آزاد نانوزیست فن‌آوری اوژن',
+        title: "آموزشگاه آزاد نانوزیست فن‌آوری اوژن",
+        titleEn: "Ogene Nano-Biotechnology Institute",
+        bulletsEn: ["Comprehensive biology courses","Certificates from the Technical and Vocational Training Organization","Guidance for master’s and doctoral theses","Medical and molecular genetics, tissue engineering and nanotechnology"],
         bullets: [
             'کامل‌ترین دوره‌های بیولوژی',
             'ارائه مدرک سازمان فنی و حرفه‌ای',
             'هدایت پایان‌نامه‌های کارشناسی ارشد و دکتری',
             'مختص رشته‌های ژنتیک پزشکی و مولکولی، مهندسی بافت، نانوفناوری'
         ],
-        primaryBtn: { text: 'مشاهده خدمات', link: '/service' },
+        primaryBtn: { text: "مشاهده خدمات", textEn: "View services", link: '/service' },
         secondaryLink: '/contact-us'
     },
     {
         id: 1,
-        title: 'دوره های آموزشی اوژن',
+        title: "دوره های آموزشی اوژن",
+        titleEn: "Ogene training courses",
+        bulletsEn: ["Cellular, molecular and genetic sciences","Microbiology","Nanotechnology and general services","Biomedical, plant, clinical and animal sciences"],
         bullets: [
             'سلولی، مولکولی و ژنتیک',
             'میکروبیولوژی',
             'نانوفناوری و خدمات عمومی',
             'زیست پزشکی و گیاهی، بالینی و حیوانی'
         ],
-        primaryBtn: { text: 'مشاهده دوره‌ها', link: '/courses' },
+        primaryBtn: { text: "مشاهده دوره‌ها", textEn: "View courses", link: '/courses' },
         secondaryLink: '/courseShop'
     },
     {
         id: 2,
-        title: 'فروشگاه اوژن',
+        title: "فروشگاه اوژن",
+        titleEn: "Ogene shop",
+        bulletsEn: ["Microbiology and nanotechnology books","A range of nanoparticles","Free shipping and special discounts"],
         bullets: [
             'کتاب‌های میکروبیولوژی و نانوفناوری',
             'انواع نانوذرات',
             'ارسال رایگان و تخفیف های ویژه'],
-        primaryBtn: { text: 'مشاهده محصولات', link: '/shop' },
+        primaryBtn: { text: "مشاهده محصولات", textEn: "View products", link: '/shop' },
         secondaryLink: '/shop'
     }
 ];
 
 const Home = () => {
+    const { t, dir, language } = useLanguage();
 
-    const context = useContext(MyContext);
+    const { setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar } = useContext(MyContext);
 
     useEffect(() => {
-        context.setIsShowFooter(true);
-        context.setIsShowNavbar(true);
-        context.setIsShowCalenderBar(true);
-    }, []);
+        setIsShowFooter(true);
+        setIsShowNavbar(true);
+        setIsShowCalenderBar(true);
+    }, [setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar]);
 
     return (
         <>
-            <div className="newBannerWrapper">
+            <div className="newBannerWrapper" dir={dir}>
                 <Swiper
+                    key={language}
+                    dir={dir}
                     slidesPerView={2}
                     spaceBetween={24}
                     navigation={false}
@@ -487,17 +500,17 @@ const Home = () => {
             <ServiceSection />
 
             {/* shop banner — redesigned to match site palette */}
-            <div className='shopBanner'>
+            <div className='shopBanner' dir={dir}>
                 <div className='row align-items-center'>
                     <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
                         <div className='infoContent'>
                             <span className='shopBannerTag'>
-                                <FaShoppingCart /> فروشگاه اوژن
+                                <FaShoppingCart /> {t("فروشگاه اوژن", "Ogene shop")}
                             </span>
-                            <h1 className='mb-3'>انواع محصولات علمی و آموزشی</h1>
-                            <p className='mt-2'>انواع کتاب، محصولات تخصصی و کاربردی از فروشگاه اوژن</p>
+                            <h1 className='mb-3'>{t("انواع محصولات علمی و آموزشی", "Scientific and educational products")}</h1>
+                            <p className='mt-2'>{t("انواع کتاب، محصولات تخصصی و کاربردی از فروشگاه اوژن", "Explore books, specialist products and practical resources from Ogene")}</p>
                             <Link to='/shop'>
-                                <Button className='shopBannerBtn'>خرید از فروشگاه</Button>
+                                <Button className='shopBannerBtn'>{t("خرید از فروشگاه", "Shop now")}</Button>
                             </Link>
                         </div>
                     </div>

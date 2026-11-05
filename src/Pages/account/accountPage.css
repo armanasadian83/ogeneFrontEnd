@@ -1,0 +1,7 @@
+.accountLoadState { padding: 36px 24px; color: #516662; font-size: 15px; line-height: 1.9; text-align: center; }
+.accountLoadState p { margin: 0 0 18px; }
+.accountLoadError { color: #8b3333; background: #fffafa; }
+.accountSessionLink { display: inline-block; padding: 9px 22px; border-radius: 10px; background: #0f766e; color: #fff; font-size: 14px; text-decoration: none; }
+.accountSessionLink:hover { background: #0d4b44; color: #fff; }
+.accountSessionLink:focus-visible { outline: 3px solid #26a999; outline-offset: 3px; }
+.accountPage .accountInput:disabled { opacity: .7; cursor: wait; }

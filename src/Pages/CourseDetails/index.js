@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import Button from "@mui/material/Button";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -64,6 +65,9 @@ const CourseItemSkeleton = () => (
 );
 
 const CourseItem = () => {
+    const { t, localize, language, dir, isEnglish, formatNumber } = useLanguage();
+    const displayDate = (value) => isEnglish ? String(value ?? '').replace(/[۰-۹٠-٩]/g, (digit) =>
+        String(digit.charCodeAt(0) - (digit <= "٩" ? 0x660 : 0x6f0))) : value;
 
     const context = useContext(MyContext);
     const { id } = useParams();
@@ -93,15 +97,8 @@ const CourseItem = () => {
         })
     }, [id]);
 
-    const [price, setPrice] = useState('');
-    const [oldPrice, setOldPrice] = useState('');
-
-    useEffect(() => {
-        const formattedPrice = courseData?.price === '' ? '' : Number(courseData?.price).toLocaleString();
-        const formattedOldPrice = courseData?.oldPrice === '' ? '' : Number(courseData?.oldPrice).toLocaleString();
-        setPrice(formattedPrice);
-        setOldPrice(formattedOldPrice);
-    }, [courseData]);
+    const price = courseData?.price === '' ? '' : formatNumber(courseData?.price);
+    const oldPrice = courseData?.oldPrice === '' ? '' : formatNumber(courseData?.oldPrice);
 
     const discount = () => {
         const oldP = Number(courseData?.oldPrice);
@@ -111,7 +108,7 @@ const CourseItem = () => {
 
         const result = ((oldP - newP) / oldP) * 100;
 
-        return Math.floor(result);
+        return formatNumber(Math.floor(result));
     }
 
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -171,7 +168,7 @@ const CourseItem = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'وارد حساب کاربری خود شوید!'
+                msg: t("وارد حساب کاربری خود شوید!")
             });
             setTimeout(() => setBtnDisabled(false), 2000);
             history(`/login?returnTo=${encodeURIComponent(returnTo)}`);
@@ -190,7 +187,7 @@ const CourseItem = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'شناسه کاربر پیدا نشد! لطفاً دوباره وارد شوید.'
+                msg: t("شناسه کاربر پیدا نشد! لطفاً دوباره وارد شوید.")
             });
             setTimeout(() => setBtnDisabled(false), 2000);
             history(`/login?returnTo=${encodeURIComponent(returnTo)}`);
@@ -225,7 +222,7 @@ const CourseItem = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'برای افزودن دوره به سبد خرید، ابتدا اطلاعات کاربری خود را تکمیل کنید.'
+                msg: t("برای افزودن دوره به سبد خرید، ابتدا اطلاعات کاربری خود را تکمیل کنید.")
             });
         
             setTimeout(() => {
@@ -303,7 +300,7 @@ const CourseItem = () => {
                         context.setAlertBox({
                             open: true,
                             error: false,
-                            msg: 'دیدگاه شما  منتشر شد!'
+                            msg: t("دیدگاه شما  منتشر شد!")
                         });
 
                         reviews.review = '';
@@ -341,7 +338,7 @@ const CourseItem = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: 'دیدگاه و امتیاز خود را مشخص کنید!'
+                    msg: t("دیدگاه و امتیاز خود را مشخص کنید!")
                 });
             }
 
@@ -351,7 +348,7 @@ const CourseItem = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'وارد حساب کاربری خود شوید!'
+                msg: t("وارد حساب کاربری خود شوید!")
             });
             setTimeout(() => {
                 setBtnDisabled(false);
@@ -372,18 +369,18 @@ const CourseItem = () => {
         <>
             <div className="container CourseItem">
                 <p className="mb-1 mt-4 me-4 me-lg-0 breadCrumb ">
-                    <Link to="/"><b> خانه </b></Link> /
-                    <Link to="/courseShop"><b> دوره آموزشی </b></Link> /
-                    <Link to=""><b> {courseData?.name ? courseData?.name : ''} </b></Link>
+                    <Link to="/"><b>{t(" خانه ")}</b></Link> /
+                    <Link to="/courseShop"><b>{t(" دوره آموزشی ")}</b></Link> /
+                    <Link to=""><b> {localize(courseData, "name") ? localize(courseData, "name") : ''} </b></Link>
                 </p>
                 <div className="row mt-4 columnReverse">
                     <div className="col-12 pointer col-md-8">
 
-                        <h1>{courseData?.name}</h1>
-                        <h3>{courseData?.field}</h3>
+                        <h1>{localize(courseData, "name")}</h1>
+                        <h3>{localize(courseData, "field")}</h3>
 
                         <div className="description mt-4">
-                            <p className="title">درباره این دوره</p>
+                            <p className="title">{t("درباره این دوره")}</p>
                             <div>
                                 <ReactMarkdown
                                     remarkPlugins={[remarkGfm]}
@@ -405,7 +402,7 @@ const CourseItem = () => {
                                         )
                                     }}
                                 >
-                                    {courseData?.description || ''}
+                                    {localize(courseData, "description") || ''}
                                 </ReactMarkdown>
                             </div>
                         </div>
@@ -413,34 +410,35 @@ const CourseItem = () => {
                         {
                             courseData?.startingDate &&
                             <div className="d-flex align-items-center p-1 fontSmall">
-                                <h5 className="mb-0">تاریخ شروع دوره :</h5>&nbsp;
-                                <strong>{courseData?.startingDate}</strong>
+                                <h5 className="mb-0">{t("تاریخ شروع دوره :")}</h5>&nbsp;
+                                <strong>{displayDate(courseData?.startingDate)}</strong>
                             </div>
                         }
 
                         {
                             courseData?.EndingDate &&
                             <div className="d-flex align-items-center p-1 fontSmall">
-                                <h5 className="mb-0">تاریخ پایان دوره :</h5>&nbsp;
-                                <strong>{courseData?.EndingDate}</strong>
+                                <h5 className="mb-0">{t("تاریخ پایان دوره :")}</h5>&nbsp;
+                                <strong>{displayDate(courseData?.EndingDate)}</strong>
                             </div>
                         }
 
                         <div className="d-flex align-items-center p-1 fontSmall">
-                            <h5 className="mb-0">وضعیت ثبت نام :</h5>
+                            <h5 className="mb-0">{t("وضعیت ثبت نام :")}</h5>
                             <div className="statusBox">
-                                <span>{courseData?.status}</span>
+                                <span>{t(courseData?.status)}</span>
                             </div>
                         </div>
                     </div>
 
                     <div className="col-12 pointer col-md-4">
                         <div className="card">
-                            <Swiper
+                            <Swiper key={language} dir={dir}
+
                                 slidesPerView={1}
                                 autoplay={{ delay: 3000 }}
                                 modules={[Autoplay]}
-                                loop={true}
+                                loop={(courseData?.images?.length ?? 0) >= 2}
                                 className="courseItemImagesSwiper"
                             >
                                 {
@@ -459,7 +457,7 @@ const CourseItem = () => {
 
                             <div className="details mt-4">
                                 <div className="price">
-                                    <h6 className="oldPrice"><b>هزینه دوره:</b>
+                                    <h6 className="oldPrice"><b>{t("هزینه دوره:")}</b>
                                         {
                                             courseData?.oldPrice &&
                                             <>
@@ -476,14 +474,14 @@ const CourseItem = () => {
                                     <h6 className="newPrice">
                                         <span>{price}</span>
                                         <span className="mx-2">
-                                            <img src={Toman} />
+                                            {isEnglish ? <span className="currencyLabel">toman</span> : <img src={Toman} alt={t("تومان")} />}
                                         </span>
                                     </h6>
                                 </div>
 
                                 <div className="row mt-3 ps-4">
                                     {
-                                        courseData?.event?.length !== undefined && courseData?.event?.map((item, index) => {
+                                        Array.isArray(courseData?.event) && localize(courseData, "event").map((item, index) => {
                                             return (
                                                 <div className="col-12 col-lg-6 mt-1" key={index}>
                                                     <div className="specialEventAlert">{item}</div>
@@ -495,7 +493,7 @@ const CourseItem = () => {
                             </div>
 
                             <div className="AddToCartBtn text-center">
-                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} onClick={addtoCart}><FaShoppingCart /> اضافه کردن دوره به سبد خرید</Button>
+                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} onClick={addtoCart}><FaShoppingCart />{t(" اضافه کردن دوره به سبد خرید")}</Button>
                             </div>
                         </div>
                     </div>
@@ -503,10 +501,10 @@ const CourseItem = () => {
 
                 <div className=" CourseInfo mt-5">
                     <div className="CourseInfoBtns d-flex">
-                        <button onClick={() => openTab(1)}>سر فصل مطالب دوره</button>
-                        <button onClick={() => openTab(2)}>پیش نیاز</button>
-                        <button onClick={() => openTab(4)}>درباره مدرس دوره</button>
-                        <button onClick={() => openTab(5)}>دیدگاه ها</button>
+                        <button onClick={() => openTab(1)}>{t("سر فصل مطالب دوره")}</button>
+                        <button onClick={() => openTab(2)}>{t("پیش نیاز")}</button>
+                        <button onClick={() => openTab(4)}>{t("درباره مدرس دوره")}</button>
+                        <button onClick={() => openTab(5)}>{t("دیدگاه ها")}</button>
                     </div>
 
                     <div className="CourseInfoTabs">
@@ -530,7 +528,7 @@ const CourseItem = () => {
                                                 )
                                             }}
                                         >
-                                            {courseData?.headline || ''}
+                                            {localize(courseData, "headline") || ''}
                                         </ReactMarkdown>
                                     </div>
                                 </div>
@@ -540,7 +538,7 @@ const CourseItem = () => {
                         {
                             infoTab === 2 && (
                                 <div className="text-center prerequisiteTab">
-                                    <h3 className="mt-4">پیش نیاز های این دوره :</h3>
+                                    <h3 className="mt-4">{t("پیش نیاز های این دوره :")}</h3>
                                     <div className="py-1">
                                         <div className="row py-5 text">
                                             {
@@ -551,18 +549,16 @@ const CourseItem = () => {
                                                         </div>
                                                     )
                                                 }) :
-                                                    <h4><SiTicktick className="tick" />&nbsp;<b>{courseData?.name}</b> نیاز به گذراندن دوره پیش نیاز ندارد!</h4>
+                                                    <h4><SiTicktick className="tick" />&nbsp;<b>{localize(courseData, "name")}</b>{t(" نیاز به گذراندن دوره پیش نیاز ندارد!")}</h4>
                                             }
                                         </div>
                                     </div>
-                                    <p className="info p-2">
-                                        برای اطلاع از جزئیات ، ثبت نام و مشاوره می توانید از طریق شماره تلفن، واتساپ، اینستاگرام ، تلگرام و وبسایت آموزشگاه آزاد نانو زیست فناوری اوژن اقدام کنید.
-                                        <br /><br />
+                                    <p className="info p-2">{t("برای اطلاع از جزئیات ، ثبت نام و مشاوره می توانید از طریق شماره تلفن، واتساپ، اینستاگرام ، تلگرام و وبسایت آموزشگاه آزاد نانو زیست فناوری اوژن اقدام کنید.")}<br /><br />
                                         <IoMdGlobe />&nbsp;www.ogenetech.com <br />
-                                        <BsTelephoneForward />&nbsp;تلفن: 02144961487  - 09120169816<br />
-                                        <IoLogoWhatsapp />&nbsp;واتساپ: 09233093463<br />
-                                        <FaTelegramPlane />&nbsp;تلگرام: t.me/Ogenetechnology<br />
-                                        <FaInstagram />&nbsp;اینستاگرام: instagram.com/ogenetech<br />
+                                        <BsTelephoneForward />{t(" تلفن: 02144961487  - 09120169816")}<br />
+                                        <IoLogoWhatsapp />{t(" واتساپ: 09233093463")}<br />
+                                        <FaTelegramPlane />{t(" تلگرام: t.me/Ogenetechnology")}<br />
+                                        <FaInstagram />{t(" اینستاگرام: instagram.com/ogenetech")}<br />
                                     </p>
                                 </div>
                             )
@@ -590,7 +586,7 @@ const CourseItem = () => {
                                                     p: ({ node, ...props }) => <span {...props} />
                                                 }}
                                             >
-                                                {courseData?.aboutTeacher || 'مدرس این دوره هنوز مشخص نشده است.'}
+                                                {localize(courseData, "aboutTeacher") || t("مدرس این دوره هنوز مشخص نشده است.")}
                                             </ReactMarkdown>
                                         </div>
                                     </div>
@@ -605,7 +601,7 @@ const CourseItem = () => {
 
                                         {
                                             reviewsData?.length !== undefined && reviewsData?.length !== 0 ?
-                                                <h2>دیدگاه ها :</h2> : <h5>دیدگاهی برای این دوره ثبت نشده است!</h5>
+                                                <h2>{t("دیدگاه ها :")}</h2> : <h5>{t("دیدگاهی برای این دوره ثبت نشده است!")}</h5>
                                         }
 
                                         {
@@ -619,7 +615,7 @@ const CourseItem = () => {
                                                                     <Rating value={item?.customerRating} style={{ direction: 'ltr' }} precision={0.5} readOnly />
                                                                 </div>
                                                             </div>
-                                                            <p>تاریخ : {item?.dateCreated}</p>
+                                                            <p>{t("تاریخ : ")}{displayDate(item?.dateCreated)}</p>
                                                             <p style={{ whiteSpace: 'pre-line' }}>{item?.review}</p>
                                                         </div>
                                                     </div>
@@ -628,17 +624,15 @@ const CourseItem = () => {
                                         }
 
                                         <form className="w-100" onSubmit={addReview}>
-                                            <textarea name="review" value={reviews.review} onChange={onchanegInput} className="w-100" rows="10" placeholder="دیدگاه خود را با ما به اشتراک بگذارید"></textarea>
+                                            <textarea name="review" value={reviews.review} onChange={onchanegInput} className="w-100" rows="10" placeholder={t("دیدگاه خود را با ما به اشتراک بگذارید")}></textarea>
 
                                             <div className="d-flex align-items-center py-3">
-                                                <h4 className="text-muted mb-2">امتیاز شما : &nbsp;&nbsp;</h4>
+                                                <h4 className="text-muted mb-2">{t("امتیاز شما :   ")}</h4>
                                                 <Rating style={{ direction: 'ltr' }} precision={0.5} onChange={changeRating} value={reviews.customerRating} />
                                             </div>
 
                                             <div className="text-center">
-                                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} type="submit" variant="contained" startIcon={<SendIcon />}>&nbsp;&nbsp;
-                                                    ثبت و ارسال دیدگاه
-                                                    {
+                                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} type="submit" variant="contained" startIcon={<SendIcon />}>{t("   ثبت و ارسال دیدگاه")}{
                                                         loader === true &&
                                                         <CircularProgress
                                                             sx={() => ({

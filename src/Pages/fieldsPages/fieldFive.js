@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import FieldsBanner from "./banner";
 import CourseCard from "../../Components/Cards/courseCard";
@@ -21,23 +22,24 @@ import { MyContext } from "../../App";
 // Static placeholder content for the articles section.
 // Swap for a real endpoint (e.g. /api/article?filterKey=...) once one exists.
 const articles = [
-    { title: "کاربردهای زیست‌پزشکی سلول‌های بنیادی", href: "/" },
-    { title: "روش‌های نوین تشخیص مولکولی بیماری‌ها", href: "/" },
-    { title: "اصول مهندسی بافت و کاربردهای آن", href: "/" },
-    { title: "آشنایی با بیومارکرهای تشخیصی و پیش‌آگهی", href: "/" },
-    { title: "کاربرد نانوذرات در زیست‌پزشکی و دارورسانی", href: "/" },
-    { title: "مقدمه‌ای بر ایمونولوژی و آزمون‌های تشخیصی", href: "/" },
+    { title: "کاربردهای زیست‌پزشکی سلول‌های بنیادی", titleEn: "Biomedical applications of stem cells", href: "/" },
+    { title: "روش‌های نوین تشخیص مولکولی بیماری‌ها", titleEn: "New methods for molecular disease diagnosis", href: "/" },
+    { title: "اصول مهندسی بافت و کاربردهای آن", titleEn: "Fundamentals and applications of tissue engineering", href: "/" },
+    { title: "آشنایی با بیومارکرهای تشخیصی و پیش‌آگهی", titleEn: "An introduction to diagnostic and prognostic biomarkers", href: "/" },
+    { title: "کاربرد نانوذرات در زیست‌پزشکی و دارورسانی", titleEn: "Applications of nanoparticles in biomedicine and drug delivery", href: "/" },
+    { title: "مقدمه‌ای بر ایمونولوژی و آزمون‌های تشخیصی", titleEn: "An introduction to immunology and diagnostic assays", href: "/" },
 ];
 
 const FieldFive = () => {
 
-    const context = useContext(MyContext);
+    const { t, dir, localize } = useLanguage();
+    const { setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar } = useContext(MyContext);
 
     useEffect(() => {
-        context.setIsShowFooter(true);
-        context.setIsShowNavbar(true);
-        context.setIsShowCalenderBar(true);
-    }, []);
+        setIsShowFooter(true);
+        setIsShowNavbar(true);
+        setIsShowCalenderBar(true);
+    }, [setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -114,20 +116,20 @@ const FieldFive = () => {
         {
             key: "courses",
             icon: <TbSchool />,
-            title: "دوره‌های آموزشی",
-            meta: `${courseData?.length ?? 0} دوره فعال`,
+            title: t("دوره‌های آموزشی", "Courses"),
+            meta: t("{count} دوره فعال", "{count} active courses", { count: courseData?.length ?? 0 }),
         },
         {
             key: "articles",
             icon: <TbArticle />,
-            title: "مقالات و مطالب آموزشی",
-            meta: `${articles.length} مقاله`,
+            title: t("مقالات و مطالب آموزشی", "Articles and learning resources"),
+            meta: t("{count} مقاله", "{count} articles", { count: articles.length }),
         },
         {
             key: "services",
             icon: <TbFlask />,
-            title: "خدمات",
-            meta: `${serviceData?.length ?? 0} نوع خدمت`,
+            title: t("خدمات", "Services"),
+            meta: t("{count} نوع خدمت", "{count} services", { count: serviceData?.length ?? 0 }),
         },
     ];
 
@@ -150,7 +152,7 @@ const FieldFive = () => {
     );
 
     return (
-        <div className="feildCellularAndMolecular">
+        <div className="feildCellularAndMolecular" dir={dir}>
 
             <FieldsBanner
                 name={fieldName}
@@ -181,7 +183,7 @@ const FieldFive = () => {
                                 }
                                 <div className="fieldContent-footer">
                                     <Link to="/courseShop">
-                                        <Button variant="outlined" className="outlineButton">مشاهده تمامی دوره‌ها</Button>
+                                        <Button variant="outlined" className="outlineButton">{t("مشاهده تمامی دوره‌ها", "View all courses")}</Button>
                                     </Link>
                                 </div>
                             </div>
@@ -192,9 +194,9 @@ const FieldFive = () => {
                                 {articles.map((article, index) => (
                                     <Link className="articleRow" to={article.href} key={index}>
                                         <span className="articleRow-icon"><TbDna /></span>
-                                        <span className="articleRow-title">{article.title}</span>
+                                        <span className="articleRow-title">{localize(article, 'title')}</span>
                                         <span className="articleRow-cta">
-                                            مشاهده مقاله <TbArrowLeft />
+                                            {t("مشاهده مقاله", "Read article")} <TbArrowLeft />
                                         </span>
                                     </Link>
                                 ))}
@@ -204,9 +206,9 @@ const FieldFive = () => {
                         {activeSection === "services" && (
                             <div className="servicesPanel" ref={servicesListRef}>
                                 <div className="servicesPanel-header">
-                                    <h3 className="servicesIntro">خدمات ارائه شده در این بخش</h3>
+                                    <h3 className="servicesIntro">{t("خدمات ارائه شده در این بخش", "Services in this field")}</h3>
                                     <p className="servicesPanel-meta">
-                                        {serviceData?.length ?? 0} خدمت &middot; صفحه {servicesPage} از {totalServicePages}
+                                        {t("{count} خدمت · صفحه {page} از {total}", "{count} services · Page {page} of {total}", { count: serviceData?.length ?? 0, page: servicesPage, total: totalServicePages })}
                                     </p>
                                 </div>
 
@@ -214,19 +216,19 @@ const FieldFive = () => {
                                     {currentServices.map((item, index) => (
                                         <div className="serviceRow" key={index}>
                                             <span className="serviceRow-icon"><TbTestPipe /></span>
-                                            <p className="serviceRow-text">{item?.name}</p>
+                                            <p className="serviceRow-text">{localize(item, 'name')}</p>
                                         </div>
                                     ))}
                                 </div>
 
                                 {totalServicePages > 1 && (
-                                    <nav className="pagination" aria-label="صفحه‌بندی خدمات">
+                                    <nav className="pagination" aria-label={t("صفحه‌بندی خدمات", "Services pagination")}>
                                         <button
                                             type="button"
                                             className="pagination-arrow"
                                             onClick={() => goToServicesPage(servicesPage - 1)}
                                             disabled={servicesPage === 1}
-                                            aria-label="صفحه قبل"
+                                            aria-label={t("صفحه قبل", "Previous page")}
                                         >
                                             <TbChevronRight />
                                         </button>
@@ -252,7 +254,7 @@ const FieldFive = () => {
                                             className="pagination-arrow"
                                             onClick={() => goToServicesPage(servicesPage + 1)}
                                             disabled={servicesPage === totalServicePages}
-                                            aria-label="صفحه بعد"
+                                            aria-label={t("صفحه بعد", "Next page")}
                                         >
                                             <TbChevronLeft />
                                         </button>
@@ -260,10 +262,10 @@ const FieldFive = () => {
                                 )}
 
                                 <div className="ctaCard">
-                                    <h3 className="ctaCard-title">درخواست خود را برای ما ارسال کنید</h3>
-                                    <p className="ctaCard-subtitle">تمامی خدمات این بخش توسط تیم ما ارائه می‌شود</p>
+                                    <h3 className="ctaCard-title">{t("درخواست خود را برای ما ارسال کنید", "Send us your request")}</h3>
+                                    <p className="ctaCard-subtitle">{t("تمامی خدمات این بخش توسط تیم ما ارائه می‌شود", "Our team provides all services in this field")}</p>
                                     <Link to={`/service?fieldName=${encodeURIComponent(fieldName)}`}>
-                                        <Button className="ctaButton">ثبت درخواست</Button>
+                                        <Button className="ctaButton">{t("ثبت درخواست", "Submit a request")}</Button>
                                     </Link>
                                 </div>
                             </div>

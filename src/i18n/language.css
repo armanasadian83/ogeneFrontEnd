@@ -1,0 +1,59 @@
+/* English presentation only; Persian keeps the existing site typography/layout. */
+html[lang="en"] body, html[lang="en"] body * { font-family: Arial, "Segoe UI", sans-serif !important; }
+html[lang="en"] body { direction: ltr; }
+html[lang="en"] .languageOptionName[lang="fa"], html[lang="en"] .languageOptionCode[lang="fa"] { font-family: fugen-font, sans-serif !important; }
+html[lang="en"] [dir="rtl"]:not([lang="fa"]) { direction: ltr; }
+html[lang="en"] .navbarMenu li { padding-inline: 16px; font-size: 13px; }
+html[lang="en"] .navbarLogo .picture { inset-inline-start: 0; }
+html[lang="en"] .dropdownMenu { text-align: left; }
+html[lang="en"] .navbarActions .logInBtn { font-size: 13px !important; padding-inline: 8px; white-space: nowrap; }
+html[lang="en"] .MuiMenu-list, html[lang="en"] .MuiDialog-paper { direction: ltr; }
+html[lang="en"] .degreeLanding, html[lang="en"] .degreeRequestPage,
+html[lang="en"] .degreeRequestAdvice ol, html[lang="en"] .degreeRequestDate .degreeRequestInput,
+html[lang="en"] .checkoutPage, html[lang="en"] .accountPage,
+html[lang="en"] .servicePage, html[lang="en"] .listingPage,
+html[lang="en"] .breadCrumb, html[lang="en"] .filterBox { text-align: left; }
+html[lang="en"] .degreeRequestField label, html[lang="en"] .degreeRequestInput,
+html[lang="en"] .degreeRequestField textarea { text-align: left; }
+html[lang="en"] .degreeStep:not(:last-child)::after { left: auto; right: -22px; transform: rotate(225deg); }
+html[lang="en"] .degreeRequestLink svg, html[lang="en"] .degreeRequestBack svg,
+html[lang="en"] .degreeRequestSubmit svg, html[lang="en"] .courseCardBtnIcon,
+html[lang="en"] .degreeBreadcrumb > svg, html[lang="en"] .degreeRequestBreadcrumb > svg { transform: scaleX(-1); }
+html[lang="en"] .degreeLanding .degreeTypeNumber { letter-spacing: 0; }
+html[lang="en"] .degreeDisclosureBody p { line-height: 1.85; }
+html[lang="en"] .degreeRequestHeader h1 { font-size: 32px; }
+html[lang="en"] .degreeRequestAdvice h2 { font-size: 22px; }
+html[lang="en"] .text-end, html[lang="en"] .text-right { text-align: left !important; }
+html[lang="en"] .courseCard .courseTitle { text-align: left; }
+html[lang="en"] .serviceCard-text, html[lang="en"] .formLabel { text-align: left; }
+html[lang="en"] .serviceWizard-panel { direction: ltr; text-align: left; }
+html[lang="en"] .serviceWizard .nextButton svg, html[lang="en"] .serviceWizard .backButton svg,
+html[lang="en"] .fieldNav-arrow, html[lang="en"] .serviceCardArrow,
+html[lang="en"] .footerLinkArrow { transform: scaleX(-1); }
+html[lang="en"] .sidenavOpen, html[lang="en"] .sidenavClosed { right: auto; left: 0; text-align: left; }
+html[lang="en"] .sidenavOpen .closeBtn { left: auto; right: 16px; }
+html[lang="en"] .currencyLabel { font-size: 14px; font-weight: 500; }
+html[lang="en"] .site-footer, html[lang="en"] .bannerCard,
+html[lang="en"] .shopBanner .infoContent { direction: ltr; text-align: left; }
+html[lang="en"] .bannerCardContent h2, html[lang="en"] .bannerCardContent ul li,
+html[lang="en"] .productPriceWrapper, html[lang="en"] .sidenavOpen .list-unstyled li { text-align: left; }
+html[lang="en"] .productPriceWrapper { align-items: flex-start; }
+html[lang="en"] .bannerCardContent ul li { padding-right: 0; padding-left: 18px; }
+html[lang="en"] .bannerCardContent ul li::before,
+html[lang="en"] .footer-links h4::after, html[lang="en"] .footer-contact h4::after { right: auto; left: 0; }
+html[lang="en"] .footer-links .link-arrow { transform: scaleX(-1); }
+html[lang="en"] .footer-links a:hover .link-arrow { transform: scaleX(-1); }
+html[lang="en"] .newBannerSwiper .swiper-pagination { text-align: left; padding-left: 10px; padding-right: 0; }
+html[lang="en"] .degreeSpecimen figcaption, html[lang="en"] .degreeComparison,
+html[lang="en"] .degreeSectionHeading, html[lang="en"] .degreeRequestBanner { text-align: center; }
+@media (max-width: 600px) {
+  html[lang="en"] .degreeLanding .degreeTypeNumber { float: right; }
+  html[lang="en"] .degreeLanding .degreeHeroCopy h1 { font-size: 29px; }
+  html[lang="en"] .degreeRequestHeader h1 { font-size: 28px; }
+  html[lang="en"] .degreeRequestBreadcrumb { font-size: 12px; }
+}
+/* Leave room for the added language action on smaller desktop headers. */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .navbarMenu li { padding-inline: 14px; }
+  html[lang="en"] .navbarMenu li { padding-inline: 13px; }
+}

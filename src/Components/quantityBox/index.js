@@ -2,9 +2,11 @@ import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
+import { useLanguage } from '../../i18n/LanguageContext';
 
 
 const QuantityBox = (props) => {
+    const { t } = useLanguage();
     const [inputVal, setinputVal] = useState(props?.value ? props?.value : 1);
 
     /*useEffect(() => {
@@ -36,9 +38,9 @@ const QuantityBox = (props) => {
     return (
         <>
             <div className='quantityDrop d-flex align-items-center'>
-                <Button disabled={props?.btnDisabled} onClick={minus} className={`${props?.btnDisabled !== false && 'btnDisabled'}`}><FaMinus /></Button>
-                <input type='text' value={inputVal} />
-                <Button disabled={props?.btnDisabled} onClick={plus} className={`${props?.btnDisabled !== false && 'btnDisabled'}`}><FaPlus /></Button>
+                <Button aria-label={t('کاهش تعداد', 'Decrease quantity')} disabled={props?.btnDisabled} onClick={minus} className={`${props?.btnDisabled !== false && 'btnDisabled'}`}><FaMinus /></Button>
+                <input type='text' value={inputVal} readOnly aria-label={t('تعداد', 'Quantity')} />
+                <Button aria-label={t('افزایش تعداد', 'Increase quantity')} disabled={props?.btnDisabled} onClick={plus} className={`${props?.btnDisabled !== false && 'btnDisabled'}`}><FaPlus /></Button>
             </div>
         </>
     );

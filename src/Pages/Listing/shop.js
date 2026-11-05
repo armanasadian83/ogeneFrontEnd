@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import Button from "@mui/material/Button";
 import Banner from "./../../assets/Listing/shopBanner2.png";
 import { BsGrid3X3GapFill } from "react-icons/bs";
@@ -45,6 +46,7 @@ const filterOptions = [
 ];
 
 const Shop = () => {
+    const { t } = useLanguage();
 
     const context = useContext(MyContext);
     const [value, setValue] = useState(0);
@@ -141,14 +143,14 @@ const Shop = () => {
                         {/* ===== Sidebar ===== */}
                         <div className="col-12 col-lg-2 filterSection">
                             <p className="mb-1 mt-2 me-4 me-lg-0 breadCrumb">
-                                <Link to="/"><b>خانه</b></Link> /
-                                <Link to="/shop"><b> فروشگاه محصولات</b></Link>
+                                <Link to="/"><b>{t("خانه")}</b></Link> /
+                                <Link to="/shop"><b>{t(" فروشگاه محصولات")}</b></Link>
                             </p>
 
                             <div className="filterBox">
                                 <div className="filterBoxHeader">
                                     <HiOutlineAdjustmentsHorizontal />
-                                    <h6>فیلتر بر اساس حوزه</h6>
+                                    <h6>{t("فیلتر بر اساس حوزه")}</h6>
                                 </div>
 
                                 <RadioGroup
@@ -161,7 +163,7 @@ const Shop = () => {
                                             key={opt.value}
                                             value={opt.value}
                                             control={<Radio />}
-                                            label={opt.label}
+                                            label={t(opt.label)}
                                         />
                                     ))}
                                 </RadioGroup>
@@ -169,7 +171,7 @@ const Shop = () => {
 
                             <div className="searchBtn">
                                 <Button onClick={context.handleClickOpenSearchModal}>
-                                    <span>جستجوی محصول &nbsp;</span>
+                                    <span>{t("جستجوی محصول  ")}</span>
                                     <GiArchiveResearch />
                                 </Button>
                             </div>
@@ -181,7 +183,7 @@ const Shop = () => {
                             <div className="container banner">
                                 <img src={Banner} />
                                 <div className="bannerOverlay"></div>
-                                <h1>فروشگاه اوژن</h1>
+                                <h1>{t("فروشگاه اوژن")}</h1>
                             </div>
 
                             <div className="toolBar">
@@ -205,9 +207,9 @@ const Shop = () => {
                                                 scrollButtons={false}
                                                 className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
                                             >
-                                                <Tab className="tab" value={0} label="همه محصولات" />
+                                                <Tab className="tab" value={0} label={t("همه محصولات")} />
                                                 {filterOptions.map((opt) => (
-                                                    <Tab className="tab" key={opt.value} value={opt.value} label={opt.label} />
+                                                    <Tab className="tab" key={opt.value} value={opt.value} label={t(opt.label)} />
                                                 ))}
                                             </Tabs>
                                         </Box>
@@ -216,7 +218,7 @@ const Shop = () => {
                                     <div className="mobileTabSection">
                                         <div className="btnWrapper">
                                             <Button onClick={handleClick}>
-                                                {value === 0 ? 'همه محصولات' : value}
+                                                {value === 0 ? t("همه محصولات") : t(value)}
                                                 &nbsp; <IoIosArrowDown />
                                             </Button>
                                         </div>
@@ -226,9 +228,9 @@ const Shop = () => {
                                             open={open}
                                             onClose={() => handleClose(value)}
                                         >
-                                            <MenuItem onClick={() => handleClose(0)}>همه محصولات</MenuItem>
+                                            <MenuItem onClick={() => handleClose(0)}>{t("همه محصولات")}</MenuItem>
                                             {filterOptions.map((opt) => (
-                                                <MenuItem key={opt.value} onClick={() => handleClose(opt.value)}>{opt.label}</MenuItem>
+                                                <MenuItem key={opt.value} onClick={() => handleClose(opt.value)}>{t(opt.label)}</MenuItem>
                                             ))}
                                         </Menu>
                                     </div>
@@ -248,7 +250,7 @@ const Shop = () => {
                                             ) : (
                                                 <div className="emptyState">
                                                     <GiArchiveResearch />
-                                                    <p>محصولی در حوزه انتخاب شده وجود ندارد!</p>
+                                                    <p>{t("محصولی در حوزه انتخاب شده وجود ندارد!")}</p>
                                                 </div>
                                             )
                                         ) : (

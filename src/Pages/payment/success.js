@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MyContext } from "../../App";
@@ -6,12 +7,12 @@ import { fetchDataFromApi } from "../../utils/api";
 const MAX_POLLS = 20; // 20 بار × ۳ ثانیه = حداکثر ۶۰ ثانیه انتظار برای تایید نهایی
 
 // ۱۴:۱۱ - ۱۴۰۵/۰۵/۱۰
-const formatTxnTime = (iso) => {
+const formatTxnTime = (iso, isEnglish = false) => {
     if (!iso) return "—";
     const d = new Date(iso);
     if (isNaN(d.getTime())) return "—";
-    const time = new Intl.DateTimeFormat("fa-IR", { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "Asia/Tehran" }).format(d);
-    const date = new Intl.DateTimeFormat("fa-IR", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Asia/Tehran" }).format(d);
+    const time = new Intl.DateTimeFormat(isEnglish ? "en-GB" : "fa-IR", { hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "Asia/Tehran" }).format(d);
+    const date = new Intl.DateTimeFormat(isEnglish ? "en-GB" : "fa-IR", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Asia/Tehran" }).format(d);
     return `${time} - ${date}`;
 };
 
@@ -30,6 +31,7 @@ const HelixDecor = () => (
 );
 
 const SuccessPayment = () => {
+    const { t, dir, isEnglish, formatNumber } = useLanguage();
 
     const context = useContext(MyContext);
     const navigate = useNavigate();
@@ -106,23 +108,23 @@ const SuccessPayment = () => {
     if (!payment) {
         return (
             <>
-                <div className="paymentResultPage paymentSuccessPage">
+                <div className="paymentResultPage paymentSuccessPage" dir={dir}>
                     <HelixDecor />
 
                     <div className="paymentCard">
-                        <h1>{timedOut ? "تایید پرداخت طول کشید" : "در حال تایید پرداخت شما"}</h1>
+                        <h1>{timedOut ? t("تایید پرداخت طول کشید", "Payment confirmation is taking longer") : t("در حال تایید پرداخت شما", "Confirming your payment")}</h1>
                         <p className="paymentSub">
                             {timedOut
-                                ? "هنوز نتیجه نهایی پرداخت به ما نرسیده است. اگر مبلغی از حساب شما کسر شده، نگران نباشید؛ یا سفارش شما ثبت می‌شود یا مبلغ به‌صورت خودکار به حساب شما برمی‌گردد. برای پیگیری با پشتیبانی تماس بگیرید."
-                                : "لطفاً این صفحه را نبندید. ثبت سفارش چند لحظه بیشتر طول نمی‌کشد."}
+                                ? t("هنوز نتیجه نهایی پرداخت به ما نرسیده است. اگر مبلغی از حساب شما کسر شده، نگران نباشید؛ یا سفارش شما ثبت می‌شود یا مبلغ به‌صورت خودکار به حساب شما برمی‌گردد. برای پیگیری با پشتیبانی تماس بگیرید.", "We have not received the final payment result yet. If your account was charged, your order will be registered or the amount will be refunded automatically. Contact support for assistance.")
+                                : t("لطفاً این صفحه را نبندید. ثبت سفارش چند لحظه بیشتر طول نمی‌کشد.", "Please keep this page open. Registering your order should only take a moment.")}
                         </p>
 
                         {timedOut && (
                             <>
                                 <Link to={ordersPath} className="primaryBtn">
-                                    مشاهده سفارش
+                                    {t("مشاهده سفارش", "View order")}
                                 </Link>
-                                <a href="tel:+98212244961487" className="secondaryLink">تماس با پشتیبانی</a>
+                                <a href="tel:+98212244961487" className="secondaryLink">{t("تماس با پشتیبانی", "Contact support")}</a>
                             </>
                         )}
                     </div>
@@ -134,7 +136,7 @@ const SuccessPayment = () => {
     // ---------- پرداخت موفق (طراحی خودتان، با داده واقعی) ----------
     return (
         <>
-            <div className="paymentResultPage paymentSuccessPage">
+            <div className="paymentResultPage paymentSuccessPage" dir={dir}>
 
                 <HelixDecor />
 
@@ -144,17 +146,17 @@ const SuccessPayment = () => {
                     <div className="miniTracker">
                         <div className="miniStep">
                             <span className="miniDot"></span>
-                            <span className="miniLabel">سبد خرید</span>
+                            <span className="miniLabel">{t("سبد خرید", "Cart")}</span>
                         </div>
                         <span className="miniLine"></span>
                         <div className="miniStep">
                             <span className="miniDot"></span>
-                            <span className="miniLabel">پرداخت</span>
+                            <span className="miniLabel">{t("پرداخت", "Payment")}</span>
                         </div>
                         <span className="miniLine"></span>
                         <div className="miniStep">
                             <span className="miniDot"></span>
-                            <span className="miniLabel">تایید سفارش</span>
+                            <span className="miniLabel">{t("تایید سفارش", "Order confirmation")}</span>
                         </div>
                     </div>
 
@@ -167,28 +169,28 @@ const SuccessPayment = () => {
                         </div>
                     </div>
 
-                    <h1>پرداخت شما با موفقیت انجام شد</h1>
-                    <p className="paymentSub">سفارش شما ثبت شد و به‌زودی توسط تیم پشتیبانی پیگیری خواهد شد.</p>
+                    <h1>{t("پرداخت شما با موفقیت انجام شد", "Your payment was successful")}</h1>
+                    <p className="paymentSub">{t("سفارش شما ثبت شد و به‌زودی توسط تیم پشتیبانی پیگیری خواهد شد.", "Your order has been registered. Our support team will follow up shortly.")}</p>
 
                     <div className="infoBox">
                         <div className="infoRow">
-                            <span>شناسه سفارش</span>
+                            <span>{t("شناسه سفارش", "Order ID")}</span>
                             <b className="font-english">{payment.orderId ? `...${payment.orderId.slice(0, 8)}#` : "—"}</b>
                         </div>
                         <div className="infoRow">
-                            <span>مبلغ پرداخت‌شده</span>
-                            <b className="amount">{Number(payment.amount).toLocaleString()} تومان</b>
+                            <span>{t("مبلغ پرداخت‌شده", "Amount paid")}</span>
+                            <b className="amount">{formatNumber(payment.amount)} {t("تومان", "Toman")}</b>
                         </div>
                         <div className="infoRow">
-                            <span>زمان تراکنش</span>
-                            <b>{formatTxnTime(payment.paidAt)}</b>
+                            <span>{t("زمان تراکنش", "Transaction time")}</span>
+                            <b>{formatTxnTime(payment.paidAt, isEnglish)}</b>
                         </div>
                     </div>
 
                     <Link to={ordersPath} className="primaryBtn">
-                        مشاهده سفارش
+                        {t("مشاهده سفارش", "View order")}
                     </Link>
-                    <Link to="/" className="secondaryLink">بازگشت به صفحه اصلی</Link>
+                    <Link to="/" className="secondaryLink">{t("بازگشت به صفحه اصلی", "Back to home")}</Link>
 
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MyContext } from "../../App";
@@ -5,6 +6,14 @@ import { fetchDataFromApi } from "../../utils/api";
 
 const REFUND_NOTE = " در صورت کسر وجه، مبلغ تا ۷۲ ساعت آینده به حساب شما بازخواهد گشت.";
 const DEFAULT_REASON = "علت: تراکنش تکمیل یا تایید نشد." + REFUND_NOTE;
+const refundNoteEn = " If your account was charged, the amount will be refunded within 72 hours.";
+const reasonTranslations = {
+    [DEFAULT_REASON]: "Reason: the transaction was not completed or confirmed." + refundNoteEn,
+    "علت: پرداخت توسط شما لغو شد. مبلغی از حساب شما کسر نشده است.": "Reason: you canceled the payment. Your account was not charged.",
+    ["علت: مهلت پرداخت به پایان رسید." + REFUND_NOTE]: "Reason: the payment session expired." + refundNoteEn,
+    ["علت: تراکنش توسط بانک صادرکننده کارت رد شد یا تکمیل نشد." + REFUND_NOTE]: "Reason: the card-issuing bank declined the transaction or it was not completed." + refundNoteEn,
+    ["علت: تایید نهایی تراکنش توسط بانک انجام نشد." + REFUND_NOTE]: "Reason: the bank did not confirm the transaction." + refundNoteEn,
+};
 
 // متن قابل‌فهم برای کاربر؛ کدهای فنی به کاربر نشان داده نمی‌شوند
 const getReasonText = (status, reason) => {
@@ -24,6 +33,7 @@ const getReasonText = (status, reason) => {
 };
 
 const FailedPayment = () => {
+    const { t, dir } = useLanguage();
 
     const context = useContext(MyContext);
     const navigate = useNavigate();
@@ -68,7 +78,7 @@ const FailedPayment = () => {
 
     return (
         <>
-            <div className="paymentResultPage paymentFailedPage">
+            <div className="paymentResultPage paymentFailedPage" dir={dir}>
 
                 <svg className="helixDecor" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <path d="M40 10 C90 40, 20 70, 70 100 C120 130, 50 160, 100 190" stroke="#0f766e" strokeWidth="6" fill="none" strokeLinecap="round" />
@@ -86,17 +96,17 @@ const FailedPayment = () => {
                     <div className="miniTracker">
                         <div className="miniStep">
                             <span className="miniDot"></span>
-                            <span className="miniLabel">سبد خرید</span>
+                            <span className="miniLabel">{t("سبد خرید", "Cart")}</span>
                         </div>
                         <span className="miniLine failedLine"></span>
                         <div className="miniStep">
                             <span className="miniDot failed"></span>
-                            <span className="miniLabel failedLabel">پرداخت</span>
+                            <span className="miniLabel failedLabel">{t("پرداخت", "Payment")}</span>
                         </div>
                         <span className="miniLine upcomingLine"></span>
                         <div className="miniStep">
                             <span className="miniDot upcoming"></span>
-                            <span className="miniLabel muted">تایید سفارش</span>
+                            <span className="miniLabel muted">{t("تایید سفارش", "Order confirmation")}</span>
                         </div>
                     </div>
 
@@ -110,20 +120,20 @@ const FailedPayment = () => {
                         </div>
                     </div>
 
-                    <h1>پرداخت ناموفق بود</h1>
-                    <p className="paymentSub">متأسفانه تراکنش شما تکمیل نشد. سبد خرید شما همچنان محفوظ است و می‌توانید مجدداً تلاش کنید.</p>
+                    <h1>{t("پرداخت ناموفق بود", "Payment was unsuccessful")}</h1>
+                    <p className="paymentSub">{t("متأسفانه تراکنش شما تکمیل نشد. سبد خرید شما همچنان محفوظ است و می‌توانید مجدداً تلاش کنید.", "Your transaction was not completed. Your cart is preserved, so you can try again.")}</p>
 
                     {reasonText && (
                         <div className="reasonBox">
                             <span className="reasonDot"></span>
-                            <span>{reasonText}</span>
+                            <span>{t(reasonText, reasonTranslations[reasonText])}</span>
                         </div>
                     )}
 
                     <Link to={cartPath} className="primaryBtn">
-                        بازگشت به سبد خرید
+                        {t("بازگشت به سبد خرید", "Back to cart")}
                     </Link>
-                    <a href="tel:+98212244961487" className="secondaryLink">تماس با پشتیبانی</a>
+                    <a href="tel:+98212244961487" className="secondaryLink">{t("تماس با پشتیبانی", "Contact support")}</a>
 
                 </div>
             </div>

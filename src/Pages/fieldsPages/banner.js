@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useRef, useState, useCallback } from "react";
 
 // Fixed set of floating dots — deliberately hand-placed (not random on
@@ -17,6 +18,7 @@ const WAVE_MAX_PUSH = 30;
 
 const FieldsBanner = ({ name, courseCount = 0, serviceCount = 0, articleCount = 0 }) => {
 
+    const { t, dir } = useLanguage();
     const bgRef = useRef(null);
     const rafRef = useRef(null);
     const [pointer, setPointer] = useState(null); // { xPct, yPct } or null
@@ -66,7 +68,7 @@ const FieldsBanner = ({ name, courseCount = 0, serviceCount = 0, articleCount = 
     };
 
     return (
-        <div className="fieldHero">
+        <div className="fieldHero" dir={dir}>
 
             {/* Ambient, decorative only — hidden from assistive tech. */}
             <div
@@ -103,24 +105,24 @@ const FieldsBanner = ({ name, courseCount = 0, serviceCount = 0, articleCount = 
             </div>
 
             <div className="fieldHero-content">
-                <p className="fieldHero-eyebrow">حوزه‌های تخصصی آموزشگاه اوژن</p>
-                <h1 className="fieldHero-title">{name}</h1>
-                <p className="fieldHero-subtitle">دوره‌های آموزشی، مقالات تخصصی و خدمات آزمایشگاهی این حوزه</p>
+                <p className="fieldHero-eyebrow">{t("حوزه‌های تخصصی آموزشگاه اوژن", "Ogene’s specialist fields")}</p>
+                <h1 className="fieldHero-title">{t(name)}</h1>
+                <p className="fieldHero-subtitle">{t("دوره‌های آموزشی، مقالات تخصصی و خدمات آزمایشگاهی این حوزه", "Explore courses, specialist articles and laboratory services in this field")}</p>
 
                 <div className="fieldHero-stats">
                     <div className="fieldHero-stat">
                         <span className="fieldHero-statValue">{courseCount}</span>
-                        <span className="fieldHero-statLabel">دوره آموزشی</span>
+                        <span className="fieldHero-statLabel">{t("دوره آموزشی", "Courses")}</span>
                     </div>
                     <div className="fieldHero-divider" />
                     <div className="fieldHero-stat">
                         <span className="fieldHero-statValue">{serviceCount}</span>
-                        <span className="fieldHero-statLabel">نوع خدمات</span>
+                        <span className="fieldHero-statLabel">{t("نوع خدمات", "Services")}</span>
                     </div>
                     <div className="fieldHero-divider" />
                     <div className="fieldHero-stat">
                         <span className="fieldHero-statValue">{articleCount}</span>
-                        <span className="fieldHero-statLabel">مقاله آموزشی</span>
+                        <span className="fieldHero-statLabel">{t("مقاله آموزشی", "Educational articles")}</span>
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import Button from "@mui/material/Button";
 import Banner from "./../../assets/Listing/banner One.jpg"
 import { BsGrid3X3GapFill } from "react-icons/bs";
@@ -45,6 +46,7 @@ const filterOptions = [
 ];
 
 const CourseShop = () => {
+    const { t } = useLanguage();
 
     const context = useContext(MyContext);
     const [viewActive, setViewActive] = useState(context.itemView);
@@ -140,14 +142,14 @@ const CourseShop = () => {
                         {/* ===== Sidebar ===== */}
                         <div className="col-12 col-lg-2 filterSection">
                             <p className="mb-1 mt-2 me-4 me-lg-0 breadCrumb">
-                                <Link to="/"><b>خانه</b></Link> /
-                                <Link to="/courseShop"><b> دوره های آموزشی</b></Link>
+                                <Link to="/"><b>{t("خانه")}</b></Link> /
+                                <Link to="/courseShop"><b>{t(" دوره های آموزشی")}</b></Link>
                             </p>
 
                             <div className="filterBox">
                                 <div className="filterBoxHeader">
                                     <HiOutlineAdjustmentsHorizontal />
-                                    <h6>فیلتر بر اساس حوزه</h6>
+                                    <h6>{t("فیلتر بر اساس حوزه")}</h6>
                                 </div>
 
                                 <RadioGroup
@@ -160,7 +162,7 @@ const CourseShop = () => {
                                             key={opt.value}
                                             value={opt.value}
                                             control={<Radio />}
-                                            label={opt.label}
+                                            label={t(opt.label)}
                                         />
                                     ))}
                                 </RadioGroup>
@@ -168,7 +170,7 @@ const CourseShop = () => {
 
                             <div className="searchBtn">
                                 <Button onClick={context.handleClickOpenSearchModal}>
-                                    <span>جستجوی دوره &nbsp;</span>
+                                    <span>{t("جستجوی دوره  ")}</span>
                                     <GiArchiveResearch />
                                 </Button>
                             </div>
@@ -180,7 +182,7 @@ const CourseShop = () => {
                             <div className="container banner">
                                 <img src={Banner} />
                                 <div className="bannerOverlay"></div>
-                                <h1>دوره های آموزشی اوژن</h1>
+                                <h1>{t("دوره های آموزشی اوژن")}</h1>
                             </div>
 
                             <div className="toolBar">
@@ -204,9 +206,9 @@ const CourseShop = () => {
                                                 scrollButtons={false}
                                                 className={`${btnDisabled === true ? 'pointerEventsNone' : ''}`}
                                             >
-                                                <Tab className="tab" value={0} label="همه دوره ها" />
+                                                <Tab className="tab" value={0} label={t("همه دوره ها")} />
                                                 {filterOptions.map((opt) => (
-                                                    <Tab className="tab" key={opt.value} value={opt.value} label={opt.label} />
+                                                    <Tab className="tab" key={opt.value} value={opt.value} label={t(opt.label)} />
                                                 ))}
                                             </Tabs>
                                         </Box>
@@ -215,7 +217,7 @@ const CourseShop = () => {
                                     <div className="mobileTabSection">
                                         <div className="btnWrapper">
                                             <Button onClick={handleClick}>
-                                                {context.courseFilterValue === 0 ? 'همه دوره ها' : context.courseFilterValue}
+                                                {context.courseFilterValue === 0 ? t("همه دوره ها") : t(context.courseFilterValue)}
                                                 &nbsp; <IoIosArrowDown />
                                             </Button>
                                         </div>
@@ -225,9 +227,9 @@ const CourseShop = () => {
                                             open={open}
                                             onClose={() => handleClose(context.courseFilterValue)}
                                         >
-                                            <MenuItem onClick={() => handleClose(0)}>همه دوره ها</MenuItem>
+                                            <MenuItem onClick={() => handleClose(0)}>{t("همه دوره ها")}</MenuItem>
                                             {filterOptions.map((opt) => (
-                                                <MenuItem key={opt.value} onClick={() => handleClose(opt.value)}>{opt.label}</MenuItem>
+                                                <MenuItem key={opt.value} onClick={() => handleClose(opt.value)}>{t(opt.label)}</MenuItem>
                                             ))}
                                         </Menu>
                                     </div>
@@ -247,7 +249,7 @@ const CourseShop = () => {
                                             ) : (
                                                 <div className="emptyState">
                                                     <GiArchiveResearch />
-                                                    <p>دوره ای در حوزه انتخاب شده وجود ندارد!</p>
+                                                    <p>{t("دوره ای در حوزه انتخاب شده وجود ندارد!")}</p>
                                                 </div>
                                             )
                                         ) : (

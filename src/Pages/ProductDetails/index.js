@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import Button from "@mui/material/Button";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
@@ -56,6 +57,9 @@ const ProductItemSkeleton = () => (
 );
 
 const ProductItem = () => {
+    const { t, localize, language, dir, isEnglish, formatNumber } = useLanguage();
+    const displayDate = (value) => isEnglish ? String(value ?? '').replace(/[۰-۹٠-٩]/g, (digit) =>
+        String(digit.charCodeAt(0) - (digit <= "٩" ? 0x660 : 0x6f0))) : value;
 
     const context = useContext(MyContext);
     const { id } = useParams();
@@ -93,15 +97,8 @@ const ProductItem = () => {
         })
     }, [id]);
 
-    const [price, setPrice] = useState('');
-    const [oldPrice, setOldPrice] = useState('');
-
-    useEffect(() => {
-        const formattedPrice = productData?.price === '' ? '' : Number(productData?.price).toLocaleString();
-        const formattedOldPrice = productData?.oldPrice === '' ? '' : Number(productData?.oldPrice).toLocaleString();
-        setPrice(formattedPrice);
-        setOldPrice(formattedOldPrice);
-    }, [productData]);
+    const price = productData?.price === '' ? '' : formatNumber(productData?.price);
+    const oldPrice = productData?.oldPrice === '' ? '' : formatNumber(productData?.oldPrice);
 
     const discount = () => {
         const oldP = Number(productData?.oldPrice);
@@ -111,7 +108,7 @@ const ProductItem = () => {
 
         const result = ((oldP - newP) / oldP) * 100;
 
-        return Math.floor(result);
+        return formatNumber(Math.floor(result));
     }
 
     const [btnDisabled, setBtnDisabled] = useState(false);
@@ -145,7 +142,7 @@ const ProductItem = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'وارد حساب کاربری خود شوید!'
+                msg: t("وارد حساب کاربری خود شوید!")
             });
 
             setTimeout(() => {
@@ -206,7 +203,7 @@ const ProductItem = () => {
                         context.setAlertBox({
                             open: true,
                             error: false,
-                            msg: 'دیدگاه شما  منتشر شد!'
+                            msg: t("دیدگاه شما  منتشر شد!")
                         });
 
                         reviews.review = '';
@@ -247,7 +244,7 @@ const ProductItem = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: 'دیدگاه و امتیاز خود را مشخص کنید!'
+                    msg: t("دیدگاه و امتیاز خود را مشخص کنید!")
                 });
             }
 
@@ -257,7 +254,7 @@ const ProductItem = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'وارد حساب کاربری خود شوید!'
+                msg: t("وارد حساب کاربری خود شوید!")
             });
             history('/login');
 
@@ -274,19 +271,19 @@ const ProductItem = () => {
         <>
             <div className="container CourseItem productItem">
                 <p className="mb-1 mt-4 me-4 me-lg-0 breadCrumb ">
-                    <Link to="/"><b> خانه </b></Link> /
-                    <Link to="/shop"><b> محصولات </b></Link> /
-                    <Link to=""><b> {productData?.name ? productData?.name : ''}</b></Link>
+                    <Link to="/"><b>{t(" خانه ")}</b></Link> /
+                    <Link to="/shop"><b>{t(" محصولات ")}</b></Link> /
+                    <Link to=""><b> {localize(productData, "name") ? localize(productData, "name") : ''}</b></Link>
                 </p>
                 <div className="row mt-4 columnReverse">
                     <div className="col-12 pointer col-md-8">
 
-                        <h1>{productData?.name}</h1>
-                        <h3>{productData?.field}</h3>
+                        <h1>{localize(productData, "name")}</h1>
+                        <h3>{localize(productData, "field")}</h3>
 
                         <div className="description mt-4" style={{ whiteSpace: 'normal !important' }}>
-                            <p className="title">درباره این محصول</p>
-                            <p>
+                            <p className="title">{t("درباره این محصول")}</p>
+                            <div className="mb-3">
                                 <ReactMarkdown
                                     remarkPlugins={[remarkGfm]}
                                     components={{
@@ -304,16 +301,16 @@ const ProductItem = () => {
                                         p: ({ node, ...props }) => <span {...props} />
                                     }}
                                 >
-                                    {productData?.description || ''}
+                                    {localize(productData, "description") || ''}
                                 </ReactMarkdown>
-                            </p>
+                            </div>
                         </div>
 
                         <div className="d-flex align-items-center p-1">
-                            <h5 className="mb-0">موجودی انبار :</h5>
+                            <h5 className="mb-0">{t("موجودی انبار :")}</h5>
                             <div className="countInStockBox">
                                 {
-                                    productData?.countInStock === 0 ? 'ناموجود' : <span>{productData?.countInStock}</span>
+                                    productData?.countInStock === 0 ? t("ناموجود") : <span>{productData?.countInStock}</span>
                                 }
                             </div>
                         </div>
@@ -321,11 +318,12 @@ const ProductItem = () => {
 
                     <div className="col-12 pointer col-md-4">
                         <div className="card">
-                            <Swiper
+                            <Swiper key={language} dir={dir}
+
                                 slidesPerView={1}
                                 autoplay={{ delay: 3000 }}
                                 modules={[Autoplay]}
-                                loop={true}
+                                loop={(productData?.images?.length ?? 0) >= 2}
                                 className="courseItemImagesSwiper"
                             >
                                 {
@@ -344,7 +342,7 @@ const ProductItem = () => {
 
                             <div className="details mt-4">
                                 <div className="price">
-                                    <h6 className="oldPrice"><b>قیمت محصول : </b>
+                                    <h6 className="oldPrice"><b>{t("قیمت محصول : ")}</b>
                                         {
                                             productData?.oldPrice &&
                                             <>
@@ -361,14 +359,14 @@ const ProductItem = () => {
                                     <h6 className="newPrice">
                                         <span>{price}</span>
                                         <span className="mx-2">
-                                            <img src={Toman} />
+                                            {isEnglish ? <span className="currencyLabel">toman</span> : <img src={Toman} alt={t("تومان")} />}
                                         </span>
                                     </h6>
                                 </div>
 
                                 <div className="row mt-3 ps-4">
                                     {
-                                        productData?.event?.length !== undefined && productData?.event?.map((item, index) => {
+                                        Array.isArray(productData?.event) && localize(productData, "event").map((item, index) => {
                                             return (
                                                 <div className="col-12 col-lg-6 mt-1" key={index}>
                                                     <div className="specialEventAlert">{item}</div>
@@ -380,7 +378,7 @@ const ProductItem = () => {
                             </div>
 
                             <div className="AddToCartBtn text-center">
-                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} onClick={addtoCart}><FaShoppingCart /> اضافه کردن محصول به سبد خرید</Button>
+                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} onClick={addtoCart}><FaShoppingCart />{t(" اضافه کردن محصول به سبد خرید")}</Button>
                             </div>
                         </div>
                     </div>
@@ -389,10 +387,10 @@ const ProductItem = () => {
                 <div className=" CourseInfo mt-5">
                     <div className="CourseInfoBtns d-flex">
                         {
-                            productData?.authorName !== '' && <button onClick={() => openTab(2)}>نویسنده</button>
+                            localize(productData, "authorName") !== '' && <button onClick={() => openTab(2)}>{t("نویسنده")}</button>
                         }
-                        <button onClick={() => openTab(3)}>سایر کتاب های مرتبط</button>
-                        <button onClick={() => openTab(4)}>دیدگاه ها</button>
+                        <button onClick={() => openTab(3)}>{t("سایر کتاب های مرتبط")}</button>
+                        <button onClick={() => openTab(4)}>{t("دیدگاه ها")}</button>
                     </div>
 
                     <div className="CourseInfoTabs">
@@ -403,14 +401,14 @@ const ProductItem = () => {
                                     <div className="pe-4">
                                         <br />
 
-                                        <div className="d-flex align-items-center" style={{ textAlign: 'right' }}>
-                                            <h3>نام نویسنده :</h3>
-                                            <h3 className="me-2">{productData?.authorName}</h3>
+                                        <div className="d-flex align-items-center" style={{ textAlign: isEnglish ? 'left' : 'right' }}>
+                                            <h3>{t("نام نویسنده :")}</h3>
+                                            <h3 className="me-2">{localize(productData, "authorName")}</h3>
                                         </div>
 
                                         <br />
 
-                                        <div style={{ textAlign: 'right' }}>
+                                        <div style={{ textAlign: isEnglish ? 'left' : 'right' }}>
                                             <ReactMarkdown
                                                 remarkPlugins={[remarkGfm]}
                                                 components={{
@@ -428,7 +426,7 @@ const ProductItem = () => {
                                                     p: ({ node, ...props }) => <span {...props} />
                                                 }}
                                             >
-                                                {productData?.authorDescription || ''}
+                                                {localize(productData, "authorDescription") || ''}
                                             </ReactMarkdown>
                                         </div>
                                     </div>
@@ -440,7 +438,7 @@ const ProductItem = () => {
                             infoTab === 3 && (
                                 <div className="productSection pt-5">
                                     <div className="text-center">
-                                        <h3 className="mb-4">سایر محصولات در این حوزه : </h3>
+                                        <h3 className="mb-4">{t("سایر محصولات در این حوزه : ")}</h3>
                                     </div>
                                     <div className="row px-2">
                                         {
@@ -465,7 +463,7 @@ const ProductItem = () => {
 
                                         {
                                             reviewsData?.length !== undefined && reviewsData?.length !== 0 ?
-                                                <h2>دیدگاه ها :</h2> : <h5>دیدگاهی برای این محصول ثبت نشده است!</h5>
+                                                <h2>{t("دیدگاه ها :")}</h2> : <h5>{t("دیدگاهی برای این محصول ثبت نشده است!")}</h5>
                                         }
 
                                         {
@@ -479,7 +477,7 @@ const ProductItem = () => {
                                                                     <Rating value={item?.customerRating} style={{ direction: 'ltr' }} precision={0.5} readOnly />
                                                                 </div>
                                                             </div>
-                                                            <p>تاریخ : {item?.dateCreated}</p>
+                                                            <p>{t("تاریخ : ")}{displayDate(item?.dateCreated)}</p>
                                                             <p style={{ whiteSpace: 'pre-line' }}>{item?.review}</p>
                                                         </div>
                                                     </div>
@@ -488,17 +486,15 @@ const ProductItem = () => {
                                         }
 
                                         <form className="w-100" onSubmit={addReview}>
-                                            <textarea name="review" value={reviews.review} onChange={onchanegInput} className="w-100" rows="10" placeholder="دیدگاه خود را با ما به اشتراک بگذارید"></textarea>
+                                            <textarea name="review" value={reviews.review} onChange={onchanegInput} className="w-100" rows="10" placeholder={t("دیدگاه خود را با ما به اشتراک بگذارید")}></textarea>
 
                                             <div className="d-flex align-items-center py-3">
-                                                <h4 className="text-muted mb-2">امتیاز شما : &nbsp;&nbsp;</h4>
+                                                <h4 className="text-muted mb-2">{t("امتیاز شما :   ")}</h4>
                                                 <Rating style={{ direction: 'ltr' }} precision={0.5} onChange={changeRating} value={reviews.customerRating} />
                                             </div>
 
                                             <div className="text-center">
-                                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} type="submit" variant="contained" startIcon={<SendIcon />}>&nbsp;&nbsp;
-                                                    ثبت و ارسال دیدگاه
-                                                    {
+                                                <Button className={`${btnDisabled !== false && 'btnDisabled'}`} type="submit" variant="contained" startIcon={<SendIcon />}>{t("   ثبت و ارسال دیدگاه")}{
                                                         loader === true &&
                                                         <CircularProgress
                                                             sx={() => ({

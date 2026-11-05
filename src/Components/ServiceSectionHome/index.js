@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import imgOne from "./../../assets/serviceSectionImgs/imgOne.png"
 import imgTwo from "./../../assets/serviceSectionImgs/imgTwo.png"
 import imgThree from "./../../assets/serviceSectionImgs/imgThree.png"
@@ -17,12 +18,13 @@ const serviceItems = [
 ];
 
 const ServiceSection = () => {
+    const { t, dir } = useLanguage();
     return (
         <>
-            <div className="container serviceSection">
+            <div className="container serviceSection" dir={dir}>
                 <div className="text-center title">
-                    <span className="titleTag">حوزه‌های فعالیت</span>
-                    <h2>ما در چه حوزه‌هایی فعالیت می‌کنیم؟</h2>
+                    <span className="titleTag">{t("حوزه‌های فعالیت", "Our fields")}</span>
+                    <h2>{t("ما در چه حوزه‌هایی فعالیت می‌کنیم؟", "What fields do we work in?")}</h2>
                 </div>
 
                 <div className="row mt-4 serviceGrid">
@@ -33,10 +35,10 @@ const ServiceSection = () => {
                                     <div className="bottom-div"></div>
                                     <div className="top-div text-center">
                                         <div className="imgWrapperService">
-                                            <img src={item.img} className={item.imgClass} />
+                                            <img src={item.img} className={item.imgClass} alt={t(item.title)} />
                                         </div>
                                         <div className="serviceCardFooter">
-                                            <div className="serviceCardTitle">{item.title}</div>
+                                            <div className="serviceCardTitle">{t(item.title)}</div>
                                             <span className="serviceCardArrow">
                                                 <IoArrowBackOutline />
                                             </span>

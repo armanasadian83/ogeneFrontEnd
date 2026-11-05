@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import Button from "@mui/material/Button";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +8,7 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { MyContext } from "../../App";
 
 const CourseCard = (props) => {
+    const { t, localize } = useLanguage();
 
     const context = useContext(MyContext);
 
@@ -34,15 +36,13 @@ const CourseCard = (props) => {
     return (
         <div className="courseCard">
             <div className="courseImgWrapper">
-                <img src={data?.images && data.images[0]} />
-                <span className="courseBadge">دوره آموزشی</span>
+                <img src={data?.images && data.images[0]} alt={localize(data, "name")} />
+                <span className="courseBadge">{t("دوره آموزشی")}</span>
             </div>
             <div className="courseCardBody">
-                <p className="courseTitle">{data?.name && data.name.substring(0, 62)}</p>
+                <p className="courseTitle">{localize(data, "name").substring(0, 62)}</p>
                 <Link to={`/course/${data?.id}`} className="courseCardLink">
-                    <Button className="courseCardBtn">
-                        مشاهده جزئیات دوره
-                        <IoArrowBackOutline className="courseCardBtnIcon" />
+                    <Button className="courseCardBtn">{t("مشاهده جزئیات دوره")}<IoArrowBackOutline className="courseCardBtnIcon" />
                     </Button>
                 </Link>
             </div>

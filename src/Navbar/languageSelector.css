@@ -1,0 +1,16 @@
+.languageSelector { display: inline-flex; align-items: center; flex-shrink: 0; }
+.myNavbar .languageSelectorTrigger { display: inline-flex; align-items: center; justify-content: center; width: 38px !important; min-width: 38px !important; height: 38px !important; padding: 0; border: 1px solid transparent; background: transparent; cursor: pointer; transition: background 160ms, border-color 160ms; }
+.myNavbar .languageSelectorTrigger svg { width: 22px; height: 22px; stroke-width: 1.8; }
+.myNavbar .languageSelectorTrigger:hover, .myNavbar .languageSelectorTrigger.isOpen { background: #eefaf6; border-color: #cee7de; }
+.myNavbar .languageSelectorTrigger.isOpen svg { color: #0f766e !important; }
+.myNavbar .languageSelectorTrigger:focus-visible { outline: 3px solid #26a999; outline-offset: 3px; }
+.languageSelectorPaper.MuiPaper-root { min-width: 196px; margin-top: 10px; padding: 6px; border: 1px solid #e0ebe6; border-radius: 16px; box-shadow: 0 12px 36px #0b3d381a; background: #fff; }
+.languageSelectorMenu.MuiList-root { padding: 0; direction: ltr; }
+.languageSelectorMenu .MuiMenuItem-root { display: flex; gap: 12px; min-height: 48px; border-radius: 10px; margin: 3px 0; padding: 8px 12px; color: #344b4a; font-size: 15px; }
+.languageSelectorMenu .MuiMenuItem-root.Mui-selected, .languageSelectorMenu .MuiMenuItem-root.Mui-selected:hover, .languageSelectorMenu .MuiMenuItem-root.Mui-selected.Mui-focusVisible { background: #e8f6f1 !important; color: #0f766e; }
+.languageSelectorMenu .MuiMenuItem-root:hover, .languageSelectorMenu .Mui-focusVisible { background: #f4faf8; }
+.languageOptionCode { display: grid; place-items: center; width: 34px; height: 30px; border: 1px solid #deebe6; border-radius: 7px; background: #fff; font-size: 14px; font-weight: 700; }
+.languageOptionCode[lang="en"], .languageOptionName[lang="en"] { font-family: Arial, sans-serif !important; }
+.languageOptionName { flex: 1; }
+.languageSelectorMenu svg, .languageOptionCheck { width: 18px; height: 18px; flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) { .myNavbar .languageSelectorTrigger { transition: none; } }

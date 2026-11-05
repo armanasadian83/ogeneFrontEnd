@@ -1,3 +1,5 @@
+import { customerMessage } from "../account/customerMessages";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../App";
@@ -8,6 +10,7 @@ import { RiEye2Fill, RiEyeCloseFill } from "react-icons/ri";
 import { postData } from "../../utils/api";
 
 const ChangePasswordNew = () => {
+    const { t, dir } = useLanguage();
     const context = useContext(MyContext);
     const history = useNavigate();
     const location = useLocation();
@@ -42,7 +45,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "لطفا ابتدا مراحل تغییر رمز عبور را طی کنید!"
+                msg: t("لطفا ابتدا مراحل تغییر رمز عبور را طی کنید!", "Please complete the password change steps first.")
             });
             setTimeout(() => {
                 history('/change-password');
@@ -58,7 +61,7 @@ const ChangePasswordNew = () => {
         if (!token) {
             history('/login');
         }
-    }, [location, context, history]);
+    }, [location, context, history, t]);
 
     const handleChange = (e) => {
         setFormData({
@@ -81,7 +84,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "رمز عبور جدید را وارد کنید!"
+                msg: t("رمز عبور جدید را وارد کنید!", "Enter your new password.")
             });
             return;
         }
@@ -90,7 +93,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "رمز عبور حداقل باید 7 حرف/عدد باشد!"
+                msg: t("رمز عبور حداقل باید 7 حرف/عدد باشد!", "Your password must contain at least 7 letters or numbers.")
             });
             return;
         }
@@ -99,7 +102,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "فاصله در رمز عبور مجاز نیست!"
+                msg: t("فاصله در رمز عبور مجاز نیست!", "Passwords cannot contain spaces.")
             });
             return;
         }
@@ -108,7 +111,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "تکرار رمز عبور را وارد کنید!"
+                msg: t("تکرار رمز عبور را وارد کنید!", "Confirm your password.")
             });
             return;
         }
@@ -117,7 +120,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "رمز عبور ها باهم تطابق ندارند!"
+                msg: t("رمز عبور ها باهم تطابق ندارند!", "The passwords do not match.")
             });
             return;
         }
@@ -140,7 +143,7 @@ const ChangePasswordNew = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: res.msg
+                    msg: customerMessage(t, res.msg)
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -148,7 +151,7 @@ const ChangePasswordNew = () => {
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: res.message
+                    msg: customerMessage(t, res.message)
                 });
 
                 // Clear reset data
@@ -161,7 +164,7 @@ const ChangePasswordNew = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "مشکلی در تغییر رمز عبور وجود دارد!"
+                    msg: t("مشکلی در تغییر رمز عبور وجود دارد!", "Your password could not be changed. Please try again.")
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -171,7 +174,7 @@ const ChangePasswordNew = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "مشکلی در تغییر رمز عبور وجود دارد!"
+                msg: t("مشکلی در تغییر رمز عبور وجود دارد!", "Your password could not be changed. Please try again.")
             });
             setLoader(false);
             setBtnDisabled(false);
@@ -179,7 +182,7 @@ const ChangePasswordNew = () => {
     };
 
     return (
-        <section className="section signInPage">
+        <section dir={dir} className="section signInPage">
             <div className="shape-bottom">
                 <svg fill="#fff" id="layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8">
                     <path className="st0" d="M1921,413.1v406.7H0V0.Sh0.41228.1,598.3c30,74.4,80.8,130.6,152.5,168.6c107.6,57,212.1,40.7,245.7,34.4 c22.4-4.2,54.9-13.1,97.5-26.6L1921,400.5V413.1z"></path>
@@ -191,13 +194,13 @@ const ChangePasswordNew = () => {
                     <form className="mt-3" onSubmit={handleSubmit}>
                         <div className="d-flex align-items-center mb-3 ms-4">
                             <img src={Logo} className="signInLogo" alt="Logo" />
-                            <h2 className="mx-1">رمز عبور جدید</h2>
+                            <h2 className="mx-1">{t("رمز عبور جدید", "New password")}</h2>
                         </div>
 
-                        <p className="text-muted mb-4 text-center">رمز عبور جدید خود را وارد کنید.</p>
+                        <p className="text-muted mb-4 text-center">{t("رمز عبور جدید خود را وارد کنید.", "Enter your new password.")}</p>
 
                         <div className="form-group">
-                            <label className="mb-1">رمز عبور جدید</label>
+                            <label className="mb-1">{t("رمز عبور جدید", "New password")}</label>
                             <span className='mx-2' style={{cursor: 'pointer'}}>
                                 {isPasswordShown === false ? 
                                     <RiEyeCloseFill onClick={revealPassword} /> : 
@@ -217,7 +220,7 @@ const ChangePasswordNew = () => {
                         </div>
 
                         <div className="form-group mt-3">
-                            <label className="mb-1">تکرار رمز عبور جدید</label>
+                            <label className="mb-1">{t("تکرار رمز عبور جدید", "Confirm new password")}</label>
                             <input 
                                 name="confirmPassword" 
                                 value={formData.confirmPassword}
@@ -233,7 +236,7 @@ const ChangePasswordNew = () => {
                                     type="submit" 
                                     className={`col btn-lg enter ${btnDisabled !== false && 'btnDisabled'}`}
                                 >
-                                    تغییر رمز
+                                    {t("تغییر رمز", "Change password")}
                                     {loader === true && 
                                         <CircularProgress
                                             sx={() => ({
@@ -248,14 +251,14 @@ const ChangePasswordNew = () => {
                             <div className="w-50">
                                 <Link to='/profile'>
                                     <Button className="col btn-lg ml-1 cancel" variant="outlined">
-                                        بازگشت
+                                        {t("بازگشت", "Back")}
                                     </Button>
                                 </Link>
                             </div>
                         </div>
 
                         <h6 className="mt-5 text-center font-weight-bold">
-                            آموزشگاه آزاد نانوزیست فناوری اوژن
+                            {t("آموزشگاه آزاد نانوزیست فناوری اوژن", "Ogene Nanobiotechnology Training Institute")}
                         </h6>
                     </form>
                 </div>

@@ -1,11 +1,12 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useLanguage } from "../../i18n/LanguageContext";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { fetchDataFromApi, postData } from "../../utils/api";
 
 import { MyContext } from "../../App";
 import { CircularProgress } from "@mui/material";
 
 import { useSearchParams } from "react-router-dom";
-import { TbFlask, TbSearch, TbCheck, TbBrandWhatsapp, TbMessageCircle, TbArrowLeft, TbArrowRight } from "react-icons/tb";
+import { TbFlask, TbSearch, TbCheck, TbBrandWhatsapp, TbArrowLeft, TbArrowRight } from "react-icons/tb";
 
 import Logo from "./../../assets/baleLogo.png";
 
@@ -25,16 +26,18 @@ const fields = [
 const COOLDOWN_SECONDS = 300; // how long the user must wait to resubmit
 
 const Service = () => {
+    const { t, localize, dir } = useLanguage();
 
     const context = useContext(MyContext);
+    const { setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar } = context;
 
     useEffect(() => {
-        context.setIsShowFooter(true);
-        context.setIsShowNavbar(true);
-        context.setIsShowCalenderBar(true);
+        setIsShowFooter(true);
+        setIsShowNavbar(true);
+        setIsShowCalenderBar(true);
 
         window.scrollTo(0, 0);
-    }, []);
+    }, [setIsShowFooter, setIsShowNavbar, setIsShowCalenderBar]);
 
     const [formFields, setFormFields] = useState({
         reqName: [],
@@ -114,19 +117,37 @@ const Service = () => {
     }, [fieldName]);
 
     const [serviceData, setServiceData] = useState([]);
+    const [servicesError, setServicesError] = useState('');
+    const [isLoadingServices, setIsLoadingServices] = useState(false);
+    const [serviceLoadAttempt, setServiceLoadAttempt] = useState(0);
 
     useEffect(() => {
+        const controller = new AbortController();
+        setServiceData([]);
+        setServicesError('');
         if (!personName) {
-            setServiceData([]);
+            setIsLoadingServices(false);
             return;
         }
-        fetchDataFromApi(`/api/service?filterKey=${personName}`).then((res) => {
-            setServiceData(res);
-        });
-    }, [personName]);
+        setIsLoadingServices(true);
+        fetchDataFromApi(`/api/service?filterKey=${encodeURIComponent(personName)}`, { throwOnError: true, signal: controller.signal })
+            .then((res) => {
+                if (controller.signal.aborted) return;
+                if (!Array.isArray(res)) throw new Error('Invalid services response');
+                setServiceData(res.filter((item) => item && typeof item.name === 'string' && item.name.trim()));
+            })
+            .catch(() => {
+                if (!controller.signal.aborted) setServicesError('دریافت خدمات انجام نشد. لطفاً دوباره تلاش کنید.');
+            })
+            .finally(() => {
+                if (!controller.signal.aborted) setIsLoadingServices(false);
+            });
+        return () => controller.abort();
+    }, [personName, serviceLoadAttempt]);
 
-    const visibleServices = (serviceData ?? []).filter((item) =>
-        (item?.name ?? '').toLowerCase().includes(serviceSearch.toLowerCase())
+    const visibleServices = serviceData.filter((item) =>
+        localize(item, "name").toLowerCase().includes(serviceSearch.toLowerCase())
+        || item.name.toLowerCase().includes(serviceSearch.toLowerCase())
     );
 
     const inputChange = (e) => {
@@ -139,22 +160,30 @@ const Service = () => {
     // Pre-fill name/phone for a logged-in user, but the fields stay
     // editable in case they're submitting on someone else's behalf.
     useEffect(() => {
-        if (context.isLoggedIn === true) {
-            const user = JSON.parse(localStorage.getItem("user"));
-
-            fetchDataFromApi(`/api/client/${user?.userId}`).then((res) => {
+        setFormFields((prev) => ({ ...prev, userId: '' }));
+        if (context.isLoggedIn !== true) return;
+        let user;
+        try { user = JSON.parse(localStorage.getItem("user") || 'null'); } catch { return; }
+        if (typeof user?.userId !== 'string' || !user.userId.trim()) return;
+        const controller = new AbortController();
+        fetchDataFromApi(`/api/client/${encodeURIComponent(user.userId)}`, { throwOnError: true, signal: controller.signal })
+            .then((res) => {
+                if (controller.signal.aborted || !res || res.error || res.success === false || res.isAxiosError
+                    || (res.id || res._id) !== user.userId || typeof res.name !== 'string' || typeof res.phone !== 'string') return;
                 setFormFields((prev) => ({
                     ...prev,
-                    name: `${user?.name} ${user?.lastName}`,
-                    userId: user?.userId,
-                    phone: res.phone
+                    name: prev.name || `${res.name} ${res.lastName || ''}`.trim(),
+                    userId: user.userId,
+                    phone: prev.phone || res.phone
                 }));
-            });
-        }
+            })
+            .catch(() => { /* Contact fields stay editable when profile prefill is unavailable. */ });
+        return () => controller.abort();
     }, [context.isLoggedIn]);
 
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
+    const requestPending = useRef(false);
 
     // Two-step wizard: 1 = field + service selection, 2 = contact form.
     const [step, setStep] = useState(1);
@@ -164,7 +193,7 @@ const Service = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "لطفاً ابتدا حوزه خدمات را انتخاب کنید!"
+                msg: t("لطفاً ابتدا حوزه خدمات را انتخاب کنید!")
             });
             return;
         }
@@ -173,7 +202,7 @@ const Service = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "حداقل یک خدمت باید انتخاب شود!"
+                msg: t("حداقل یک خدمت باید انتخاب شود!")
             });
             return;
         }
@@ -187,17 +216,23 @@ const Service = () => {
 
     // Anyone can submit a request — logged in or not. A logged-in
     // user's request is just tagged with their userId.
-    const sendRequest = (e) => {
+    const sendRequest = async (e) => {
         e.preventDefault();
-        if (cooldown > 0) return;
+        if (cooldown > 0 || requestPending.current) return;
 
-        const payload = { ...formFields, reqName: serviceName };
+        const payload = {
+            ...formFields,
+            name: String(formFields.name || '').trim(),
+            phone: String(formFields.phone || '').trim(),
+            description: String(formFields.description || ''),
+            reqName: serviceName,
+        };
 
         if (payload.name.trim() === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "نام را وارد کنید!"
+                msg: t("نام را وارد کنید!")
             });
             return;
         }
@@ -206,7 +241,7 @@ const Service = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "شماره تماس را وارد کنید!"
+                msg: t("شماره تماس را وارد کنید!")
             });
             return;
         }
@@ -215,48 +250,62 @@ const Service = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "حداقل یک خدمت باید انتخاب شود!"
+                msg: t("حداقل یک خدمت باید انتخاب شود!")
             });
             return;
         }
 
+        if (payload.description.length > 2000) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: t("توضیحات باید حداکثر ۲۰۰۰ کاراکتر باشد.")
+            });
+            return;
+        }
+
+        requestPending.current = true;
         try {
             setLoader(true);
             setBtnDisabled(true);
 
-            postData('/api/request/create', payload).then(() => {
+            const response = await postData('/api/request/create', payload);
+            const savedId = response?.id || response?._id;
+            if (!response || response.error || response.success === false || response.status === false || response.isAxiosError
+                || typeof savedId !== 'string' || !savedId.trim()
+                || !Array.isArray(response.reqName) || typeof response.name !== 'string' || typeof response.phone !== 'string') {
                 context.setAlertBox({
                     open: true,
-                    error: false,
-                    msg: "درخواست با موفقیت ثبت شد!"
+                    error: true,
+                    msg: t("ثبت درخواست انجام نشد. لطفاً دوباره تلاش کنید.")
                 });
-
-                setLoader(false);
-                setTimeout(() => {
-                    setBtnDisabled(false);
-                }, 1000);
-
-                setServiceName([]);
-                setFormFields((prev) => ({ ...prev, description: '' }));
-                setStep(1);
-            });
-
-            // start cooldown
-            const until = Date.now() + COOLDOWN_SECONDS * 1000;
-            localStorage.setItem(cooldownKey, String(until));
-            setCooldown(COOLDOWN_SECONDS);
-
-        } catch (error) {
-            console.log(error);
-
-            setLoader(false);
-            setBtnDisabled(false);
+                return;
+            }
 
             context.setAlertBox({
                 open: true,
-                error: true,
-                msg: "مشکلی در ثبت درخواست وجود دارد!"
+                error: false,
+                msg: t("درخواست با موفقیت ثبت شد!")
             });
+
+            // Only a confirmed saved request starts the cooldown.
+            const until = Date.now() + COOLDOWN_SECONDS * 1000;
+            try { localStorage.setItem(cooldownKey, String(until)); } catch { /* The in-memory cooldown still applies. */ }
+            setCooldown(COOLDOWN_SECONDS);
+            setServiceName([]);
+            setFormFields((prev) => ({ ...prev, description: '' }));
+            setStep(1);
+
+        } catch {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: t("مشکلی در ثبت درخواست وجود دارد!")
+            });
+        } finally {
+            requestPending.current = false;
+            setLoader(false);
+            setBtnDisabled(false);
         }
     };
 
@@ -265,7 +314,7 @@ const Service = () => {
     }, [step]);
 
     return (
-        <div className="container serviceAnformaticSection">
+        <div className="container serviceAnformaticSection" dir={dir}>
 
             <div className="serviceWizard">
                 <div
@@ -278,12 +327,12 @@ const Service = () => {
 
                         <div className="serviceHero">
                             <span className="serviceHero-icon"><TbFlask /></span>
-                            <h1 className="serviceHero-title">خدمات اوژن</h1>
-                            <p className="serviceHero-subtitle">حوزه مورد نظر را انتخاب کنید و خدمات لازم را از میان گزینه‌ها مشخص کنید</p>
+                            <h1 className="serviceHero-title">{t("خدمات اوژن")}</h1>
+                            <p className="serviceHero-subtitle">{t("حوزه مورد نظر را انتخاب کنید و خدمات لازم را از میان گزینه‌ها مشخص کنید")}</p>
                         </div>
 
                         <div className="serviceStep">
-                            <p className="serviceStep-label">۱. حوزه خدمات</p>
+                            <p className="serviceStep-label">{t("۱. حوزه خدمات")}</p>
                             <div className="fieldChipRow">
                                 {fields.map((name) => (
                                     <button
@@ -292,7 +341,7 @@ const Service = () => {
                                         className={`fieldChip${personName === name ? " is-active" : ""}`}
                                         onClick={() => setPersonName(name)}
                                     >
-                                        {name}
+                                        {t(name)}
                                     </button>
                                 ))}
                             </div>
@@ -301,9 +350,9 @@ const Service = () => {
                         {personName && (
                             <div className="serviceStep">
                                 <div className="serviceStep-header">
-                                    <p className="serviceStep-label">۲. انتخاب خدمات</p>
+                                    <p className="serviceStep-label">{t("۲. انتخاب خدمات")}</p>
                                     {serviceName.length !== 0 && (
-                                        <span className="selectedCount">{serviceName.length} مورد انتخاب شد</span>
+                                        <span className="selectedCount">{serviceName.length}{t(" مورد انتخاب شد")}</span>
                                     )}
                                 </div>
 
@@ -311,12 +360,17 @@ const Service = () => {
                                     <TbSearch className="serviceSearch-icon" />
                                     <input
                                         type="text"
-                                        placeholder="جستجوی خدمت..."
+                                        placeholder={t("جستجوی خدمت...")}
                                         value={serviceSearch}
                                         onChange={(e) => setServiceSearch(e.target.value)}
                                     />
                                 </div>
 
+                                {isLoadingServices ? <p className="serviceCardGrid-empty" role="status">{t("در حال دریافت خدمات...")}</p> : null}
+                                {servicesError ? <div className="serviceCardGrid-empty" role="alert">
+                                    <p>{t(servicesError)}</p>
+                                    <button type="button" className="backButton" onClick={() => setServiceLoadAttempt((value) => value + 1)}>{t("تلاش دوباره")}</button>
+                                </div> : null}
                                 <div className="serviceCardGrid">
                                     {visibleServices.map((item, index) => {
                                         const selected = serviceName.includes(item?.name);
@@ -331,20 +385,18 @@ const Service = () => {
                                                 <span className="serviceCard-check">
                                                     {selected && <TbCheck />}
                                                 </span>
-                                                <span className="serviceCard-text">{item?.name}</span>
+                                                <span className="serviceCard-text">{localize(item, "name")}</span>
                                             </button>
                                         );
                                     })}
 
                                     {serviceData?.length !== 0 && visibleServices.length === 0 && (
-                                        <p className="serviceCardGrid-empty">خدمتی با این عنوان پیدا نشد.</p>
+                                        <p className="serviceCardGrid-empty">{t("خدمتی با این عنوان پیدا نشد.")}</p>
                                     )}
                                 </div>
 
                                 <div className="serviceWizard-nextRow">
-                                    <button type="button" className="nextButton" onClick={goToContactStep}>
-                                        مرحله بعدی
-                                        <TbArrowLeft />
+                                    <button type="button" className="nextButton" onClick={goToContactStep}>{t("مرحله بعدی")}<TbArrowLeft />
                                     </button>
                                 </div>
                             </div>
@@ -356,19 +408,18 @@ const Service = () => {
                     <div className="serviceWizard-panel">
 
                         <button type="button" className="backButton" onClick={goBackToSelection}>
-                            <TbArrowRight />
-                            بازگشت به انتخاب خدمات
-                        </button>
+                            <TbArrowRight />{t("بازگشت به انتخاب خدمات")}</button>
 
                         <div className="contactCard">
-                            <p className="serviceStep-label">۳. اطلاعات تماس</p>
+                            <p className="serviceStep-label">{t("۳. اطلاعات تماس")}</p>
 
                             <form onSubmit={sendRequest}>
 
                                 <div className="formRow">
                                     <div className="formGroup">
-                                        <label className="formLabel">نام و نام خانوادگی</label>
+                                        <label className="formLabel" htmlFor="service-request-name">{t("نام و نام خانوادگی")}</label>
                                         <input
+                                            id="service-request-name"
                                             className="formInput"
                                             name="name"
                                             type="text"
@@ -378,8 +429,9 @@ const Service = () => {
                                         />
                                     </div>
                                     <div className="formGroup">
-                                        <label className="formLabel">شماره تماس</label>
+                                        <label className="formLabel" htmlFor="service-request-phone">{t("شماره تماس")}</label>
                                         <input
+                                            id="service-request-phone"
                                             className="formInput"
                                             name="phone"
                                             type="text"
@@ -391,12 +443,14 @@ const Service = () => {
                                 </div>
 
                                 <div className="formGroup">
-                                    <label className="formLabel">توضیحات (اختیاری)</label>
+                                    <label className="formLabel" htmlFor="service-request-description">{t("توضیحات (اختیاری)")}</label>
                                     <textarea
+                                        id="service-request-description"
                                         className="formTextarea"
                                         name="description"
                                         rows={3}
-                                        placeholder="توضیح دهید دقیقاً به چه چیزی نیاز دارید..."
+                                        maxLength={2000}
+                                        placeholder={t("توضیح دهید دقیقاً به چه چیزی نیاز دارید...")}
                                         value={formFields.description}
                                         onChange={inputChange}
                                     />
@@ -406,15 +460,12 @@ const Service = () => {
                                     type="submit"
                                     className="submitButton"
                                     disabled={cooldown > 0 || btnDisabled}
-                                >
-                                    ثبت درخواست
-                                    {loader === true && (
+                                >{t("ثبت درخواست")}{loader === true && (
                                         <CircularProgress
                                             sx={() => ({
                                                 color: '#fff',
                                                 marginRight: '10px',
                                             })}
-                                            enableTrackSlot
                                             size="20px"
                                         />
                                     )}
@@ -423,9 +474,7 @@ const Service = () => {
                             </form>
 
                             {cooldown > 0 && (
-                                <p className="contactCard-cooldown">
-                                    برای ارسال دوباره، لطفاً {formatTime(cooldown)} ثانیه صبر کنید.
-                                </p>
+                                <p className="contactCard-cooldown">{t("برای ارسال دوباره، لطفاً {time} صبر کنید.", "Please wait {time} before submitting again.", { time: formatTime(cooldown) })}</p>
                             )}
                         </div>
 
@@ -439,8 +488,8 @@ const Service = () => {
                             >
                                 <span className="supportLink-icon"><TbBrandWhatsapp /></span>
                                 <span className="supportLink-text">
-                                    <span className="supportLink-title">پیام به پشتیبانی</span>
-                                    <span className="supportLink-subtitle">دریافت مشاوره در واتساپ</span>
+                                    <span className="supportLink-title">{t("پیام به پشتیبانی")}</span>
+                                    <span className="supportLink-subtitle">{t("دریافت مشاوره در واتساپ")}</span>
                                 </span>
                                 <TbArrowLeft className="supportLink-arrow" />
                             </a>
@@ -451,11 +500,10 @@ const Service = () => {
                                 rel="noopener noreferrer"
                                 className="supportLink supportLink--bale"
                             >
-                                {/* Swap TbMessageCircle for the real Bale logo asset if one exists in the project. */}
-                                <span className="supportLink-icon"><img src={Logo} /></span>
+                                <span className="supportLink-icon"><img src={Logo} alt={t("بله")} /></span>
                                 <span className="supportLink-text">
-                                    <span className="supportLink-title">پیام به پشتیبانی</span>
-                                    <span className="supportLink-subtitle">دریافت مشاوره در بله</span>
+                                    <span className="supportLink-title">{t("پیام به پشتیبانی")}</span>
+                                    <span className="supportLink-subtitle">{t("دریافت مشاوره در بله")}</span>
                                 </span>
                                 <TbArrowLeft className="supportLink-arrow" />
                             </a>

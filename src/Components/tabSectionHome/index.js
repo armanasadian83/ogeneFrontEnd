@@ -1,8 +1,9 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { FaGraduationCap } from "react-icons/fa";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import { useEffect, useState, useRef } from "react";
-import { fetchDataFromApi } from "../../utils/api";
+
 
 /* Reusable count-up hook — animates from 0 to target when the card scrolls into view */
 const useCountUp = (target, duration = 1500) => {
@@ -39,18 +40,20 @@ const useCountUp = (target, duration = 1500) => {
 
 const StatCard = ({ icon, value, label, variant }) => {
     const [count, ref] = useCountUp(value);
+    const { isEnglish } = useLanguage();
 
     return (
         <div className={`statCard ${variant}`} ref={ref}>
             <span className="ghostIcon">{icon}</span>
             <div className="statIconWrapper">{icon}</div>
-            <span className="statNumber">+{count.toLocaleString('fa-IR')}</span>
+            <span className="statNumber">+{count.toLocaleString(isEnglish ? 'en-US' : 'fa-IR')}</span>
             <h3 className="statLabel">{label}</h3>
         </div>
     );
 };
 
 const TabsHome = () => {
+    const { t, dir } = useLanguage();
 
     /*const [courseData, setCourseDate] = useState([]);
 
@@ -64,26 +67,26 @@ const TabsHome = () => {
         {
             icon: <LiaChalkboardTeacherSolid />,
             value: 110,
-            label: 'دوره آموزشی تخصصی',
+            label: t("دوره آموزشی تخصصی", "Specialist courses"),
             variant: 'variant1'
         },
         {
             icon: <FaGraduationCap />,
             value: 4413,
-            label: 'دانشجوی فارغ التحصیل',
+            label: t("دانشجوی فارغ التحصیل", "Graduates"),
             variant: 'variant2'
         },
         {
             icon: <IoDocumentTextSharp />,
             value: 870,
-            label: 'مدرک فنی و حرفه ای',
+            label: t("مدرک فنی و حرفه ای", "Technical and vocational certificates"),
             variant: 'variant3'
         },
     ];
 
     return (
         <>
-            <div className="tabSectionHome">
+            <div className="tabSectionHome" dir={dir}>
                 <div className="container">
                     <div className="statsRow">
                         {stats.map((stat, i) => (

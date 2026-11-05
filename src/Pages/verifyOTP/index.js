@@ -1,3 +1,5 @@
+import { customerMessage } from "../account/customerMessages";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +11,7 @@ import { Button, CircularProgress } from "@mui/material";
 
 
 const VerifyOTP = () => {
+    const { t, dir } = useLanguage();
 
     const [isLoading, setIsLoading] = useState(false);
     const [otp, setOtp] = useState("");   
@@ -43,7 +46,7 @@ const VerifyOTP = () => {
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: res?.message
+                    msg: customerMessage(t, res?.message)
                 });
                 localStorage.removeItem("userPhone");  // Changed from userEmail
                 // Also remove email if exists
@@ -53,7 +56,7 @@ const VerifyOTP = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: res?.message
+                    msg: customerMessage(t, res?.message)
                 });
             }
         });
@@ -72,7 +75,7 @@ const VerifyOTP = () => {
 
     return (
         <>
-        <section className="section signInPage otpPage">
+        <section dir={dir} className="section signInPage otpPage">
                 <div className="shape-bottom">
                     <svg fill="#fff" id="layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8" 
                       style={{enableBackground: "new 0 0 1921 819.8"}}>
@@ -88,20 +91,20 @@ const VerifyOTP = () => {
                         </div>
                         <form className="mt-0" onSubmit={verify}>
                             {/* CHANGED: Title and message to use phone instead of email */}
-                            <h2 className="mb-1 text-center">تایید شماره تلفن</h2>
-                            <p className="text-center text-muted">کد تایید به شماره تلفن <b>{localStorage.getItem('userPhone')}</b> ارسال شد.</p>
+                            <h2 className="mb-1 text-center">{t("تایید شماره تلفن", "Verify your phone number")}</h2>
+                            <p className="text-center text-muted">{t("کد تایید به شماره تلفن", "A verification code was sent to")} <b>{localStorage.getItem('userPhone')}</b> {t("ارسال شد.", ".")}</p>
 
-                            <p className="text-center text-muted mt-4">کد ارسال شده را وارد کنید:</p>
+                            <p className="text-center text-muted mt-4">{t("کد ارسال شده را وارد کنید:", "Enter the verification code:")}</p>
                             
                             <OtpInput length={6} onChange={handleOtpChange} />
 
                             <div className="d-flex align-items-center mt-4 mb-3">
                                 <Button type="submit" className="col verifyOtpSubmitBtn">
-                                    {isLoading === true ? <CircularProgress /> : "تایید"}
+                                    {isLoading === true ? <CircularProgress /> : t("تایید", "Verify")}
                                 </Button>
                             </div>
 
-                            <h6 className="mt-4 text-center font-weight-bold">آموزشگاه آزاد نانوزیست فناوری اوژن</h6>
+                            <h6 className="mt-4 text-center font-weight-bold">{t("آموزشگاه آزاد نانوزیست فناوری اوژن", "Ogene Nanobiotechnology Training Institute")}</h6>
 
                         </form>
                     </div>

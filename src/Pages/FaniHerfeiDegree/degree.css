@@ -1,0 +1,148 @@
+.degreeLanding { --degree-ink: #0b3d38; --degree-teal: #0f766e; --degree-muted: #516662; --degree-line: #e0ebe6; color: var(--degree-ink); background: #fff; text-align: right; font-size: 16px; line-height: 1.9; }
+.degreeLanding[dir="ltr"] { text-align: left; }
+.degreeLanding[dir="ltr"] .degreeBreadcrumb svg, .degreeLanding[dir="ltr"] .degreeRequestLink svg { transform: scaleX(-1); }
+.degreeLanding[dir="ltr"] .degreeStep:not(:last-child)::after { left: auto; right: -22px; transform: rotate(225deg); }
+.degreeLanding .degreeComparisonScroll { overflow-x: auto; border-radius: 8px; }
+.degreeLanding .degreeComparisonScroll:focus-visible { outline: 3px solid #26a999; outline-offset: 3px; }
+.degreeLanding .degreeComparisonTable { width: 100%; min-width: 580px; border-collapse: collapse; font-size: 12px; text-align: left; line-height: 1.6; }
+.degreeLanding .degreeComparisonTable caption { color: var(--degree-muted); font-size: 13px; caption-side: bottom; padding-top: 12px; text-align: left; }
+.degreeLanding .degreeComparisonTable th, .degreeLanding .degreeComparisonTable td { padding: 10px 7px; border-bottom: 1px solid var(--degree-line); vertical-align: middle; }
+.degreeLanding .degreeComparisonTable thead th { color: var(--degree-ink); background: #e7f4ee; font-weight: 700; }
+.degreeLanding .degreeComparisonTable tbody th { min-width: 120px; font-weight: 600; }
+.degreeLanding .degreeRating { display: inline-block; padding: 3px 6px; border-radius: 5px; font-size: 11px; }
+.degreeLanding .degreeRating-yes { background: #d5f3df; color: #16552c; }
+.degreeLanding .degreeRating-no { background: #ffe4e8; color: #8b2536; }
+.degreeLanding .degreeRating-discretionary { background: #fff0c9; color: #795713; }
+.degreeLanding .degreeShell { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+.degreeLanding h1, .degreeLanding h2, .degreeLanding h3 { color: var(--degree-ink); font-weight: 800; margin: 0; line-height: 1.65; }
+.degreeLanding h2 { font-size: 30px; }
+.degreeLanding h3 { font-size: 21px; }
+.degreeLanding p { color: var(--degree-muted); margin: 0; font-size: 16px; line-height: 2; }
+.degreeLanding a { text-decoration: none; }
+.degreeLanding a:focus-visible, .degreeLanding summary:focus-visible { outline: 3px solid #26a999; outline-offset: 5px; }
+.degreeLanding .degreeHero { background: #eefaf6; padding: 28px 0 36px; }
+.degreeLanding .degreeBreadcrumb { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--degree-muted); }
+.degreeLanding .degreeBreadcrumb a { color: var(--degree-teal); }
+.degreeLanding .degreeBreadcrumb svg { width: 14px; height: 14px; }
+.degreeLanding .degreeHeroGrid { display: grid; grid-template-columns: 1.35fr 0.65fr; align-items: center; gap: 48px; padding-top: 20px; }
+.degreeLanding .degreeHeroCopy { padding-bottom: 24px; }
+.degreeLanding .degreeHeroCopy h1 { font-size: clamp(32px, 3.3vw, 44px); margin-bottom: 16px; }
+.degreeLanding .degreeHeroCopy p { font-size: 19px; color: #294c46; }
+.degreeLanding .degreeSpecimen { width: 236px; margin: 0 auto; }
+.degreeLanding .degreeSpecimen a { display: block; padding: 9px; background: #fff; border: 1px solid #e3ece6; border-radius: 12px; box-shadow: 0 14px 36px #0b3d3812; transition: transform 180ms ease; }
+.degreeLanding .degreeSpecimen a:hover { transform: translateY(-3px); }
+.degreeLanding .degreeSpecimen img { display: block; width: 100%; height: auto; border-radius: 4px; }
+.degreeLanding .degreeSpecimen figcaption { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: var(--degree-muted); margin-top: 10px; }
+.degreeLanding .degreeIntro { display: grid; grid-template-columns: 1fr 220px; align-items: center; gap: 72px; padding-block: 62px 48px; }
+.degreeLanding .degreeIntro h2 { margin-bottom: 14px; }
+.degreeLanding .degreeIntro img { width: 100%; height: auto; }
+.degreeLanding .degreeTypes { padding-bottom: 60px; }
+.degreeLanding .degreeSectionHeading { text-align: center; margin-bottom: 32px; }
+.degreeLanding .degreeSectionHeading h2 { margin-bottom: 8px; }
+.degreeLanding .degreeTypeGrid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.degreeLanding .degreeType { padding: 4px 28px; border-inline-end: 1px solid var(--degree-line); }
+.degreeLanding .degreeType:last-child { border-inline-end: 0; }
+.degreeLanding .degreeTypeNumber { color: #92cfc3; font-size: 29px; font-weight: 800; line-height: 1.3; }
+.degreeLanding .degreeType h3 { margin: 8px 0; }
+.degreeLanding .degreeType p { font-size: 15px; }
+.degreeLanding .degreeProcess { background: #eefaf6; padding: 42px 0 46px; }
+.degreeLanding .degreeStepGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; padding: 0; margin: 0; list-style: none; }
+.degreeLanding .degreeStep { position: relative; }
+.degreeLanding .degreeStep:not(:last-child)::after { content: ""; position: absolute; left: -22px; top: 31px; width: 9px; height: 9px; border-left: 1.5px solid #75b8ab; border-bottom: 1.5px solid #75b8ab; transform: rotate(45deg); }
+.degreeLanding .degreeStepHeading { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.degreeLanding .degreeStepHeading span { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border: 1px solid #c3e6dc; border-radius: 50%; background: #dbf2eb; color: var(--degree-teal); font-weight: 800; font-size: 15px; }
+.degreeLanding .degreeStep h3 { font-size: 19px; }
+.degreeLanding .degreeStep p { font-size: 14px; }
+.degreeLanding .degreeGuide { padding-block: 58px 46px; }
+.degreeLanding .degreeGuideGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.degreeLanding .degreeGuideLead { font-size: 15px; margin: 10px 0 22px; }
+.degreeLanding .degreeDisclosureList { display: grid; gap: 10px; }
+.degreeLanding .degreeDisclosure { border: 1px solid var(--degree-line); border-radius: 12px; background: #fff; overflow: hidden; }
+.degreeLanding .degreeDisclosure summary { display: flex; gap: 16px; align-items: center; justify-content: space-between; padding: 14px 18px; cursor: pointer; list-style: none; color: #234d46; font-size: 15px; font-weight: 700; transition: background 160ms ease; }
+.degreeLanding .degreeDisclosure summary::-webkit-details-marker { display: none; }
+.degreeLanding .degreeDisclosure summary:hover { background: #f4faf8; }
+.degreeLanding .degreeDisclosure summary svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--degree-teal); transition: transform 180ms ease; }
+.degreeLanding .degreeDisclosure[open] summary { background: #f4faf8; border-bottom: 1px solid var(--degree-line); }
+.degreeLanding .degreeDisclosure[open] summary svg { transform: rotate(180deg); }
+.degreeLanding .degreeDisclosureBody { padding: 8px 20px 22px; }
+.degreeLanding .degreeDisclosureBody section + section { margin-top: 24px; }
+.degreeLanding .degreeDisclosureBody h3 { font-size: 17px; margin: 14px 0 10px; }
+.degreeLanding .degreeDisclosureBody p, .degreeLanding .degreeDisclosureBody li { font-size: 14px; line-height: 2.15; color: var(--degree-muted); overflow-wrap: anywhere; }
+.degreeLanding .degreeDisclosureBody p + p { margin-top: 12px; }
+.degreeLanding .degreeDisclosureBody ul { margin: 12px 0 0; padding-inline-start: 22px; }
+.degreeLanding .degreeComparison { margin: 0; padding: 26px 22px 18px; background: #f4faf8; border: 1px solid var(--degree-line); border-radius: 16px; text-align: center; }
+.degreeLanding .degreeComparison figcaption { margin-bottom: 24px; }
+.degreeLanding .degreeComparison h3 { font-size: 22px; margin-bottom: 6px; }
+.degreeLanding .degreeComparison p { font-size: 14px; }
+.degreeLanding .degreeComparison a { display: block; border-radius: 8px; }
+.degreeLanding .degreeComparison img { display: block; width: 100%; height: auto; border: 1px solid var(--degree-line); border-radius: 8px; background: #fff; }
+.degreeLanding .degreeImageLink { display: inline-flex; align-items: center; gap: 10px; color: var(--degree-teal); font-size: 14px; margin-top: 22px; }
+.degreeLanding .degreeComparison a:hover .degreeImageLink { text-decoration: underline; }
+.degreeLanding .degreeOfficial { display: flex; align-items: center; justify-content: center; gap: 24px; border-top: 1px solid var(--degree-line); margin-top: 44px; padding-top: 32px; }
+.degreeLanding .degreeOfficial > img { width: 94px; height: auto; }
+.degreeLanding .degreeOfficial h2 { font-size: 23px; margin-bottom: 4px; }
+.degreeLanding .degreeOfficial p { font-size: 14px; }
+.degreeLanding .degreeOfficialLinks { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.degreeLanding .degreeOfficialLinks a { display: inline-flex; align-items: center; gap: 20px; padding: 9px 16px; border: 1px solid #8abeb2; border-radius: 10px; color: var(--degree-teal); font-size: 14px; transition: background 160ms ease; }
+.degreeLanding .degreeOfficialLinks a:hover { background: #eefaf6; }
+.degreeLanding .degreeRequestBanner { text-align: center; background: #0b514a; padding-block: 42px 46px; }
+.degreeLanding .degreeRequestBanner h2 { color: #fff; }
+.degreeLanding .degreeRequestBanner p { color: #d3ece5; font-size: 17px; margin: 8px 0 23px; }
+.degreeLanding .degreeRequestLink { display: inline-flex; align-items: center; justify-content: center; gap: 26px; min-width: 190px; min-height: 54px; padding: 12px 24px; background: #fff; color: #0b514a; border: 1px solid #e0ebe6; border-radius: 12px; font-size: 17px; font-weight: 800; box-shadow: 0 8px 20px #00362f25; transition: transform 180ms ease, background 180ms ease; }
+.degreeLanding .degreeRequestLink:hover { background: #e4f6ef; transform: translateY(-3px); }
+.degreeLanding .degreeRequestLink svg { width: 21px; height: 21px; }
+@media (max-width: 900px) {
+  .degreeLanding h2 { font-size: 26px; }
+  .degreeLanding .degreeHeroGrid { gap: 24px; grid-template-columns: 1.3fr 0.7fr; }
+  .degreeLanding .degreeHeroCopy p { font-size: 17px; }
+  .degreeLanding .degreeSpecimen { width: 205px; }
+  .degreeLanding .degreeIntro { gap: 36px; grid-template-columns: 1fr 165px; }
+  .degreeLanding .degreeType { padding-inline: 20px; }
+  .degreeLanding .degreeType h3 { font-size: 19px; }
+  .degreeLanding .degreeStepGrid { grid-template-columns: repeat(2, 1fr); gap: 28px 48px; }
+  .degreeLanding .degreeStep:nth-child(2)::after { display: none; }
+  .degreeLanding .degreeGuideGrid { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 600px) {
+  .degreeLanding .degreeShell { width: calc(100% - 36px); }
+  .degreeLanding .degreeHero { padding-top: 20px; }
+  .degreeLanding .degreeBreadcrumb { gap: 8px; font-size: 12px; }
+  .degreeLanding .degreeHeroGrid { grid-template-columns: 1fr; gap: 26px; padding-top: 26px; text-align: center; }
+  .degreeLanding .degreeHeroCopy { padding: 0; }
+  .degreeLanding .degreeHeroCopy h1 { font-size: 30px; margin-bottom: 10px; }
+  .degreeLanding .degreeHeroCopy p { font-size: 15px; }
+  .degreeLanding .degreeSpecimen { width: 190px; }
+  .degreeLanding .degreeIntro { grid-template-columns: 1fr; gap: 20px; padding-block: 36px; }
+  .degreeLanding .degreeIntro img { width: 160px; justify-self: center; }
+  .degreeLanding h2 { font-size: 24px; }
+  .degreeLanding p { font-size: 15px; }
+  .degreeLanding .degreeTypes { padding-bottom: 36px; }
+  .degreeLanding .degreeSectionHeading { margin-bottom: 24px; }
+  .degreeLanding .degreeSectionHeading p { font-size: 14px; }
+  .degreeLanding .degreeTypeGrid { grid-template-columns: 1fr; }
+  .degreeLanding .degreeType { padding: 20px 0; border-inline-end: 0; border-bottom: 1px solid var(--degree-line); }
+  .degreeLanding .degreeType:first-child { padding-top: 0; }
+  .degreeLanding .degreeType:last-child { border-bottom: 0; padding-bottom: 0; }
+  .degreeLanding .degreeTypeNumber { float: left; font-size: 27px; }
+  .degreeLanding .degreeType h3 { margin-top: 0; }
+  .degreeLanding .degreeProcess { padding-block: 32px 36px; }
+  .degreeLanding .degreeStepGrid { gap: 24px 26px; }
+  .degreeLanding .degreeStep:not(:last-child)::after { display: none; }
+  .degreeLanding .degreeStepHeading { gap: 8px; }
+  .degreeLanding .degreeStepHeading span { width: 36px; height: 36px; font-size: 13px; }
+  .degreeLanding .degreeStep h3 { font-size: 17px; }
+  .degreeLanding .degreeStep p { font-size: 13px; }
+  .degreeLanding .degreeGuide { padding-block: 36px; }
+  .degreeLanding .degreeGuideLead { font-size: 14px; }
+  .degreeLanding .degreeDisclosure summary { padding: 13px 14px; font-size: 14px; }
+  .degreeLanding .degreeDisclosureBody { padding-inline: 16px; }
+  .degreeLanding .degreeComparison { padding: 22px 14px 16px; }
+  .degreeLanding .degreeOfficial { flex-direction: column; text-align: center; gap: 16px; margin-top: 32px; }
+  .degreeLanding .degreeOfficial > img { width: 80px; }
+  .degreeLanding .degreeOfficialLinks { justify-content: center; }
+  .degreeLanding .degreeOfficialLinks a { justify-content: space-between; width: 100%; font-size: 13px; }
+  .degreeLanding .degreeRequestBanner { padding-block: 34px 38px; }
+  .degreeLanding .degreeRequestBanner h2 { font-size: 23px; }
+  .degreeLanding .degreeRequestBanner p { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { .degreeLanding a, .degreeLanding summary, .degreeLanding summary svg { transition: none !important; } }

@@ -1,3 +1,5 @@
+import { customerMessage } from "../account/customerMessages";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect } from "react";
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +14,7 @@ import { RiEye2Fill } from "react-icons/ri";
 import { RiEyeCloseFill } from "react-icons/ri";
 
 const SignUp = () => {
+    const { t, dir } = useLanguage();
     
     const context = useContext(MyContext);
 
@@ -70,7 +73,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "نام را وارد کنید!"
+                    msg: t("نام را وارد کنید!", "Enter your first name.")
                 });
                 return false;
             }
@@ -80,7 +83,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "شماره موبایل را وارد کنید!"
+                    msg: t("شماره موبایل را وارد کنید!", "Enter your mobile number.")
                 });
                 return false;
             }
@@ -89,7 +92,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "شماره موبایل معتبر وارد کنید!"
+                    msg: t("شماره موبایل معتبر وارد کنید!", "Enter a valid mobile number.")
                 });
                 return false;
             }
@@ -99,7 +102,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "ایمیل را وارد کنید!"
+                    msg: t("ایمیل را وارد کنید!", "Enter your email address.")
                 });
                 return false;
             }
@@ -108,7 +111,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "ایمیل معتبر وارد کنید!"
+                    msg: t("ایمیل معتبر وارد کنید!", "Enter a valid email address.")
                 });
                 return false;
             }
@@ -117,7 +120,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "رمز عبور را وارد کنید!"
+                    msg: t("رمز عبور را وارد کنید!", "Enter your password.")
                 });
                 return false;
             }
@@ -126,7 +129,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "رمز عبور ها باهم تطابق ندارند!"
+                    msg: t("رمز عبور ها باهم تطابق ندارند!", "The passwords do not match.")
                 });
                 return false;
             }
@@ -135,7 +138,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "قوانین و ضوابط را قبول کنید!"
+                    msg: t("قوانین و ضوابط را قبول کنید!", "Please accept the terms and conditions.")
                 });
                 return false;
             }
@@ -144,7 +147,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "رمز عبور حداقل باید 7 حرف/عدد باشد!"
+                    msg: t("رمز عبور حداقل باید 7 حرف/عدد باشد!", "Your password must contain at least 7 letters or numbers.")
                 });
                 return false;
             }
@@ -153,7 +156,7 @@ const SignUp = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: "فاصله در رمز عبور مجاز نیست!"
+                    msg: t("فاصله در رمز عبور مجاز نیست!", "Passwords cannot contain spaces.")
                 });
                 return false;
             }
@@ -175,7 +178,7 @@ const SignUp = () => {
                     context.setAlertBox({
                         open: true,
                         error: false,
-                        msg: "کد تایید به شماره موبایل شما ارسال گردید!"
+                        msg: t("کد تایید به شماره موبایل شما ارسال گردید!", "A verification code was sent to your mobile number.")
                     }); 
 
                     setTimeout(() => {
@@ -187,7 +190,7 @@ const SignUp = () => {
                     context.setAlertBox({
                         open: true,
                         error: true,
-                        msg: res.msg
+                        msg: customerMessage(t, res.msg)
                     });
 
                     if(res?.isVerify === false){
@@ -216,7 +219,7 @@ const SignUp = () => {
 
     return (
         <>
-            <section className="section signInPage signUp">
+            <section dir={dir} className="section signInPage signUp">
                 <div className="shape-bottom">
                     <svg fill="#fff" id="layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8" 
                       style={{enableBackground: "new 0 0 1921 819.8"}}>
@@ -230,34 +233,34 @@ const SignUp = () => {
                         <form className="mt-3" onSubmit={register}>
                             <div className="d-flex align-items-center mb-3 ms-4">
                                 <img src={Logo} className="signInLogo" />
-                                <h2 className="mx-1">ثبت نام</h2>
+                                <h2 className="mx-1">{t("ثبت نام", "Sign up")}</h2>
                             </div>
                             <div className="row">
                                 <div className="form-group col-12 col-md-6">
-                                    <label className="mb-1">نام</label>
+                                    <label className="mb-1">{t("نام", "First name")}</label>
                                     <input name="name" onChange={onChangeInput} id="standard-basic" className="w-100" />
                                 </div>
                                 <div className="form-group col-12 col-md-6">
-                                    <label className="mb-1">نام خانوادگی</label>
+                                    <label className="mb-1">{t("نام خانوادگی", "Last name")}</label>
                                     <input name="lastName" onChange={onChangeInput} id="standard-basic" className="w-100" />
                                 </div>
                             </div>
                             <p className="txt text-muted">
-                                توجه: نام و نام خانوادگی باید حتماً مطابق شناسنامه وارد شود.
+                                {t("توجه: نام و نام خانوادگی باید حتماً مطابق شناسنامه وارد شود.", "Enter your first and last name exactly as shown on your identity document.")}
                             </p>
                             <div className="form-group">
-                                <label className="mb-1">شماره موبایل</label>
+                                <label className="mb-1">{t("شماره موبایل", "Mobile number")}</label>
                                 <input name="phone" onChange={onChangeInput} id="standard-basic" className="w-100" />
                             </div>
 
                             <div className="form-group">
-                                <label className="mb-1">ایمیل</label>
+                                <label className="mb-1">{t("ایمیل", "Email")}</label>
                                 <input name="email" onChange={onChangeInput} id="standard-basic" className="w-100" />
                             </div>
 
                             <div className="row">
                                 <div className="form-group col-12 col-md-6">
-                                    <label className="mb-1">رمز عبور</label>
+                                    <label className="mb-1">{t("رمز عبور", "Password")}</label>
                                     <span className='mx-2' style={{cursor: 'pointer'}}>{isPasswordShown === false ? <RiEyeCloseFill onClick={revealPassword} /> : <RiEye2Fill onClick={revealPassword} />}</span>
                                     <input name="password" onChange={onChangeInput} id="standard-basic" type={isPasswordShown === false ? 'password' : 'text'} className="w-100"
                                         onKeyDown={(e) => {
@@ -267,18 +270,18 @@ const SignUp = () => {
                                 </div>
 
                                 <div className="form-group col-12 col-md-6">
-                                    <label className="mb-1">تکرار رمز عبور</label>
+                                    <label className="mb-1">{t("تکرار رمز عبور", "Confirm password")}</label>
                                     <input name="confirmPassword" onChange={onChangeInput} type={isPasswordShown === false ? 'password' : 'text'} id="standard-basic" className="w-100"  />
                                 </div>
                             </div>
 
-                            <label className="checkBoxLabel">قوانین و ضوابط را قبول دارم</label>
+                            <label className="checkBoxLabel">{t("قوانین و ضوابط را قبول دارم", "I accept the terms and conditions")}</label>
                             <Checkbox checked={acceptPolicies} onChange={handleCheckPolicies}  />
 
                             <div className="d-flex align-items-center mt-3 mb-3 actionBtnWrapper">
                                 <div className="w-50">
                                     <Button type="submit" className={`col btn-lg enter ${btnDisabled !== false && 'btnDisabled'}`}>
-                                    ثبت نام
+                                    {t("ثبت نام", "Sign up")}
                                     {
                                         loader === true && 
                                         <CircularProgress
@@ -293,14 +296,14 @@ const SignUp = () => {
                                 </div>
                                 <div className="w-50">
                                     <Link to='/'>
-                                        <Button className="col btn-lg ml-1 cancel" variant="outlined">انصراف</Button>
+                                        <Button className="col btn-lg ml-1 cancel" variant="outlined">{t("انصراف", "Cancel")}</Button>
                                     </Link>
                                 </div>
                             </div>
 
-                            <p className="txt">قبلا حساب کاربری ساخته اید؟<Link to="/logIn" className="border-effect me-2">ورود به حساب کاربری</Link></p>
+                            <p className="txt">{t("قبلا حساب کاربری ساخته اید؟", "Already have an account?")}<Link to="/logIn" className="border-effect me-2">{t("ورود به حساب کاربری", "Sign in to your account")}</Link></p>
 
-                            <h6 className="mt-5 text-center font-weight-bold">آموزشگاه آزاد نانوزیست فناوری اوژن</h6>
+                            <h6 className="mt-5 text-center font-weight-bold">{t("آموزشگاه آزاد نانوزیست فناوری اوژن", "Ogene Nanobiotechnology Training Institute")}</h6>
 
                         </form>
                     </div>

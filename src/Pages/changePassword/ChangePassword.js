@@ -1,3 +1,5 @@
+import { customerMessage } from "../account/customerMessages";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../App";
@@ -7,10 +9,14 @@ import { CircularProgress } from "@mui/material";
 import { postData } from "../../utils/api";
 
 const ChangePassword = () => {
+    const { t, dir } = useLanguage();
     const context = useContext(MyContext);
     const history = useNavigate();
 
-    const [phone, setPhone] = useState("");
+    const [phone, setPhone] = useState(() => {
+        try { return JSON.parse(localStorage.getItem("user") || "null")?.phone || ""; }
+        catch { return ""; }
+    });
     const [loader, setLoader] = useState(false);
     const [btnDisabled, setBtnDisabled] = useState(false);
 
@@ -19,28 +25,17 @@ const ChangePassword = () => {
         context.setIsShowNavbar(false);
         context.setIsShowCalenderBar(false);
 
-        // Get user phone from localStorage
-        const userData = localStorage.getItem("user");
-        if (userData) {
-            try {
-                const user = JSON.parse(userData);
-                setPhone(user.phone);
-            } catch (error) {
-                console.error("Error parsing user data:", error);
-            }
-        }
-
         // Check if user is logged in
         const token = localStorage.getItem("token");
         if (!token) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "لطفا ابتدا وارد حساب کاربری خود شوید!"
+                msg: t("لطفا ابتدا وارد حساب کاربری خود شوید!", "Please sign in first.")
             });
             history('/login');
         }
-    }, [context, history]);
+    }, [context, history, t]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,7 +44,7 @@ const ChangePassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "شماره تلفن خود را وارد کنید!"
+                msg: t("شماره تلفن خود را وارد کنید!", "Enter your phone number.")
             });
             return;
         }
@@ -58,7 +53,7 @@ const ChangePassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "شماره تلفن معتبر وارد کنید!"
+                msg: t("شماره تلفن معتبر وارد کنید!", "Enter a valid phone number.")
             });
             return;
         }
@@ -73,7 +68,7 @@ const ChangePassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: true,
-                    msg: res.msg
+                    msg: customerMessage(t, res.msg)
                 });
                 setLoader(false);
                 setBtnDisabled(false);
@@ -84,7 +79,7 @@ const ChangePassword = () => {
                 context.setAlertBox({
                     open: true,
                     error: false,
-                    msg: res.message
+                    msg: customerMessage(t, res.message)
                 });
 
                 setTimeout(() => {
@@ -96,7 +91,7 @@ const ChangePassword = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "مشکلی در ارتباط با سرور وجود دارد!"
+                msg: t("مشکلی در ارتباط با سرور وجود دارد!", "Could not connect to the server. Please try again.")
             });
             setLoader(false);
             setBtnDisabled(false);
@@ -104,7 +99,7 @@ const ChangePassword = () => {
     };
 
     return (
-        <section className="section signInPage">
+        <section dir={dir} className="section signInPage">
             <div className="shape-bottom">
                 <svg fill="#fff" id="layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8">
                     <path className="st0" d="M1921,413.1v406.7H0V0.Sh0.41228.1,598.3c30,74.4,80.8,130.6,152.5,168.6c107.6,57,212.1,40.7,245.7,34.4 c22.4-4.2,54.9-13.1,97.5-26.6L1921,400.5V413.1z"></path>
@@ -116,15 +111,15 @@ const ChangePassword = () => {
                     <form className="mt-3" onSubmit={handleSubmit}>
                         <div className="d-flex align-items-center mb-3 ms-4">
                             <img src={Logo} className="signInLogo" alt="Logo" />
-                            <h2 className="mx-1">تغییر رمز عبور</h2>
+                            <h2 className="mx-1">{t("تغییر رمز عبور", "Change password")}</h2>
                         </div>
 
                         <p className="text-muted mb-4 text-center">
-                            کد تایید به شماره تلفن شما ارسال خواهد شد.
+                            {t("کد تایید به شماره تلفن شما ارسال خواهد شد.", "A verification code will be sent to your phone number.")}
                         </p>
 
                         <div className="form-group">
-                            <label className="mb-1">شماره تلفن</label>
+                            <label className="mb-1">{t("شماره تلفن", "Phone number")}</label>
                             <input 
                                 name="phone" 
                                 value={phone}
@@ -144,7 +139,7 @@ const ChangePassword = () => {
                                     type="submit" 
                                     className={`col btn-lg enter ${btnDisabled !== false && 'btnDisabled'}`}
                                 >
-                                    ارسال کد
+                                    {t("ارسال کد", "Send code")}
                                     {loader === true && 
                                         <CircularProgress
                                             sx={() => ({
@@ -159,14 +154,14 @@ const ChangePassword = () => {
                             <div className="w-50">
                                 <Link to='/'>
                                     <Button className="col btn-lg ml-1 cancel" variant="outlined">
-                                        بازگشت
+                                        {t("بازگشت", "Back")}
                                     </Button>
                                 </Link>
                             </div>
                         </div>
 
                         <h6 className="mt-5 text-center font-weight-bold">
-                            آموزشگاه آزاد نانوزیست فناوری اوژن
+                            {t("آموزشگاه آزاد نانوزیست فناوری اوژن", "Ogene Nanobiotechnology Training Institute")}
                         </h6>
                     </form>
                 </div>

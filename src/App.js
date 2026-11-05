@@ -5,12 +5,13 @@ import Navbar from "./Navbar";
 
 import "./App.css";
 import "./Responsive.css";
+import { useLanguage } from "./i18n/LanguageContext";
 
 import Footer from "./Components/Footer"; 
 import CourseItem from "./Pages/CourseDetails";
 import Service from "./Pages/Service";
 import AboutUs from "./Pages/aboutUs";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import CalenderBar from "./Components/CalenderHome/calenderBar";
 import SignIn from "./Pages/logIn";
 import SignUp from "./Pages/signUp";
@@ -21,6 +22,7 @@ import FieldFour from "./Pages/fieldsPages/fieldFour";
 import FieldFive from "./Pages/fieldsPages/fieldFive";
 import FieldSix from "./Pages/fieldsPages/fieldSix";
 import FaniHerfeiDegree from "./Pages/FaniHerfeiDegree";
+import DegreeRequest from "./Pages/FaniHerfeiDegree/DegreeRequest";
 import CourseShop from "./Pages/Listing/courseShop";
 import Shop from "./Pages/Listing/shop";
 import ProductItem from "./Pages/ProductDetails";
@@ -28,7 +30,8 @@ import ProductItem from "./Pages/ProductDetails";
 import LoadingBar from "react-top-loading-bar";
 import { Alert, Snackbar } from "@mui/material";
 import Cart from "./Pages/cart";
-import { fetchDataFromApi, postData } from "./utils/api";
+import Checkout from "./Pages/checkout";
+import { fetchDataFromApi, postData, readStoredSession } from "./utils/api";
 import VerifyOTP from "./Pages/verifyOTP";
 import AccountPage from "./Pages/account/accountPage";
 import Blog from "./Pages/Blog";
@@ -47,6 +50,7 @@ import CompleteInfo from "./Pages/completeInfo";
 export const MyContext = createContext();
 
 const App = () => {
+    const { t } = useLanguage();
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isShowNavbar, setIsShowNavbar] = useState(true);
@@ -102,69 +106,61 @@ const App = () => {
     })
 
     useEffect(() => {
-
-        const token = localStorage.getItem("token");
-        if(token !== null && token !== undefined && token !== ''){
+        const session = readStoredSession();
+        if (session) {
             setIsLoggedIn(true);
-
-            const userData = JSON.parse(localStorage.getItem("user"));
-
-            setUser(userData);
-
-        }else{
+            setUser(session.user);
+        } else {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
             setIsLoggedIn(false);
+            setUser({ name: "", lastName: "", email: "", userId: "" });
         }
-
     }, [isLoggedIn]);
 
     // vid 43 : add to cart
     const [addingInCart, setAddingInCart] = useState(false);
-    const [cartData, setCartData] = useState();
+    const [cartData, setCartData] = useState([]);
+    const cartSubmitLock = useRef(false);
 
-    const addtoCart = (data) => {
+    const addtoCart = async (data) => {
+        if (cartSubmitLock.current) return;
+        cartSubmitLock.current = true;
         setAddingInCart(true);
-        postData(`/api/cart/add`, data).then((res) => {
-            if(res !== null && res !== undefined && res !== ''){
-                if(res.status !== false){
-                    setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: 'محصول به سبد خرید اضافه شد!'
-                    });
-
-                    setTimeout(() => {
-                        setAddingInCart(false);
-                    }, 1000);
-
-                }else{
-                    setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: 'این محصول در سبد خرید شما است!'
-                    });
-                    setAddingInCart(false);
-                }
+        try {
+            const res = await postData(`/api/cart/add`, data);
+            const validCartItem = res && typeof res === "object" && !Array.isArray(res)
+                && !res.isAxiosError && !res.error && res.success !== false && res.status !== false
+                && typeof (res._id || res.id) === "string"
+                && res.productId === data.productId && res.userId === data.userId;
+            if (!validCartItem) {
+                setAlertBox({ open: true, error: true,
+                    msg: res?.status === false ? (res.msg || 'این محصول در سبد خرید شما است!') : 'افزودن محصول به سبد خرید انجام نشد. دوباره تلاش کنید.' });
+                return;
             } 
-        })
+            setCartData((previous) => [...(Array.isArray(previous) ? previous : []), res]);
+            setAlertBox({ open: true, error: false, msg: 'محصول به سبد خرید اضافه شد!' });
+        } catch {
+            setAlertBox({ open: true, error: true, msg: 'افزودن محصول به سبد خرید انجام نشد. دوباره تلاش کنید.' });
+        } finally {
+            cartSubmitLock.current = false;
+            setAddingInCart(false);
+        }
     }
 
 
 
     useEffect(() => {
-        //const user = JSON.parse(localStorage.getItem("user"));
-
-        // fix: 20 Feb
-        const FixedUser = JSON.parse(localStorage.getItem("user"));
-        const FixedUserId = FixedUser?.userId;
-
-
-        if (FixedUserId === null || FixedUserId === undefined || !FixedUserId) return;
-        if (!FixedUser === null || FixedUser === undefined || !FixedUser) return;
-
-        fetchDataFromApi(`/api/cart?userId=${FixedUserId}`).then((res) => {
-            setCartData(res);
-        })
-    }, []);
+        if (!isLoggedIn || !user.userId) {
+            setCartData([]);
+            return;
+        }
+        const controller = new AbortController();
+        fetchDataFromApi(`/api/cart?userId=${user.userId}`, { signal: controller.signal, throwOnError: true })
+            .then((res) => { if (!controller.signal.aborted) setCartData(Array.isArray(res) ? res : []); })
+            .catch(() => { if (!controller.signal.aborted) setCartData([]); });
+        return () => controller.abort();
+    }, [isLoggedIn, user.userId]);
 
     // 16 June update:
     const [courseFilterValue, setCourseFilterValue] = useState(0);
@@ -214,7 +210,7 @@ const App = () => {
                         variant="filled"
                         sx={{ width: '100%' }}
                     >
-                        {alertBox.msg}
+                        {t(alertBox.msg)}
                     </Alert>
                 </Snackbar>
             {isShowCalenderBar === true && <CalenderBar />}
@@ -232,10 +228,12 @@ const App = () => {
                     <Route path="/logIn" element={<SignIn />} />
                     <Route path="/signUp" element={<SignUp />} />
                     <Route path="/degree" element={<FaniHerfeiDegree />} />
+                    <Route path="/degree/request" element={<DegreeRequest />} />
                     <Route path="/courseShop" element={<CourseShop />} />
                     <Route path="/shop" element={<Shop />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/cart/:id" element={<Cart />} />
+                    <Route path="/checkout" element={<Checkout />} />
                     <Route path="/verifyOTP" element={<VerifyOTP />} />
                     <Route path="/accountPage/:id" element={<AccountPage />} />
                     <Route path="/orders/:id" element={<OrderPage />} />

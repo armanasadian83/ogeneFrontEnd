@@ -1,14 +1,14 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { PiClockCountdownFill } from "react-icons/pi";
 
 const Blog = () => {
+    const { t } = useLanguage();
     return (
         <>
         <div className="blogPage container">
             <h6 className="px-4 text-center">
                 <div className="d-flex align-items-center text-nowrap content">
-                    <span className="icon"><PiClockCountdownFill /></span>
-                    به زودی بلاگ های جدید بارگذاری خواهند شد.
-                </div>
+                    <span className="icon"><PiClockCountdownFill /></span>{t("به زودی بلاگ های جدید بارگذاری خواهند شد.")}</div>
             </h6>
         </div>
         </>

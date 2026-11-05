@@ -1,3 +1,4 @@
+import { useLanguage } from "../../i18n/LanguageContext";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { Link, useParams } from "react-router-dom";
@@ -9,6 +10,7 @@ import { TbRefresh } from "react-icons/tb";
 import { MdSupportAgent } from "react-icons/md";
 
 const OrderPage = () => {
+    const { t, dir, isEnglish, localize, formatNumber } = useLanguage();
 
     const context = useContext(MyContext);
     const { id } = useParams();
@@ -58,7 +60,7 @@ const OrderPage = () => {
                     context.setAlertBox({
                         open: true,
                         error: true,
-                        msg: 'خطا در به‌روزرسانی سفارش‌ها!'
+                        msg: t("خطا در به‌روزرسانی سفارش‌ها!", "Your orders could not be refreshed.")
                     });
                 });
         } else {
@@ -67,7 +69,7 @@ const OrderPage = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'شما دسترسی به این صفحه ندارید!'
+                msg: t("شما دسترسی به این صفحه ندارید!", "You do not have access to this page.")
             });
         }
     };
@@ -114,13 +116,13 @@ const OrderPage = () => {
             context.setAlertBox({
                 open: true,
                 error: false,
-                msg: 'آیدی سفارش کپی شد!'
+                msg: t("آیدی سفارش کپی شد!", "Order ID copied.")
             });
         }).catch(() => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'خطا در کپی کردن آیدی!'
+                msg: t("خطا در کپی کردن آیدی!", "The ID could not be copied.")
             });
         });
     }
@@ -141,14 +143,14 @@ const OrderPage = () => {
         }
     };
 
-    const stepLabels = ['ثبت سفارش', 'بررسی و تایید', 'پایان یافته'];
+    const stepLabels = [t("ثبت سفارش", "Order placed"), t("بررسی و تایید", "Review and approval"), t("پایان یافته", "Completed")];
 
     const renderStepper = (status) => {
         if (status === 'لغو شده') {
             return (
                 <div className="orderCancelledNote">
                     <span className="orderCancelledDot"></span>
-                    این سفارش توسط پشتیبانی لغو شده است.
+                    {t("این سفارش توسط پشتیبانی لغو شده است.", "This order was canceled by support.")}
                 </div>
             );
         }
@@ -156,7 +158,7 @@ const OrderPage = () => {
         const step = getStepIndex(status);
         // Reversed so index 0 (ثبت سفارش) sits on the right and index 2
         // (پایان یافته) sits on the left — matching RTL reading order.
-        const nodeX = [700, 380, 60];
+        const nodeX = isEnglish ? [60, 380, 700] : [700, 380, 60];
 
         const seg1Done = step >= 2;
         const seg2Done = step >= 3;
@@ -229,19 +231,19 @@ const OrderPage = () => {
         .reduce((sum, o) => sum + (o.totalPrice || 0), 0);
 
     const statusChips = [
-        { key: 'all', label: 'همه' },
-        { key: 'در انتظار', label: 'در انتظار' },
-        { key: 'در حال پردازش', label: 'در حال پردازش' },
-        { key: 'تایید شده', label: 'تایید شده' },
-        { key: 'لغو شده', label: 'لغو شده' },
+        { key: 'all', label: t("همه", "All") },
+        { key: 'در انتظار', label: t('در انتظار', 'Pending') },
+        { key: 'در حال پردازش', label: t('در حال پردازش', 'Processing') },
+        { key: 'تایید شده', label: t('تایید شده', 'Confirmed') },
+        { key: 'لغو شده', label: t('لغو شده', 'Cancelled') },
     ];
 
     return (
         <>
-            <div className="ordersPage container">
+            <div className="ordersPage container" dir={dir}>
                 <p className="mb-1 mt-4 me-4 me-lg-0 breadCrumb">
-                    <Link to="/"><b>خانه</b></Link> /
-                    <Link to={`/orders/${id}`}><b>سفارشات من</b></Link> /
+                    <Link to="/"><b>{t("خانه", "Home")}</b></Link> /
+                    <Link to={`/orders/${id}`}><b>{t("سفارشات من", "My orders")}</b></Link> /
                     <Link to=""><b>{`${context.user?.name} ${context.user?.lastName}`}</b></Link>
                 </p>
 
@@ -251,52 +253,51 @@ const OrderPage = () => {
                         {isLoading ? (
                             <div className="text-center my-5">
                                 <div className="spinner-border text-primary" role="status">
-                                    <span className="visually-hidden">در حال بارگذاری...</span>
+                                    <span className="visually-hidden">{t("در حال بارگذاری...", "Loading...")}</span>
                                 </div>
                             </div>
                         ) : orders?.length > 0 ? (
                             <>
                                 <div className="orderPageHead">
                                     <div>
-                                        <h1>سفارش‌های من</h1>
-                                        <p>شما <b>{totalOrdersCount}</b> سفارش ثبت شده دارید.</p>
+                                        <h1>{t("سفارش‌های من", "My orders")}</h1>
+                                        <p>{t("شما", "You have")} <b>{totalOrdersCount}</b> {t("سفارش ثبت شده دارید.", "orders.")}</p>
                                     </div>
                                 </div>
 
                                 <div className="orderStatsRow">
                                     <div className="statCard">
                                         <div className="statCardHead">
-                                            <span className="statLabel">کل سفارش‌ها</span>
+                                            <span className="statLabel">{t("کل سفارش‌ها", "Total orders")}</span>
                                             <span className="statIcon icTeal">▤</span>
                                         </div>
-                                        <div className="statValue">{totalOrdersCount}<span className="statValueSmall">سفارش</span></div>
+                                        <div className="statValue">{totalOrdersCount}<span className="statValueSmall">{t("سفارش", "orders")}</span></div>
                                     </div>
                                     <div className="statCard">
                                         <div className="statCardHead">
-                                            <span className="statLabel">در انتظار پیگیری</span>
+                                            <span className="statLabel">{t("در انتظار پیگیری", "Awaiting follow-up")}</span>
                                             <span className="statIcon icGold">◔</span>
                                         </div>
-                                        <div className="statValue">{pendingCount}<span className="statValueSmall">سفارش</span></div>
+                                        <div className="statValue">{pendingCount}<span className="statValueSmall">{t("سفارش", "orders")}</span></div>
                                     </div>
                                     <div className="statCard">
                                         <div className="statCardHead">
-                                            <span className="statLabel">پایان یافته</span>
+                                            <span className="statLabel">{t("پایان یافته", "Completed")}</span>
                                             <span className="statIcon icTeal">✓</span>
                                         </div>
-                                        <div className="statValue">{completedCount}<span className="statValueSmall">سفارش</span></div>
+                                        <div className="statValue">{completedCount}<span className="statValueSmall">{t("سفارش", "orders")}</span></div>
                                     </div>
                                     <div className="statCard">
                                         <div className="statCardHead">
-                                            <span className="statLabel">مجموع خرید</span>
+                                            <span className="statLabel">{t("مجموع خرید", "Total purchases")}</span>
                                             <span className="statIcon icAmber">T</span>
                                         </div>
-                                        <div className="statValue">{totalSpent?.toLocaleString()}<span className="statValueSmall">تومان</span></div>
+                                        <div className="statValue">{formatNumber(totalSpent)}<span className="statValueSmall">{t("تومان", "Toman")}</span></div>
                                     </div>
                                 </div>
 
                                 <div className="filtersRow">
                                     {statusChips.map(chip => (
-                                        <>
                                         <button
                                             key={chip.key}
                                             className={`chipBtn ${statusFilter === chip.key ? 'active' : ''}`}
@@ -304,13 +305,12 @@ const OrderPage = () => {
                                         >
                                             {chip.label}
                                         </button>
-                                        </>
                                     ))}
                                     <button
                                         className={`refreshBtn ${isRefreshing ? 'spinning' : ''}`}
                                         onClick={handleRefreshClick}
                                         disabled={isRefreshing}
-                                        title="رفرش"
+                                        title={t("رفرش", "Refresh")}
                                     >
                                         <TbRefresh />
                                     </button>
@@ -324,14 +324,14 @@ const OrderPage = () => {
                                                     <span className="orderIdChip" onClick={() => copyOrderId(order._id)}>
                                                         #{order._id?.substr(0, 8)}...
                                                     </span>
-                                                    <button className="copyBtn" onClick={() => copyOrderId(order._id)} title="کپی آیدی">
+                                                    <button className="copyBtn" onClick={() => copyOrderId(order._id)} title={t("کپی آیدی", "Copy ID")}>
                                                         <span>⧉</span>
                                                     </button>
                                                     <span className="orderDateText">{order.dateCreated}</span>
                                                 </div>
                                                 <span className={`statusPill ${getStatusClass(order.status)}`}>
                                                     <span className="statusDot"></span>
-                                                    {order.status}
+                                                    {t(order.status)}
                                                 </span>
                                             </div>
 
@@ -340,14 +340,14 @@ const OrderPage = () => {
                                             <div className="orderCardFoot">
                                                 <div className="footInfo">
                                                     <div className="footItem">
-                                                        <span className="footLabel">تعداد آیتم</span>
-                                                        <span className="footValue">{order.totalItems || order.items?.length || 0} آیتم</span>
+                                                        <span className="footLabel">{t("تعداد آیتم", "Item count")}</span>
+                                                        <span className="footValue">{order.totalItems || order.items?.length || 0} {t("آیتم", "items")}</span>
                                                     </div>
                                                     <div className="footItem">
-                                                        <span className="footLabel">مبلغ کل</span>
+                                                        <span className="footLabel">{t("مبلغ کل", "Order total")}</span>
                                                         <span className="footValue footValueTotal">
-                                                            {order.totalPrice?.toLocaleString()}
-                                                            <span className="toman-icon">تومان</span>
+                                                            {formatNumber(order.totalPrice)}
+                                                            <span className="toman-icon">{t("تومان", "Toman")}</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -358,12 +358,12 @@ const OrderPage = () => {
                                                     {expandedOrder === order._id ? (
                                                         <>
                                                             <BsChevronUp />
-                                                            <span>بستن</span>
+                                                            <span>{t("بستن", "Close")}</span>
                                                         </>
                                                     ) : (
                                                         <>
                                                             <BsChevronDown />
-                                                            <span>مشاهده جزئیات</span>
+                                                            <span>{t("مشاهده جزئیات", "View details")}</span>
                                                         </>
                                                     )}
                                                 </Button>
@@ -371,13 +371,13 @@ const OrderPage = () => {
 
                                             {expandedOrder === order._id && (
                                                 <div className={`orderDetailsWrapper ${isClosing ? 'slideUp' : 'slideDown'}`}>
-                                                    <h6 className="orderDetailsTitle">جزئیات سفارش</h6>
+                                                    <h6 className="orderDetailsTitle">{t("جزئیات سفارش", "Order details")}</h6>
                                                     <div className="orderItemsList">
                                                         {order.items?.map((item, idx) => (
                                                             <div className="orderItemRow" key={idx}>
                                                                 <div className="miniBox">{idx + 1}</div>
                                                                 <div className="itemThumb">
-                                                                    <img className="w-100" src={item?.image} alt={item?.productTitle} />
+                                                                    <img className="w-100" src={item?.image} alt={localize(item, "productTitle")} />
                                                                 </div>
                                                                 <div className="itemInfo">
                                                                     <Link
@@ -385,26 +385,26 @@ const OrderPage = () => {
                                                                         className="itemInfoLink"
                                                                     >
                                                                         <h6 className="itemInfoName">
-                                                                            {item?.productTitle?.substr(0, 30) + '...'}
+                                                                            {localize(item, "productTitle")?.substr(0, 30) + '...'}
                                                                         </h6>
                                                                     </Link>
                                                                     <div className="itemInfoMeta">
                                                                         <span className={`item-type-badge ${item?.typeCourse ? 'type-course' : 'type-product'}`}>
-                                                                            {item?.typeCourse ? 'دوره' : 'محصول'}
+                                                                            {item?.typeCourse ? t("دوره", "Course") : t("محصول", "Product")}
                                                                         </span>
-                                                                        <span>تعداد: {item?.quantity}</span>
-                                                                        <span>قیمت واحد: {item?.price?.toLocaleString()} تومان</span>
+                                                                        <span>{t("تعداد:", "Quantity:")} {item?.quantity}</span>
+                                                                        <span>{t("قیمت واحد:", "Unit price:")} {formatNumber(item?.price)} {t("تومان", "Toman")}</span>
                                                                     </div>
                                                                 </div>
                                                                 <div className="itemSubtotal">
-                                                                    {item?.subTotal?.toLocaleString()} تومان
+                                                                    {formatNumber(item?.subTotal)} {t("تومان", "Toman")}
                                                                 </div>
                                                             </div>
                                                         ))}
                                                     </div>
                                                     <div className="orderGrandTotal">
-                                                        <strong>مجموع کل:</strong>
-                                                        <strong>{order.totalPrice?.toLocaleString()} تومان</strong>
+                                                        <strong>{t("مجموع کل:", "Grand total:")}</strong>
+                                                        <strong>{formatNumber(order.totalPrice)} {t("تومان", "Toman")}</strong>
                                                     </div>
                                                 </div>
                                             )}
@@ -413,7 +413,7 @@ const OrderPage = () => {
 
                                     {filteredOrders.length === 0 && (
                                         <div className="emptyOrders emptyOrdersFiltered">
-                                            <h6>سفارشی با این وضعیت یافت نشد.</h6>
+                                            <h6>{t("سفارشی با این وضعیت یافت نشد.", "No orders match this status.")}</h6>
                                         </div>
                                     )}
                                 </div>
@@ -421,9 +421,9 @@ const OrderPage = () => {
                         ) : (
                             <div className="emptyOrders">
                                 <div>
-                                    <h5>شما هیچ سفارشی ثبت نکرده‌اید!</h5>
+                                    <h5>{t("شما هیچ سفارشی ثبت نکرده‌اید!", "You have not placed any orders yet.")}</h5>
                                     <Link to="/courseShop" className="btn btn-ogeneGreen">
-                                        مشاهده دوره ها
+                                        {t("مشاهده دوره ها", "Browse courses")}
                                     </Link>
                                 </div>
                             </div>
@@ -433,12 +433,12 @@ const OrderPage = () => {
 
 
                 <div className="cartPageText">
-                    <small className="mx-1">آیا نیاز به کمک دارید؟</small>
+                    <small className="mx-1">{t("آیا نیاز به کمک دارید؟", "Need help?")}</small>
                     <Button
                         className="getHelp"
                         onClick={() => window.location.href = "tel:0212244961487"}
                     >
-                        ارتباط با پشتیبانی
+                        {t("ارتباط با پشتیبانی", "Contact support")}
                         <MdSupportAgent />
                     </Button>
                 </div>
