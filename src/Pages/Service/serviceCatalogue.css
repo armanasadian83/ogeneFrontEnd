@@ -1,0 +1,59 @@
+.serviceCatalogue {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 48px;
+    position: relative;
+    margin: 0 2px 38px;
+    padding: 40px 42px;
+    border: 1px solid #285c55;
+    border-radius: 24px;
+    background: #103f3a;
+    color: #fff;
+    overflow: hidden;
+    text-align: start;
+}
+.serviceCatalogue .serviceCatalogueContent { min-width: 0; position: relative; z-index: 1; }
+.serviceCatalogue h2 { margin: 0 0 14px; color: #fff; font-size: 29px; font-weight: 800; line-height: 1.6; }
+.serviceCatalogue .serviceCatalogueDescription { margin: 0; color: #dceee7; font-size: 16px; line-height: 2; }
+.serviceCatalogue .serviceCatalogueTopics { display: flex; flex-wrap: wrap; gap: 9px 20px; list-style: none; padding: 0; margin: 20px 0 26px; color: #caece0; font-size: 13px; }
+.serviceCatalogueTopics li { display: inline-flex; align-items: center; gap: 7px; line-height: 1.8; }
+.serviceCatalogueTopics li::before { content: ""; width: 5px; height: 5px; flex: 0 0 5px; border-radius: 50%; background: #73d5b8; }
+.serviceCatalogue .serviceCatalogueActions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.serviceCatalogue .serviceCatalogueDownload { display: inline-flex; align-items: center; justify-content: center; gap: 11px; min-height: 52px; padding: 12px 20px; border: 1px solid #d6f5e8; border-radius: 12px; background: #d6f5e8; color: #123f35; font-size: 16px; font-weight: 700; line-height: 1.8; text-decoration: none; transition: background 180ms, transform 180ms; }
+.serviceCatalogue .serviceCatalogueDownload:hover { background: #fff; transform: translateY(-2px); }
+.serviceCatalogueDownload svg { width: 20px; height: 20px; flex-shrink: 0; }
+.serviceCatalogue .serviceCatalogueView { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: #fff; font-size: 14px; text-decoration: none; }
+.serviceCatalogueView:hover { text-decoration: underline; text-underline-offset: 5px; }
+.serviceCatalogueView svg { width: 17px; height: 17px; }
+.serviceCatalogue[dir="ltr"] .serviceCatalogueView svg { transform: scaleX(-1); }
+.serviceCatalogue .serviceCatalogueMetadata { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin: 14px 0 0; color: #b2cec4; font-size: 12px; line-height: 1.8; }
+.serviceCatalogueMetadata svg { width: 15px; height: 15px; }
+.serviceCataloguePreview { position: relative; min-width: 0; padding: 20px 9px; }
+.serviceCataloguePreview::before, .serviceCataloguePreview::after { content: ""; position: absolute; inset: 15px 0; border: 1px solid #80ae9d55; border-radius: 17px; background: #397165; transform: rotate(6deg); }
+.serviceCataloguePreview::after { inset: 23px 4px; background: #c2e5d7; transform: rotate(-4deg); }
+.serviceCataloguePreviewFrame { position: relative; z-index: 1; overflow: hidden; border: 1px solid #dae9e2; border-radius: 15px; background: #fff; box-shadow: 0 20px 36px #001c2140; transform: rotate(-1deg); }
+.serviceCatalogue .serviceCataloguePreview img { display: block; width: 100%; max-width: 100%; height: auto; margin: 0; object-fit: contain; }
+.serviceCataloguePreviewCaption { display: flex; align-items: center; gap: 8px; padding: 14px 13px; color: #274b40; font-size: 11px; line-height: 1.7; }
+.serviceCataloguePreviewCaption svg { flex-shrink: 0; color: #168365; width: 18px; height: 18px; }
+.serviceCataloguePreviewCaption bdi { margin-inline-start: auto; color: #588077; font: 9px Arial, sans-serif; letter-spacing: 1px; }
+.serviceCatalogue a:focus-visible { outline: 3px solid #8fe3c3; outline-offset: 5px; }
+@media (max-width: 991px) {
+    .serviceCatalogue { gap: 28px; padding: 32px 28px; }
+    .serviceCatalogue h2 { font-size: 25px; }
+    .serviceCatalogue .serviceCatalogueDescription { font-size: 15px; }
+    .serviceCatalogue .serviceCatalogueActions { gap: 8px 16px; }
+}
+@media (max-width: 767px) {
+    .serviceCatalogue { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 26px 22px; border-radius: 20px; }
+    .serviceCataloguePreview { max-width: 440px; width: 100%; margin: 0 auto; }
+    .serviceCataloguePreviewCaption { font-size: 12px; }
+    .serviceCatalogue .serviceCatalogueActions { gap: 10px; }
+    .serviceCatalogue .serviceCatalogueDownload { width: 100%; font-size: 15px; padding-inline: 12px; }
+    .serviceCatalogue .serviceCatalogueView { margin-inline: auto; }
+    .serviceCatalogue .serviceCatalogueMetadata { justify-content: center; margin-top: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .serviceCatalogue .serviceCatalogueDownload { transition: none; }
+    .serviceCatalogue .serviceCatalogueDownload:hover { transform: none; }
+}

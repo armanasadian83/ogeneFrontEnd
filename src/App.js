@@ -10,6 +10,7 @@ import { useLanguage } from "./i18n/LanguageContext";
 import Footer from "./Components/Footer"; 
 import CourseItem from "./Pages/CourseDetails";
 import Service from "./Pages/Service";
+import Projects from "./Pages/Projects";
 import AboutUs from "./Pages/aboutUs";
 import { createContext, useEffect, useRef, useState } from "react";
 import CalenderBar from "./Components/CalenderHome/calenderBar";
@@ -222,6 +223,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/service" element={<Service />} />
+                    <Route path="/projects" element={<Projects />} />
                     <Route path="/aboutUs" element={<AboutUs />} />
                     <Route path="/course/:id" element={<CourseItem />} />
                     <Route path="/product/:id" element={<ProductItem />} />

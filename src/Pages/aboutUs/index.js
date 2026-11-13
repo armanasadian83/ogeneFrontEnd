@@ -5,6 +5,7 @@ import SecondImg from "./../../assets/aboutUsPage/second.png";
 import Map from "./../../assets/aboutUsPage//map.png";
 import { useContext, useEffect } from "react";
 import { MyContext } from "../../App";
+import Partners from "./Partners";
 import "./aboutUs.css";
 
 const content = {
@@ -101,6 +102,8 @@ const AboutUs = () => {
                         <img src={SecondImg} alt={t.whyTitle} />
                     </div>
                 </div>
+
+                <Partners />
 
                 <div className="text-center secThree">
                     <h1>{t.contactTitle}</h1>

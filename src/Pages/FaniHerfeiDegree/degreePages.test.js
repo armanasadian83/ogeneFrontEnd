@@ -125,7 +125,7 @@ test("request fields keep editable personal and course information in local UI s
     expect(screen.getByRole("textbox", { name: "ایمیل (اختیاری)", exact: true })).not.toBeRequired();
 });
 
-test("the request button and Enter/native form submission stay inert without API, storage, or navigation effects", () => {
+test("incomplete requests are blocked without API, storage, or navigation effects", () => {
     renderDegree();
     const firstName = screen.getByRole("textbox", { name: "نام", exact: true });
     fireEvent.change(firstName, { target: { value: "آرمان" } });
@@ -139,5 +139,6 @@ test("the request button and Enter/native form submission stay inert without API
     expect(submission.defaultPrevented).toBe(true);
     expect(screen.getByTestId("degree-location").textContent).toBe("/degree/request");
     expect(firstName).toHaveValue("آرمان");
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("لطفاً قسمت‌های مشخص‌شده را بررسی کنید.");
+    expect(screen.getByRole("textbox", { name: "نام خانوادگی", exact: true })).toHaveAttribute("aria-invalid", "true");
 });

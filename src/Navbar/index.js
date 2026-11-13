@@ -201,6 +201,7 @@ const Navbar = () => {
                                 </div>
                                 <Link to='/degree'><li>{t("مدرک فنی و حرفه ای")}</li></Link>
                                 <Link to='/service'><li>{t("خدمات")}</li></Link>
+                                <Link to='/projects'><li>{t("پروژه‌ها", "Projects")}</li></Link>
                                 <Link to='/shop'><li>{t("فروشگاه")}</li></Link>
                                 <Link to='/blog'><li>{t("بلاگ")}</li></Link>
                                 <Link to='/aboutUs'><li>{t("درباره و تماس")}</li></Link>
@@ -211,7 +212,7 @@ const Navbar = () => {
                             <LanguageSelector />
                             {
                                 context.isLoggedIn === true ?
-                                    <Link className="iconBtn">
+                                    <Link className="iconBtn hideInMobile">
                                         <Button onClick={handleOpenMyAccDrop} className="hideInMobile">
                                             <FaUserCircle />
                                         </Button>
@@ -245,26 +246,26 @@ const Navbar = () => {
                                         </Menu>
                                     </Link>
                                     :
-                                    <Link to='/logIn'>
+                                    <Link to='/logIn' className="hideInMobile">
                                         <div className="hideInMobile ms-1 logInBtn">{t("ورود / ثبت نام")}</div>
                                     </Link>
                             }
                             {
                                 context.isLoggedIn === true &&
-                                <Link to={`/cart/${context.user?.userId}`} className="iconBtn">
+                                <Link to={`/cart/${context.user?.userId}`} className="iconBtn hideInMobile">
                                     <Button className="hideInMobile">
                                         <BsBasket3Fill />
                                     </Button>
                                 </Link>
                             }
-                            <div className="d-flex align-items-center justify-content-center iconBtn search">
-                                <Tooltip title={t("جستجو")} arrow>
-                                    <div onClick={context.handleClickOpenSearchModal}>
-                                        <IoSearch />
-                                    </div>
-                                </Tooltip>
-                            </div>
-                            <Button className="menuButton" onClick={SideNavOpen}>
+                            <Tooltip title={t("جستجو")} arrow>
+                                <Button className="navbarSearchButton" aria-label={t("جستجو")}
+                                    onClick={context.handleClickOpenSearchModal}>
+                                    <IoSearch />
+                                </Button>
+                            </Tooltip>
+                            <Button className="menuButton" aria-label={t("باز کردن منو", "Open menu")}
+                                aria-expanded={isSideNavOpen} onClick={SideNavOpen}>
                                 <MdOutlineMenu />
                             </Button>
                         </div>
@@ -336,6 +337,7 @@ const Navbar = () => {
                         <Link to='/courseShop' onClick={SideNavClose}><li>{t("دوره های آموزشی")}</li></Link>
                         <Link to='/degree' onClick={SideNavClose}><li>{t("مدرک فنی و حرفه ای")}</li></Link>
                         <Link to='/service' onClick={SideNavClose}><li>{t("خدمات")}</li></Link>
+                        <Link to='/projects' onClick={SideNavClose}><li>{t("پروژه‌ها", "Projects")}</li></Link>
                         <Link to='/shop' onClick={SideNavClose}><li>{t("فروشگاه")}</li></Link>
                         <Link to='/blog' onClick={SideNavClose}><li>{t("بلاگ")}</li></Link>
                         <Link to='/aboutUs' onClick={SideNavClose} className="mb-5"><li>{t("درباره اوژن")}</li></Link>

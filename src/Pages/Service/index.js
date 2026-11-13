@@ -9,6 +9,7 @@ import { useSearchParams } from "react-router-dom";
 import { TbFlask, TbSearch, TbCheck, TbBrandWhatsapp, TbArrowLeft, TbArrowRight } from "react-icons/tb";
 
 import Logo from "./../../assets/baleLogo.png";
+import ServiceCatalogue from "./ServiceCatalogue";
 
 // TODO: replace with the real support numbers/usernames.
 const WHATSAPP_NUMBER = "989050168316"; // digits only, country code, no leading 0 or +
@@ -330,6 +331,8 @@ const Service = () => {
                             <h1 className="serviceHero-title">{t("خدمات اوژن")}</h1>
                             <p className="serviceHero-subtitle">{t("حوزه مورد نظر را انتخاب کنید و خدمات لازم را از میان گزینه‌ها مشخص کنید")}</p>
                         </div>
+
+                        <ServiceCatalogue />
 
                         <div className="serviceStep">
                             <p className="serviceStep-label">{t("۱. حوزه خدمات")}</p>

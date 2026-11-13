@@ -87,6 +87,7 @@ a { text-decoration: none !important; color: #212529;}
     max-width: 42px !important;}
 .myNavbar button:hover { color: #000 !important;}
 .myNavbar button svg { color: #212529 !important; font-size: 22px;}
+.myNavbar .navbarSearchButton { min-width: 42px !important; padding: 0; }
 .myNavbar .menuButton { display: none;}
 .sidenavOpen, .sidenavClosed { width: 0;}
 .sidenavOpen a, .sidenavClosed a { display: none;}

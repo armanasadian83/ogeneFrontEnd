@@ -1,0 +1,7 @@
+.enamadVerification { display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+.enamadVerification:focus-visible { outline: 3px solid #20a898; outline-offset: 5px; }
+.enamadFallback { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 110px; padding: 10px 6px; text-align: center; color: #235e55; }
+.enamadFallback > svg { width: 24px; height: 24px; color: #298779; }
+.enamadFallback strong { font-size: 14px; font-weight: 600; line-height: 1.6; }
+.enamadFallback > span { font-size: 11px; line-height: 1.7; color: #61766f; }
+.enamadVerification:hover .enamadFallback { color: #107c6d; }

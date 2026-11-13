@@ -74,6 +74,15 @@
 .degreeRequestBack:hover { color: var(--degree-request-heading); }
 .degreeRequestBack svg { width: 20px; height: 20px; flex-shrink: 0; }
 .degreeRequestSubmit:focus-visible, .degreeRequestPage a:focus-visible { outline: 3px solid #26a999; outline-offset: 4px; }
+.degreeRequestPage .degreeRequestInput[aria-invalid="true"], .degreeRequestField textarea[aria-invalid="true"] { border-color: #b43e3e; }
+.degreeRequestFieldError { margin: 6px 0 0; color: #a83232; font-size: 13px; line-height: 1.8; }
+.degreeRequestFeedback { margin: 0 0 24px; padding: 12px 16px; border: 1px solid #edd0d0; border-radius: 12px; background: #fff7f7; color: #983434; }
+.degreeRequestSubmit:disabled { opacity: .65; cursor: wait; }
+.degreeRequestPage input:disabled, .degreeRequestPage textarea:disabled { background: #f6f9f8; color: #607671; }
+.degreeRequestSuccess { padding: 40px 28px; text-align: center; }
+.degreeRequestSuccess h2 { color: var(--degree-request-heading); font-size: 24px; line-height: 1.8; }
+.degreeRequestSuccess p { color: var(--degree-request-muted); }
+.degreeRequestSuccess:focus-visible, .degreeRequestFeedback:focus-visible { outline: 3px solid #26a999; outline-offset: 4px; }
 @media (max-width: 991px) {
     .degreeRequestLayout { grid-template-columns: minmax(0, 1fr) 250px; gap: 20px; }
     .degreeRequestForm { padding: 24px; }

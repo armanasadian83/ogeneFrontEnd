@@ -13,6 +13,7 @@ import AboutUs from "../aboutUs";
 
 jest.mock("../../App", () => ({ MyContext: require("react").createContext(null) }));
 jest.mock("../../utils/api", () => ({ fetchDataFromApi: jest.fn() }));
+jest.mock("./degreeRequestApi", () => ({ submitDegreeRequest: jest.fn() }));
 jest.mock("../../Components/Cards/courseCard", () => () => null);
 jest.mock("react-router-dom", () => {
   const { TextEncoder, TextDecoder } = require("util");

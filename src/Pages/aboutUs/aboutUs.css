@@ -1,2 +1,93 @@
 .aboutUsSection .changeLangBtn button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; }
 .aboutUsSection .changeLangBtn button:focus-visible { outline: 3px solid #26a999; outline-offset: 5px; border-radius: 3px; }
+
+.aboutUsSection .aboutPartners {
+    margin-top: 100px;
+    padding: 38px;
+    border: 1px solid #dceee8;
+    border-radius: 28px;
+    background: linear-gradient(125deg, #f6fbf9, #eef9f5);
+}
+
+.aboutPartners .aboutPartnersHeading { margin-bottom: 26px; }
+.aboutPartners .aboutPartnersHeading h2 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 10px;
+    color: #174a4e;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+.aboutPartners .aboutPartnersHeading h2::before { content: ""; width: 5px; height: 30px; border-radius: 8px; background: #26a999; }
+.aboutPartners .aboutPartnersHeading p { margin: 0; color: #647b76; font-size: 17px; line-height: 1.8; }
+.aboutPartners .aboutPartnersList { display: grid; gap: 22px; }
+.aboutPartners .aboutPartnerCard {
+    display: grid;
+    grid-template-columns: minmax(250px, 0.95fr) minmax(0, 1.3fr);
+    align-items: center;
+    gap: 38px;
+    padding: 34px;
+    border: 1px solid #e1eee9;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 10px 30px #175e4e06;
+}
+.aboutPartners .aboutPartnerLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 160px;
+    padding: 18px;
+    border: 1px solid #edf3f0;
+    border-radius: 16px;
+    background: #fff;
+}
+.aboutUsSection .aboutPartners .aboutPartnerLogo img { display: block; width: 100%; max-width: 320px; height: auto; margin: 0; object-fit: contain; }
+.aboutPartners .aboutPartnerContent { min-width: 0; }
+.aboutPartners .aboutPartnerContent h3 { margin: 0 0 4px; color: #174a4e; font-size: 28px; font-weight: 800; line-height: 1.6; }
+.aboutPartners .aboutPartnerDomain { display: inline-block; color: #0f8278; font-family: Arial, sans-serif !important; font-size: 15px; letter-spacing: .3px; }
+.aboutPartners .aboutPartnerContent p { margin: 16px 0 22px; color: #5c716c; font-size: 17px; line-height: 1.9; }
+.aboutPartners .aboutPartnerLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 9px 20px;
+    border: 1px solid #d1e9e2;
+    border-radius: 11px;
+    background: #eff9f5;
+    color: #116e64;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 160ms, border-color 160ms, color 160ms;
+}
+.aboutPartners .aboutPartnerLink svg { flex-shrink: 0; width: 18px; height: 18px; }
+.aboutPartners .aboutPartnerLink:hover { background: #147d70; border-color: #147d70; color: #fff; }
+.aboutPartners .aboutPartnerLink:focus-visible { outline: 3px solid #26a999; outline-offset: 4px; }
+
+@media (max-width: 991px) {
+    .aboutUsSection .aboutPartners { margin-top: 70px; padding: 28px; }
+    .aboutPartners .aboutPartnerCard { grid-template-columns: minmax(210px, 1fr) minmax(0, 1.2fr); gap: 24px; padding: 26px; }
+    .aboutPartners .aboutPartnersHeading h2 { font-size: 32px; }
+}
+@media (max-width: 767px) {
+    .aboutUsSection .aboutPartners { margin-top: 60px; padding: 24px 20px; border-radius: 22px; }
+    .aboutPartners .aboutPartnerCard { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 24px 20px; border-radius: 18px; }
+    .aboutPartners .aboutPartnerLogo { min-height: 140px; padding: 16px; }
+    .aboutUsSection .aboutPartners .aboutPartnerLogo img { max-width: 290px; }
+    .aboutPartners .aboutPartnerContent { text-align: center; }
+    .aboutPartners .aboutPartnerContent h3 { font-size: 26px; }
+    .aboutPartners .aboutPartnerContent p { font-size: 16px; }
+}
+@media (max-width: 399px) {
+    .aboutUsSection .aboutPartners { padding: 22px 14px; }
+    .aboutPartners .aboutPartnerCard { padding: 20px 16px; }
+    .aboutPartners .aboutPartnersHeading h2 { font-size: 28px; }
+    .aboutPartners .aboutPartnersHeading p { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .aboutPartners .aboutPartnerLink { transition: none; } }

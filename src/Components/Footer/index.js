@@ -7,6 +7,7 @@ import { FaInstagram, FaTelegram } from "react-icons/fa6";
 import { IoCallOutline } from "react-icons/io5";
 import { FiMapPin, FiArrowLeft } from "react-icons/fi";
 import { PiCopyrightFill } from "react-icons/pi";
+import EnamadSeal from "./EnamadSeal";
 
 const Footer = () => {
     const { t, dir } = useLanguage();
@@ -64,12 +65,7 @@ const Footer = () => {
                     </div>
 
                     <div className="footer-trust">
-                        <div
-                            className="trust-seal"
-                            dangerouslySetInnerHTML={{
-                                __html: `<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=6800848&Code=DCUvppqG13XGco7UU3cpoZFr82zDH5vY' alt='${t("نماد اعتماد الکترونیکی", "Electronic Trust Symbol")}' style='cursor:pointer' code='DCUvppqG13XGco7UU3cpoZFr82zDH5vY' /></a>`
-                            }}
-                        />
+                        <EnamadSeal />
                     </div>
 
                 </div>

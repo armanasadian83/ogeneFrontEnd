@@ -1,5 +1,5 @@
 import { useLanguage } from "../../i18n/LanguageContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -8,6 +8,9 @@ import persianEn from "react-date-object/locales/persian_en";
 import { FiArrowLeft, FiBookOpen, FiCalendar, FiChevronLeft, FiUser } from "react-icons/fi";
 import { PiCertificateLight } from "react-icons/pi";
 import { MyContext } from "../../App";
+import { submitDegreeRequest } from "./degreeRequestApi";
+import { DEGREE_REQUEST_LIMITS, isValidJalaliDate, normalizeDigits, validateDegreeRequest } from "./degreeRequestValidation";
+import { fieldErrorMessage, submissionMessage } from "./degreeRequestMessages";
 import "./degreeRequest.css";
 
 const personalFields = [
@@ -31,10 +34,7 @@ const formAdvice = [
     "اطلاعات تماس خود را بررسی کنید.",
 ];
 const formAdviceEn = ["Enter your first and last names exactly as registered.","Write the full course title.","Check your contact details."];
-const toEnglishDigits = (value) => String(value).replace(/[۰-۹٠-٩]/g, (digit) =>
-    String(digit.charCodeAt(0) - (digit <= "٩" ? 0x660 : 0x6f0)));
-
-function RequestField({ field, value, onChange }) {
+function RequestField({ field, value, onChange, error, disabled }) {
     const { t, dir, language, isEnglish, localize } = useLanguage();
     const id = `degree-request-${field.name}`;
     return (
@@ -45,8 +45,8 @@ function RequestField({ field, value, onChange }) {
                     <DatePicker
                         id={id}
                         name={field.name}
-                        value={value}
-                        onChange={(date) => onChange(field.name, date ? toEnglishDigits(date.format("YYYY/MM/DD")) : "")}
+                        value={isValidJalaliDate(value) ? value : null}
+                        onChange={(date) => onChange(field.name, date ? normalizeDigits(date.format("YYYY/MM/DD")) : "")}
                         calendar={persian}
                         locale={isEnglish ? persianEn : persianFa}
                         format="YYYY/MM/DD"
@@ -57,7 +57,17 @@ function RequestField({ field, value, onChange }) {
                         inputClass="degreeRequestInput"
                         calendarPosition={isEnglish ? "bottom-left" : "bottom-right"}
                         onOpenPickNewDate={false}
+                        disabled={disabled}
                         digits={["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]}
+                        render={(_formattedValue, openCalendar) => (
+                            <input id={id} name={field.name} type="text" value={value}
+                                onChange={(event) => onChange(field.name, normalizeDigits(event.target.value))}
+                                onFocus={openCalendar} onClick={openCalendar}
+                                required={!field.optional} disabled={disabled} maxLength={10}
+                                autoComplete="off" dir="ltr" className="degreeRequestInput"
+                                placeholder={t("سال / ماه / روز (شمسی)", "YYYY / MM / DD (Persian)")}
+                                aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} />
+                        )}
                     />
                     <FiCalendar aria-hidden="true" />
                 </div>
@@ -67,9 +77,12 @@ function RequestField({ field, value, onChange }) {
                     name={field.name}
                     type={field.type || "text"}
                     value={value}
-                    onChange={(event) => onChange(field.name, field.inputMode ? toEnglishDigits(event.target.value) : event.target.value)}
+                    onChange={(event) => onChange(field.name, field.inputMode ? normalizeDigits(event.target.value) : event.target.value)}
                     required={!field.optional}
-                    maxLength={field.maxLength || 100}
+                    disabled={disabled}
+                    maxLength={DEGREE_REQUEST_LIMITS[field.name]}
+                    aria-invalid={Boolean(error)}
+                    aria-describedby={error ? `${id}-error` : undefined}
                     inputMode={field.inputMode}
                     autoComplete={field.autoComplete}
                     placeholder={localize(field, 'placeholder')}
@@ -78,6 +91,7 @@ function RequestField({ field, value, onChange }) {
                     className="degreeRequestInput"
                 />
             )}
+            {error && <p className="degreeRequestFieldError" id={`${id}-error`}>{fieldErrorMessage(error, t)}</p>}
         </div>
     );
 }
@@ -86,6 +100,21 @@ export default function DegreeRequest() {
     const { t, dir, isEnglish } = useLanguage();
     const { setIsShowNavbar, setIsShowFooter, setIsShowCalenderBar, setIsBaleIconShown } = useContext(MyContext);
     const [formFields, setFormFields] = useState(initialFields);
+    const [errors, setErrors] = useState({});
+    const [feedback, setFeedback] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const submitLock = useRef(false);
+    const formRef = useRef(null);
+    const feedbackRef = useRef(null);
+    const focusField = useRef(null);
+
+    useEffect(() => {
+        if (focusField.current) {
+            formRef.current?.elements.namedItem(focusField.current)?.focus();
+            focusField.current = null;
+        } else if (feedback || submitted) feedbackRef.current?.focus();
+    }, [errors, feedback, submitted]);
 
     useEffect(() => {
         setIsShowNavbar(true);
@@ -99,7 +128,49 @@ export default function DegreeRequest() {
         };
     }, [setIsShowNavbar, setIsShowFooter, setIsShowCalenderBar, setIsBaleIconShown]);
 
-    const changeField = (name, value) => setFormFields((previous) => ({ ...previous, [name]: value }));
+    const changeField = (name, value) => {
+        setFormFields((previous) => ({ ...previous, [name]: value }));
+        setErrors((previous) => ({ ...previous, [name]: undefined }));
+        setFeedback("");
+    };
+
+    const showValidation = (fieldErrors) => {
+        focusField.current = Object.keys(initialFields).find((name) => fieldErrors[name]);
+        setErrors(fieldErrors);
+        setFeedback("VALIDATION_ERROR");
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (submitLock.current || submitted) return;
+        const { details, errors: fieldErrors } = validateDegreeRequest(formFields);
+        if (Object.keys(fieldErrors).length) { showValidation(fieldErrors); return; }
+        submitLock.current = true;
+        setIsSubmitting(true);
+        setFeedback("");
+        setErrors({});
+        try {
+            await submitDegreeRequest(details);
+            setSubmitted(true);
+        } catch (error) {
+            const serverFields = Object.fromEntries(Object.keys(initialFields)
+                .filter((name) => typeof error.fields?.[name] === "string")
+                .map((name) => [name, error.fields[name]]));
+            if (error.code === "VALIDATION_ERROR" && Object.keys(serverFields).length) showValidation(serverFields);
+            else setFeedback(error.status === 429 ? "RATE_LIMITED" : "REQUEST_FAILED");
+        } finally {
+            submitLock.current = false;
+            setIsSubmitting(false);
+        }
+    };
+
+    const newRequest = () => {
+        setFormFields(initialFields);
+        setErrors({});
+        setFeedback("");
+        focusField.current = "firstName";
+        setSubmitted(false);
+    };
 
     return (
         <main className="degreeRequestPage" dir={dir}>
@@ -116,29 +187,39 @@ export default function DegreeRequest() {
                 </header>
 
                 <div className="degreeRequestLayout">
-                    <form className="degreeRequestForm" aria-labelledby="degree-request-page-title" onSubmit={(event) => event.preventDefault()} noValidate>
+                    {submitted ? (
+                        <section className="degreeRequestForm degreeRequestSuccess" ref={feedbackRef} tabIndex={-1} role="status">
+                            <PiCertificateLight className="degreeRequestCertificateIcon" aria-hidden="true" />
+                            <h2>{t("درخواست مدرک شما با موفقیت ثبت شد.", "Your certificate request was submitted successfully.")}</h2>
+                            <p>{t("اطلاعات درخواست شما برای بررسی ذخیره شد.", "Your request details have been saved for review.")}</p>
+                            <button type="button" className="degreeRequestSubmit" onClick={newRequest}>{t("ثبت درخواست دیگر", "Submit another request")}</button>
+                        </section>
+                    ) : <form ref={formRef} className="degreeRequestForm" aria-labelledby="degree-request-page-title" onSubmit={handleSubmit} aria-busy={isSubmitting} noValidate>
+                        {feedback && <p className="degreeRequestFeedback" role="alert" tabIndex={-1} ref={feedbackRef}>{submissionMessage(feedback, t)}</p>}
                         <section className="degreeRequestSection" aria-labelledby="degree-personal-title">
                             <h2 id="degree-personal-title"><FiUser aria-hidden="true" /> {t("اطلاعات فردی", "Personal information")}</h2>
                             <div className="degreeRequestGrid">
-                                {personalFields.map((field) => <RequestField key={field.name} field={field} value={formFields[field.name]} onChange={changeField} />)}
+                                {personalFields.map((field) => <RequestField key={field.name} field={field} value={formFields[field.name]} onChange={changeField} error={errors[field.name]} disabled={isSubmitting} />)}
                             </div>
                         </section>
 
                         <section className="degreeRequestSection" aria-labelledby="degree-course-title">
                             <h2 id="degree-course-title"><FiBookOpen aria-hidden="true" /> {t("اطلاعات دوره", "Course information")}</h2>
                             <div className="degreeRequestGrid">
-                                {courseFields.map((field) => <RequestField key={field.name} field={field} value={formFields[field.name]} onChange={changeField} />)}
+                                {courseFields.map((field) => <RequestField key={field.name} field={field} value={formFields[field.name]} onChange={changeField} error={errors[field.name]} disabled={isSubmitting} />)}
                                 <div className="degreeRequestField degreeRequestNotes">
                                     <label htmlFor="degree-request-notes">{t("توضیحات (اختیاری)", "Notes (optional)")}</label>
                                     <textarea id="degree-request-notes" name="notes" value={formFields.notes}
-                                        onChange={(event) => changeField("notes", event.target.value)}
+                                        onChange={(event) => changeField("notes", event.target.value)} disabled={isSubmitting}
+                                        aria-invalid={Boolean(errors.notes)} aria-describedby={errors.notes ? "degree-request-notes-error" : undefined}
                                         placeholder={t("توضیحات تکمیلی خود را در این قسمت وارد کنید...", "Add any further details here...")} rows={3} maxLength={2000} />
+                                    {errors.notes && <p className="degreeRequestFieldError" id="degree-request-notes-error">{fieldErrorMessage(errors.notes, t)}</p>}
                                 </div>
                             </div>
                         </section>
 
-                        <button type="button" className="degreeRequestSubmit">{t("ثبت درخواست مدرک", "Submit certificate request")}<FiArrowLeft aria-hidden="true" /></button>
-                    </form>
+                        <button type="submit" className="degreeRequestSubmit" disabled={isSubmitting}>{isSubmitting ? t("در حال ثبت درخواست…", "Submitting…") : t("ثبت درخواست مدرک", "Submit certificate request")}<FiArrowLeft aria-hidden="true" /></button>
+                    </form>}
 
                     <aside className="degreeRequestAdvice" aria-labelledby="degree-advice-title">
                         <PiCertificateLight className="degreeRequestCertificateIcon" aria-hidden="true" />
